@@ -1,2 +1,2 @@
 # bggn_213
-Bioinformatics class UCSD F21 repository
+Bioinformatics class at UC - San Diego, AY21 Fall
