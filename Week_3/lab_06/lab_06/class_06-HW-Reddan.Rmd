@@ -1,0 +1,97 @@
+---
+title: 'HW Class 6: Write a Function'
+author: "Jack Reddan"
+date: "10/17/2021"
+#output: html_document
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(bio3d)
+```
+
+# Analysis code to improve
+
+```{r}
+s1 <- read.pdb("4AKE") # kinase with drug
+s2 <- read.pdb("1AKE") # kinase no drug
+s3 <- read.pdb("1E4Y") # kinase with drug
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s1.b <- s1.chainA$atom$b
+s2.b <- s2.chainA$atom$b
+s3.b <- s3.chainA$atom$b
+plotb3(s1.b, sse=s1.chainA, typ="l", ylab="Bfactor")
+plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
+plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
+```
+
+# Question 1:
+## What type of object is returned from the read.pdb() function? 
+
+```{r}
+s1 <- read.pdb("4AKE")
+str(s1)
+```
+
+Returns a list.
+
+# Question 2:
+## What does the trim.pdb() function do?
+
+```{r}
+help("trim.pdb")
+```
+
+It trims the original PDB object to contain a subset of the original atoms.
+
+# Question 3:
+## What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?
+
+```{r}
+help("plotb3")
+```
+
+The *sse* parameter is what sets the marginal grey and black rectangles,
+which represents the major secondary structure elements (SSEs) of the protein.
+
+# Question 4:
+## What would be a better plot to compare across the different proteins? 
+A scatterplot of RMSD data from aligned protein sequences.
+Alignment would allow for significant residue-residue comparisons.
+
+# Question 5:
+## Which proteins are more similar to each other in their B-factor trends. How could you quantify this?
+Use hierarchical clustering with the calculated distances between protein structures to identify which are more similar.
+
+```{r}
+hc <- hclust(dist(rbind(s1.b, s2.b, s3.b)))
+plot(hc)
+```
+  
+The kinases with drugs (4AKE and 1E4Y) are more similar to each other than to the kinase without drugs (1AKE).
+
+# Question 6:
+## How would you generalize the original code above to work with any set of input protein structures?
+
+```{r}
+structure_analysis <- function(protein_vector, 
+                               trim_chain = "A", trim_elety = "CA", 
+                               plotb3_typ = "l", plotb3_ylab = "Bfactor") {
+  for(protein in protein_vector) {
+    structure <- read.pdb(protein)
+    structure.chainA <- trim.pdb(structure, chain=trim_chain, elety=trim_elety)
+    structure.b <- structure.chainA$atom$b
+    plotb3(structure.b, sse=structure.chainA, typ=plotb3_typ, ylab=plotb3_ylab)
+
+  }
+}
+
+structure_analysis(c("4AKE", "1AKE", "1E4Y"))
+```
+

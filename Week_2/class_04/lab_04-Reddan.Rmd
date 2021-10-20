@@ -1,0 +1,91 @@
+---
+title: "Lab 4 Walkthrough"
+author: "Jack Reddan"
+date: "10/8/2021"
+output: pdf_document
+---
+
+# Simple calculations
+```{r}
+5+3
+5-3
+5*3
+5/3
+```
+
+# Saving your answers - object assignment
+```{r}
+x <- 3*4
+x
+this_is_a_really_long_name <- 2.5
+this_is_a_really_long_name
+r_rocks <- 2^3
+#rrocks
+#Error: object 'rrocks' not found
+#R_rocks
+#Error: object 'R_rocks' not found
+r_rocks
+```
+
+# Calling functions
+```{r}
+seq(1, 10)
+seq(1, 10, by = 2)
+example(seq)
+date()
+```
+
+# Getting help in R
+```{r}
+help(log)
+?log
+help.search("cross tabulate")
+??"cross tabulate"
+example(log)
+```
+
+# Vectors, vectorizations, and indexing
+```{r}
+length(3.1)
+x <- c(56, 95.3, 0.4)
+x
+y <- c(3.2, 1.1, 0.2)
+y
+```
+
+## Vectorization
+```{r}
+x+y
+x-y
+x/y
+sqrt(x)
+round(sqrt(x), 3)
+log(x)/2 + 1
+```
+
+## Vector indexing
+```{r}
+x <- c(56, 95.3, 0.4)
+x[2]
+x[1]
+x[4]
+x[3] <- 0.5
+x
+```
+
+# Reproducibility and sessionInfo()
+```{r}
+sessionInfo()
+```
+
+# In lab
+```{r}
+x <- 1:50
+plot(x, sin(x))
+?plot
+plot(x, sin(x), 
+     type = "l", 
+     col = "blue",
+     lwd = 3,
+     xlab = "A vector named x")
+```

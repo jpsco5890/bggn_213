@@ -1,0 +1,86 @@
+---
+title: "Lab 06"
+author: "Jack Reddan (A59010543)"
+date: "10/15/2021"
+output: pdf_document
+#output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Question 1:
+### Write a function grade() to determine an overall grade from a vector of student homework assignment scores dropping the lowest single score.
+This function will provide the grade for a student given a vector of their scores,
+and will provide the average of all scores while dropping the lowest score.
+
+```{r}
+grade <- function(scores) {
+  scores <- as.numeric(scores)
+  scores[is.na(scores)] <- 0
+  scores <- scores[-which.min(scores)]
+  return(mean(scores))
+}
+```
+
+When tested on these student cases, the *grade* function should result in the 
+average score of student1 without the **90**, student2 without the **NA** and student3
+without one **NA** and the rest of the NAs represented as a 0.
+
+```{r}
+# Example input vectors to start with
+student1 <- c(100, 100, 100, 100, 100, 100, 100, 90)
+student2 <- c(100, NA, 90, 90, 90, 90, 97, 80)
+student3 <- c(90, NA, NA, NA, NA, NA, NA, NA)
+
+#Test 'grade' function
+c("Student 1" = grade(student1), 
+  "Student 2" = grade(student2), 
+  "Student 3" = grade(student3))
+```
+
+```{r}
+#gradebook <- read.csv(file = "student_homework.csv", row.names = 1)
+gradebook <- read.csv(file = "https://tinyurl.com/gradeinput", row.names = 1)
+```
+
+## Question 2:
+### Who is the top scoring student overall in the gradebook?
+Apply the grade function across all students in the gradebook dataframe. Then,
+identify the student with the maximum calculated grade average.
+
+```{r}
+adjusted_averages <- apply(gradebook, 1, grade)
+adjusted_averages[which.max(adjusted_averages)]
+```
+
+## Question 3:
+### Which homework was toughest on students?
+Generate a copy of the gradebook dataframe, and convert all *NA* values to 0.
+
+```{r}
+gradebook_mask <- gradebook
+gradebook_mask[is.na(gradebook_mask)] <- 0
+```
+
+Apply the mean function across the homeworks in the gradebook dataframe. Then,
+identify the homework with the minimum calculated grade average.
+
+```{r}
+hw_averages <- apply(gradebook_mask, 2, mean)
+hw_averages[which.min(hw_averages)]
+```
+
+## Question 4:
+### Which homework was most predictive of overall score?
+Using the *cor* function,
+calculate the correlation between each student's score for a homework assignment 
+and the average score of each student for that homework assignment.
+Then,
+identify the homework with the strongest correlation.
+
+```{r}
+homework_correlations <- cor(gradebook_mask, adjusted_averages)
+homework_correlations[which.max(homework_correlations),1]
+```
+
