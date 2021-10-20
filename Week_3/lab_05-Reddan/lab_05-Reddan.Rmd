@@ -3,7 +3,8 @@ title: "Lab 05"
 author: "Jack Reddan (A59010543)"
 date: "10/14/2021"
 #output: html_document
-output: pdf_document
+#output: pdf_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
