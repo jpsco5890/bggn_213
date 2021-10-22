@@ -126,5 +126,3 @@ ggplot(data = df) +
   geom_point() +
   scale_color_manual(values = c("#785EF0", "#FE6100"), name = "Cluster")
 ```
-
-
