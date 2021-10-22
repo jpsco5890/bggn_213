@@ -2,8 +2,8 @@
 title: "K-Means Problem"
 author: "Jack Reddan"
 date: "10/21/2021"
-#output: github_document
-output: pdf_document
+output: github_document
+#output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -28,6 +28,7 @@ plot(x)
 ```
 
 ## Use the kmeans() function to explore the fake data
+Use it while specifying 2 expected clusters and iterating 20 times.
 ```{r}
 clusters <- kmeans(x, centers = 2, nstart = 20)
 

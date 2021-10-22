@@ -28,6 +28,8 @@ plot(x)
 
 ## Use the kmeans() function to explore the fake data
 
+Use it while specifying 2 expected clusters and iterating 20 times.
+
 ``` r
 clusters <- kmeans(x, centers = 2, nstart = 20)
 
@@ -38,16 +40,16 @@ clusters
     ## 
     ## Cluster means:
     ##           x         y
-    ## 1  3.116737 -2.922568
-    ## 2 -2.922568  3.116737
+    ## 1 -2.975036  3.142915
+    ## 2  3.142915 -2.975036
     ## 
     ## Clustering vector:
-    ##  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1
-    ## [39] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+    ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     ## 
     ## Within cluster sum of squares by cluster:
-    ## [1] 51.09436 51.09436
-    ##  (between_SS / total_SS =  91.5 %)
+    ## [1] 49.23086 49.23086
+    ##  (between_SS / total_SS =  91.9 %)
     ## 
     ## Available components:
     ## 
@@ -80,8 +82,8 @@ clusters$size
 clusters$cluster
 ```
 
-    ##  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1
-    ## [39] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+    ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
+    ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 
 -   Cluster center
 
@@ -90,8 +92,8 @@ clusters$centers
 ```
 
     ##           x         y
-    ## 1  3.116737 -2.922568
-    ## 2 -2.922568  3.116737
+    ## 1 -2.975036  3.142915
+    ## 2  3.142915 -2.975036
 
 ### Plot x colored by the kmeans cluster centers as blue points
 
