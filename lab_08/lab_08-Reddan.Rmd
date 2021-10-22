@@ -104,3 +104,30 @@ barplot(uk_foods_pca$rotation[,1], las = 2)
 par(op)
 ```
 
+#PCA of RNA-Seq Data
+
+## Import the Data
+```{r}
+url2 <- "https://tinyurl.com/expression-CSV"
+rna_data <- read.csv(url2, row.names=1)
+head(rna_data)
+```
+
+>Question 10: How many genes and samples are in this data set?  
+
+```{r}
+nrow(rna_data)
+```
+
+## PCA for RNA-Seq Data
+```{r}
+rna_pca <- prcomp(t(rna_data), scale = TRUE)
+```
+
+Plot the data using PC1 and PC2
+```{r}
+plot(rna_pca$x[,1], rna_pca$x[,2])
+```
+
+
+
