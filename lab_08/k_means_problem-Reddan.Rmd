@@ -10,7 +10,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Try K-Means clustering
+# Try K-Means Clustering
 
 Generate fake data and explore how the method works.
 
@@ -84,3 +84,29 @@ ggplot(data = df) +
   scale_color_manual(values = c("#785EF0", "#FE6100"), name = "Cluster") +
   geom_point(data = centroids, aes(x = x, y = y), color = "#648FFF", shape = 8, size = 5)
 ```
+# Try Hierarchical Clustering
+
+Using the same example data *'x'*.
+
+## Generate the distance matrix
+
+```{r}
+dm <- dist(x)
+
+str(dm)
+```
+
+## Call hclust() to determine clusters
+
+```{r}
+hc <- hclust(dm)
+hc
+```
+
+## Plot the hierachical cluster
+
+```{r}
+plot(hc)
+```
+
+
