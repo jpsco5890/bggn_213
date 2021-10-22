@@ -2,8 +2,8 @@
 title: "K-Means Problem"
 author: "Jack Reddan"
 date: "10/21/2021"
-#output: github_document
-output: pdf_document
+output: github_document
+#output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -107,6 +107,24 @@ hc
 
 ```{r}
 plot(hc)
+```
+## '*Cut*' the dendrogram to assign membership of '*leaves*' to clusters
+Can either specify the height (*h*) or desired number of clusters (*k*).
+```{r}
+trimmed_hc <- cutree(hc, h = 6)
+trimmed_hc
+
+trimmed_hc_v2 <- cutree(hc, k = 2)
+trimmed_hc == trimmed_hc_v2
+```
+
+## Plot x data colored by the hierarchical cluster membership
+
+```{r}
+ggplot(data = df) +
+  aes(x = x, y = y, color = factor(trimmed_hc)) +
+  geom_point() +
+  scale_color_manual(values = c("#785EF0", "#FE6100"), name = "Cluster")
 ```
 
 
