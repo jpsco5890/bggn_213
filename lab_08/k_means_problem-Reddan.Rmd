@@ -2,8 +2,8 @@
 title: "K-Means Problem"
 author: "Jack Reddan"
 date: "10/21/2021"
-output: github_document
-#output: pdf_document
+#output: github_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}

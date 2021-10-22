@@ -3,7 +3,7 @@ K-Means Problem
 Jack Reddan
 10/21/2021
 
-# Try K-Means clustering
+# Try K-Means Clustering
 
 Generate fake data and explore how the method works.
 
@@ -40,16 +40,16 @@ clusters
     ## 
     ## Cluster means:
     ##           x         y
-    ## 1 -2.835117  3.288716
-    ## 2  3.288716 -2.835117
+    ## 1 -2.877614  3.229831
+    ## 2  3.229831 -2.877614
     ## 
     ## Clustering vector:
     ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
     ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     ## 
     ## Within cluster sum of squares by cluster:
-    ## [1] 77.57996 77.57996
-    ##  (between_SS / total_SS =  87.9 %)
+    ## [1] 71.18334 71.18334
+    ##  (between_SS / total_SS =  88.7 %)
     ## 
     ## Available components:
     ## 
@@ -92,8 +92,8 @@ clusters$centers
 ```
 
     ##           x         y
-    ## 1 -2.835117  3.288716
-    ## 2  3.288716 -2.835117
+    ## 1 -2.877614  3.229831
+    ## 2  3.229831 -2.877614
 
 ### Plot x colored by the kmeans cluster centers as blue points
 
@@ -122,3 +122,44 @@ ggplot(data = df) +
 ```
 
 ![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+# Try Hierarchical Clustering
+
+Using the same example data *‘x’*.
+
+## Generate the distance matrix
+
+``` r
+dm <- dist(x)
+
+str(dm)
+```
+
+    ##  'dist' num [1:1770] 2.788 0.418 0.861 1.485 0.564 ...
+    ##  - attr(*, "Size")= int 60
+    ##  - attr(*, "Diag")= logi FALSE
+    ##  - attr(*, "Upper")= logi FALSE
+    ##  - attr(*, "method")= chr "euclidean"
+    ##  - attr(*, "call")= language dist(x = x)
+
+## Call hclust() to determine clusters
+
+``` r
+hc <- hclust(dm)
+hc
+```
+
+    ## 
+    ## Call:
+    ## hclust(d = dm)
+    ## 
+    ## Cluster method   : complete 
+    ## Distance         : euclidean 
+    ## Number of objects: 60
+
+## Plot the hierachical cluster
+
+``` r
+plot(hc)
+```
+
+![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
