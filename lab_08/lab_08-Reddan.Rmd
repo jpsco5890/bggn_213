@@ -122,12 +122,31 @@ nrow(rna_data)
 ## PCA for RNA-Seq Data
 ```{r}
 rna_pca <- prcomp(t(rna_data), scale = TRUE)
+summary(rna_pca)
+```
+
+Scree plot of the PCs
+```{r}
+plot(rna_pca)
 ```
 
 Plot the data using PC1 and PC2
 ```{r}
-plot(rna_pca$x[,1], rna_pca$x[,2])
+plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 ```
 
+Check if the gorupings make sense
+```{r}
+rna_pca_variance <- rna_pca$sdev^2
+rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
 
+color_vector <- colnames(rna_data)
+color_vector[grep("wt", color_vector)] <- "red"
+color_vector[grep("ko", color_vector)] <- "blue"
 
+plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
+     xlab=paste0("PC1 (", rna_pca_varience_percent[1], "%)"),
+     ylab=paste0("PC2 (", rna_pca_varience_percent[2], "%)"))
+
+text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
+```
