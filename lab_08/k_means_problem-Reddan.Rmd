@@ -1,0 +1,75 @@
+---
+title: "K-Means Problem"
+author: "Jack Reddan"
+date: "10/21/2021"
+#output: github_document
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Try K-Means clustering
+
+Generate fake data and explore how the method works.
+
+## Generate Example data
+```{r}
+tmp <- c(rnorm(30,-3), rnorm(30,3))
+x <- cbind(x = tmp, y = rev(tmp))
+
+plot(x)
+```
+
+## Use the kmeans() function to explore the fake data
+```{r}
+clusters <- kmeans(x, centers = 2, nstart = 20)
+
+clusters
+```
+
+### [Q] How many points are in each cluster?
+There are 30 points in each cluster.
+```{r}
+clusters$size
+```
+
+### [Q] What component of your results object dteails:
+- Cluster size
+```{r}
+clusters$size
+```
+
+- Cluster assignment
+```{r}
+clusters$cluster
+```
+
+- Cluster center
+```{r}
+clusters$centers
+```
+
+### Plot x colored by the kmeans cluster centers as blue points
+
+Load ggplot2
+```{r}
+library(ggplot2)
+```
+
+Convert matrices to be used in ggplot to data frames.
+```{r}
+df <- data.frame(x)
+centroids <- data.frame(clusters$centers)
+```
+
+Plot the original data colored by kmenas clusters and add blue centroids. 
+IBM's colorblind palette is used.
+```{r}
+ggplot(data = df) +
+  aes(x = x, y = y, color = factor(clusters$cluster)) +
+  geom_point() +
+  scale_color_manual(values = c("#785EF0", "#FE6100"), name = "Cluster") +
+  geom_point(data = centroids, aes(x = x, y = y), color = "#648FFF", shape = 8)
+```
