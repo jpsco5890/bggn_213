@@ -154,4 +154,3 @@ text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), 
 ```{r}
 sessionInfo()
 ```
-
