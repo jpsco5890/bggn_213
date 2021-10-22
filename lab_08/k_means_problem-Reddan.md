@@ -40,16 +40,16 @@ clusters
     ## 
     ## Cluster means:
     ##           x         y
-    ## 1 -2.619361  2.562192
-    ## 2  2.562192 -2.619361
+    ## 1 -2.835117  3.288716
+    ## 2  3.288716 -2.835117
     ## 
     ## Clustering vector:
     ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
     ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     ## 
     ## Within cluster sum of squares by cluster:
-    ## [1] 66.41997 66.41997
-    ##  (between_SS / total_SS =  85.8 %)
+    ## [1] 77.57996 77.57996
+    ##  (between_SS / total_SS =  87.9 %)
     ## 
     ## Available components:
     ## 
@@ -92,8 +92,8 @@ clusters$centers
 ```
 
     ##           x         y
-    ## 1 -2.619361  2.562192
-    ## 2  2.562192 -2.619361
+    ## 1 -2.835117  3.288716
+    ## 2  3.288716 -2.835117
 
 ### Plot x colored by the kmeans cluster centers as blue points
 
@@ -118,7 +118,7 @@ ggplot(data = df) +
   aes(x = x, y = y, color = factor(clusters$cluster)) +
   geom_point() +
   scale_color_manual(values = c("#785EF0", "#FE6100"), name = "Cluster") +
-  geom_point(data = centroids, aes(x = x, y = y), color = "#648FFF", shape = 8)
+  geom_point(data = centroids, aes(x = x, y = y), color = "#648FFF", shape = 8, size = 5)
 ```
 
 ![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
