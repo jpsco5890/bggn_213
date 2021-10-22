@@ -2,8 +2,8 @@
 title: "K-Means Problem"
 author: "Jack Reddan"
 date: "10/21/2021"
-output: github_document
-#output: pdf_document
+#output: github_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -35,24 +35,29 @@ clusters <- kmeans(x, centers = 2, nstart = 20)
 clusters
 ```
 
-### [Q] How many points are in each cluster?
+> [Q] How many points are in each cluster?  
+
 There are 30 points in each cluster.
 ```{r}
 clusters$size
 ```
 
-### [Q] What component of your results object dteails:
-- Cluster size
+> [Q] What component of your results object dteails:  
+
+>> Cluster size  
+
 ```{r}
 clusters$size
 ```
 
-- Cluster assignment
+>> Cluster assignment
+
 ```{r}
 clusters$cluster
 ```
 
-- Cluster center
+>> Cluster center
+
 ```{r}
 clusters$centers
 ```

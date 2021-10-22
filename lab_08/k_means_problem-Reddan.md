@@ -40,23 +40,23 @@ clusters
     ## 
     ## Cluster means:
     ##           x         y
-    ## 1 -2.975036  3.142915
-    ## 2  3.142915 -2.975036
+    ## 1 -2.619361  2.562192
+    ## 2  2.562192 -2.619361
     ## 
     ## Clustering vector:
     ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
     ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
     ## 
     ## Within cluster sum of squares by cluster:
-    ## [1] 49.23086 49.23086
-    ##  (between_SS / total_SS =  91.9 %)
+    ## [1] 66.41997 66.41997
+    ##  (between_SS / total_SS =  85.8 %)
     ## 
     ## Available components:
     ## 
     ## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
     ## [6] "betweenss"    "size"         "iter"         "ifault"
 
-### \[Q\] How many points are in each cluster?
+> \[Q\] How many points are in each cluster?
 
 There are 30 points in each cluster.
 
@@ -66,9 +66,9 @@ clusters$size
 
     ## [1] 30 30
 
-### \[Q\] What component of your results object dteails:
+> \[Q\] What component of your results object dteails:
 
--   Cluster size
+> > Cluster size
 
 ``` r
 clusters$size
@@ -76,7 +76,7 @@ clusters$size
 
     ## [1] 30 30
 
--   Cluster assignment
+> > Cluster assignment
 
 ``` r
 clusters$cluster
@@ -85,15 +85,15 @@ clusters$cluster
     ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
     ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 
--   Cluster center
+> > Cluster center
 
 ``` r
 clusters$centers
 ```
 
     ##           x         y
-    ## 1 -2.975036  3.142915
-    ## 2  3.142915 -2.975036
+    ## 1 -2.619361  2.562192
+    ## 2  2.562192 -2.619361
 
 ### Plot x colored by the kmeans cluster centers as blue points
 
