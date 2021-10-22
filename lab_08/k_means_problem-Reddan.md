@@ -7,16 +7,24 @@ Jack Reddan
 
 Generate fake data and explore how the method works.
 
-## Generate Example data
+## Generate example data
 
 ``` r
 tmp <- c(rnorm(30,-3), rnorm(30,3))
+hist(tmp)
+```
+
+![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+## Generate multidimensional example data
+
+``` r
 x <- cbind(x = tmp, y = rev(tmp))
 
 plot(x)
 ```
 
-![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ## Use the kmeans() function to explore the fake data
 
@@ -30,16 +38,16 @@ clusters
     ## 
     ## Cluster means:
     ##           x         y
-    ## 1 -2.734687  3.106648
-    ## 2  3.106648 -2.734687
+    ## 1  3.116737 -2.922568
+    ## 2 -2.922568  3.116737
     ## 
     ## Clustering vector:
-    ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
-    ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    ##  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1
+    ## [39] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
     ## 
     ## Within cluster sum of squares by cluster:
-    ## [1] 57.56768 57.56768
-    ##  (between_SS / total_SS =  89.9 %)
+    ## [1] 51.09436 51.09436
+    ##  (between_SS / total_SS =  91.5 %)
     ## 
     ## Available components:
     ## 
@@ -72,8 +80,8 @@ clusters$size
 clusters$cluster
 ```
 
-    ##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2
-    ## [39] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+    ##  [1] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1
+    ## [39] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 
 -   Cluster center
 
@@ -82,8 +90,8 @@ clusters$centers
 ```
 
     ##           x         y
-    ## 1 -2.734687  3.106648
-    ## 2  3.106648 -2.734687
+    ## 1  3.116737 -2.922568
+    ## 2 -2.922568  3.116737
 
 ### Plot x colored by the kmeans cluster centers as blue points
 
@@ -111,4 +119,4 @@ ggplot(data = df) +
   geom_point(data = centroids, aes(x = x, y = y), color = "#648FFF", shape = 8)
 ```
 
-![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](k_means_problem-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
