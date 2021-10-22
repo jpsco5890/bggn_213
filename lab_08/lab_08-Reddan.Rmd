@@ -2,10 +2,38 @@
 title: "Lab 08"
 author: "Jack Reddan"
 date: "10/22/2021"
-output: html_document
+output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Import the Data
+
+```{r}
+url <- "https://tinyurl.com/UK-foods"
+uk_foods <- read.csv(url, row.names = 1)
+```
+
+## Explore Imported Data
+>Question 1: How many rows and columns are in your new data frame named x? What R functions could you use to answer this questions?
+
+```{r}
+dim(uk_foods)
+```
+
+## Checking the Data
+
+```{r}
+head(uk_foods)
+```
+
+>Question 2: Which approach to solving the ‘row-names problem’ mentioned above do you prefer and why? Is one approach more robust than another under certain circumstances?
+
+I prefer to read in the row-names when I read in the csv data (in *read.csv*).
+This is less dangerous since it does not mutate our data to in the body of the 
+code, and instead restricts it to data initiation.
+
+# Looking for differences
+
+```{r}
+barplot(as.matrix(uk_foods), beside = T, col = rainbow(nrow(uk_foods)))
 ```
 
