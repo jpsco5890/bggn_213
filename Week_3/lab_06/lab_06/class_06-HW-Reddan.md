@@ -78,8 +78,8 @@ s1 <- read.pdb("4AKE")
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/
-    ## RtmpXl7y33/4AKE.pdb exists. Skipping download
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## 4AKE.pdb exists. Skipping download
 
 ``` r
 str(s1)
@@ -187,9 +187,18 @@ than to the kinase without drugs (1AKE).
 #### How would you generalize the original code above to work with any set of input protein structures?
 
 ``` r
-structure_analysis <- function(protein_vector, 
-                               trim_chain = "A", trim_elety = "CA", 
-                               plotb3_typ = "l", plotb3_ylab = "Bfactor") {
+# Argument          (type)              [Description]
+# ==============================================================================
+# protein_vector    character vector    PDB IDs for proteins of interest
+# trim_chain        character vector    Identifiers for chains for trim.pdb
+# trim_elety        character vector    Identifiers for atoms for trim.pdb
+# plotb3_typ        character string    Identifier of plot type for plotb3
+# plotb3_ylab       character string    Desired y-axis label of graph for plotb3
+structure_analysis <- function(protein_vector,
+                               trim_chain = "A", 
+                               trim_elety = "CA", 
+                               plotb3_typ = "l", 
+                               plotb3_ylab = "Bfactor") {
   
   for(protein in protein_vector) {
     structure <- read.pdb(protein)
@@ -208,13 +217,13 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/
-    ## RtmpXl7y33/4AKE.pdb exists. Skipping download
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## 4AKE.pdb exists. Skipping download
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/
-    ## RtmpXl7y33/1AKE.pdb exists. Skipping download
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## 1AKE.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
@@ -222,7 +231,7 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/
-    ## RtmpXl7y33/1E4Y.pdb exists. Skipping download
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## 1E4Y.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->

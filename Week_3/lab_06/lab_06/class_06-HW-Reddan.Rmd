@@ -118,9 +118,18 @@ The kinases with drugs (4AKE and 1E4Y) are more similar to each other than to th
 #### How would you generalize the original code above to work with any set of input protein structures?
 
 ```{r}
-structure_analysis <- function(protein_vector, 
-                               trim_chain = "A", trim_elety = "CA", 
-                               plotb3_typ = "l", plotb3_ylab = "Bfactor") {
+# Argument          (type)              [Description]
+# ==============================================================================
+# protein_vector    character vector    PDB IDs for proteins of interest
+# trim_chain        character vector    Identifiers for chains for trim.pdb
+# trim_elety        character vector    Identifiers for atoms for trim.pdb
+# plotb3_typ        character string    Identifier of plot type for plotb3
+# plotb3_ylab       character string    Desired y-axis label of graph for plotb3
+structure_analysis <- function(protein_vector,
+                               trim_chain = "A", 
+                               trim_elety = "CA", 
+                               plotb3_typ = "l", 
+                               plotb3_ylab = "Bfactor") {
   
   for(protein in protein_vector) {
     structure <- read.pdb(protein)
