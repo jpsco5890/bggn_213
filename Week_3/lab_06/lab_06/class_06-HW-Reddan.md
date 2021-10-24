@@ -70,7 +70,7 @@ plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
 
 ### Question 1:
 
-#### What type of object is returned from the read.pdb() function?
+> What type of object is returned from the read.pdb() function?
 
 ``` r
 s1 <- read.pdb("4AKE")
@@ -78,7 +78,7 @@ s1 <- read.pdb("4AKE")
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
     ## 4AKE.pdb exists. Skipping download
 
 ``` r
@@ -137,7 +137,7 @@ Returns a list.
 
 ### Question 2:
 
-#### What does the trim.pdb() function do?
+> What does the trim.pdb() function do?
 
 ``` r
 help("trim.pdb")
@@ -148,7 +148,8 @@ atoms.
 
 ### Question 3:
 
-#### What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?
+> What input parameter would turn off the marginal black and grey
+> rectangles in the plots and what do they represent in this case?
 
 ``` r
 help("plotb3")
@@ -160,14 +161,15 @@ protein.
 
 ### Question 4:
 
-#### What would be a better plot to compare across the different proteins?
+> What would be a better plot to compare across the different proteins?
 
 A scatterplot of RMSD data from aligned protein sequences. Alignment
 would allow for significant residue-residue comparisons.
 
 ### Question 5:
 
-#### Which proteins are more similar to each other in their B-factor trends. How could you quantify this?
+> Which proteins are more similar to each other in their B-factor
+> trends. How could you quantify this?
 
 Use hierarchical clustering with the calculated distances between
 protein structures to identify which are more similar.
@@ -184,7 +186,8 @@ than to the kinase without drugs (1AKE).
 
 ### Question 6:
 
-#### How would you generalize the original code above to work with any set of input protein structures?
+> How would you generalize the original code above to work with any set
+> of input protein structures?
 
 The function below is used to construct plots for proteins of interest
 where B-factor is plotted across the residues of the proteins, and
@@ -241,12 +244,12 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
     ## 4AKE.pdb exists. Skipping download
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
     ## 1AKE.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -255,7 +258,7 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
     ## 1E4Y.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->

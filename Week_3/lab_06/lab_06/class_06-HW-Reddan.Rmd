@@ -70,8 +70,8 @@ plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
 ```
 
 ### Question 1:  
-#### What type of object is returned from the read.pdb() function?  
-
+> What type of object is returned from the read.pdb() function?  
+  
 ```{r}
 s1 <- read.pdb("4AKE")
 str(s1)
@@ -80,8 +80,8 @@ str(s1)
 Returns a list.  
 
 ### Question 2:  
-#### What does the trim.pdb() function do?  
-
+>What does the trim.pdb() function do?  
+  
 ```{r}
 help("trim.pdb")
 ```
@@ -89,8 +89,8 @@ help("trim.pdb")
 It trims the original PDB object to contain a subset of the original atoms.  
 
 ### Question 3:  
-#### What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?  
-
+>What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?  
+  
 ```{r}
 help("plotb3")
 ```
@@ -99,12 +99,14 @@ The *sse* parameter is what sets the marginal grey and black rectangles,
 which represents the major secondary structure elements (SSEs) of the protein.  
 
 ### Question 4:  
-#### What would be a better plot to compare across the different proteins?  
+>What would be a better plot to compare across the different proteins?
+  
 A scatterplot of RMSD data from aligned protein sequences.
 Alignment would allow for significant residue-residue comparisons.  
 
 ### Question 5:  
-#### Which proteins are more similar to each other in their B-factor trends. How could you quantify this?  
+>Which proteins are more similar to each other in their B-factor trends. How could you quantify this?  
+  
 Use hierarchical clustering with the calculated distances between protein structures to identify which are more similar.  
 
 ```{r}
@@ -115,8 +117,8 @@ plot(hc)
 The kinases with drugs (4AKE and 1E4Y) are more similar to each other than to the kinase without drugs (1AKE).  
 
 ### Question 6:  
-#### How would you generalize the original code above to work with any set of input protein structures?  
-
+>How would you generalize the original code above to work with any set of input protein structures?  
+  
 The function below is used to construct plots for proteins of interest where
 B-factor is plotted across the residues of the proteins, and secondary structure
 is represented by boxes at the top and bottom of the figure. This function will print these plots while invisibly returning a NULL list.  
