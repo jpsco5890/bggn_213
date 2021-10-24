@@ -78,7 +78,7 @@ s1 <- read.pdb("4AKE")
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp7jNO0J/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
     ## 4AKE.pdb exists. Skipping download
 
 ``` r
@@ -186,6 +186,12 @@ than to the kinase without drugs (1AKE).
 
 #### How would you generalize the original code above to work with any set of input protein structures?
 
+The function below is used to construct plots for proteins of interest
+where B-factor is plotted across the residues of the proteins, and
+secondary structure is represented by boxes at the top and bottom of the
+figure. This function will print these plots while invisibly returning a
+NULL list.
+
 ``` r
 # Argument          (type)              [Description]
 # ==============================================================================
@@ -233,12 +239,12 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp7jNO0J/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
     ## 4AKE.pdb exists. Skipping download
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp7jNO0J/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
     ## 1AKE.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -247,7 +253,7 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp7jNO0J/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
     ## 1E4Y.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->

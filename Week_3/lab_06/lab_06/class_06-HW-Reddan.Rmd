@@ -2,8 +2,8 @@
 title: 'HW Class 6: Write a Function'
 author: "Jack Reddan"
 date: "10/17/2021"
-output: github_document
-#output: pdf_document
+#output: github_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -116,6 +116,10 @@ The kinases with drugs (4AKE and 1E4Y) are more similar to each other than to th
 
 ### Question 6:
 #### How would you generalize the original code above to work with any set of input protein structures?
+
+The function below is used to construct plots for proteins of interest where
+B-factor is plotted across the residues of the proteins, and secondary structure
+is represented by boxes at the top and bottom of the figure. This function will print these plots while invisibly returning a NULL list.
 
 ```{r}
 # Argument          (type)              [Description]
