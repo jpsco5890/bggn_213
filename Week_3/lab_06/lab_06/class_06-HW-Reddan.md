@@ -78,7 +78,7 @@ s1 <- read.pdb("4AKE")
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpfwhygS/
     ## 4AKE.pdb exists. Skipping download
 
 ``` r
@@ -200,16 +200,19 @@ structure_analysis <- function(protein_vector,
                                plotb3_typ = "l", 
                                plotb3_ylab = "Bfactor") {
   
-  for(protein in protein_vector) {
-    structure <- read.pdb(protein)
-    structure.chainA <- trim.pdb(structure, 
-                                 chain=trim_chain, 
-                                 elety=trim_elety)
-    plotb3(structure.chainA$atom$b, 
-           sse=structure.chainA, 
-           typ=plotb3_typ, 
-           ylab=plotb3_ylab)
-  }
+  invisible(
+    sapply(protein_vector, 
+           function(protein = x){
+             structure.chainA <- trim.pdb(read.pdb(protein), 
+                                          chain=trim_chain, 
+                                          elety=trim_elety)
+             plotb3(structure.chainA$atom$b, 
+                    sse=structure.chainA, 
+                    typ=plotb3_typ, 
+                    ylab=plotb3_ylab)
+           }
+    )
+  )
 }
 
 structure_analysis(c("4AKE", "1AKE", "1E4Y"))
@@ -217,12 +220,12 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpfwhygS/
     ## 4AKE.pdb exists. Skipping download
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpfwhygS/
     ## 1AKE.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -231,7 +234,7 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpRq7RLd/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpfwhygS/
     ## 1E4Y.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->

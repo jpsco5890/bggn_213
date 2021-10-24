@@ -131,16 +131,19 @@ structure_analysis <- function(protein_vector,
                                plotb3_typ = "l", 
                                plotb3_ylab = "Bfactor") {
   
-  for(protein in protein_vector) {
-    structure <- read.pdb(protein)
-    structure.chainA <- trim.pdb(structure, 
-                                 chain=trim_chain, 
-                                 elety=trim_elety)
-    plotb3(structure.chainA$atom$b, 
-           sse=structure.chainA, 
-           typ=plotb3_typ, 
-           ylab=plotb3_ylab)
-  }
+  invisible(
+    sapply(protein_vector, 
+           function(protein = x){
+             structure.chainA <- trim.pdb(read.pdb(protein), 
+                                          chain=trim_chain, 
+                                          elety=trim_elety)
+             plotb3(structure.chainA$atom$b, 
+                    sse=structure.chainA, 
+                    typ=plotb3_typ, 
+                    ylab=plotb3_ylab)
+           }
+    )
+  )
 }
 
 structure_analysis(c("4AKE", "1AKE", "1E4Y"))
