@@ -18,6 +18,8 @@ uk_foods <- read.csv(url, row.names = 1)
 ```{r}
 dim(uk_foods)
 ```
+  
+17 rows and 4 columns (*17 food categories and 4 countries*)  
 
 ## Checking the Data
 
@@ -28,19 +30,21 @@ head(uk_foods)
 >Question 2: Which approach to solving the ‘row-names problem’ mentioned above do you prefer and why? Is one approach more robust than another under certain circumstances?  
 
 I prefer to read in the row-names when I read in the csv data (in *read.csv*).
-This is less dangerous since it does not mutate our data to in the body of the 
-code, and instead restricts it to data initiation.
+This is less dangerous since it does not mutate our data in the body of the 
+code, and instead restricts it to when the data is read in.
 
-# Looking for differences
+# Looking for differences and trends
 
 ```{r}
 barplot(as.matrix(uk_foods), beside = T, col = rainbow(nrow(uk_foods)))
 ```
+  
 >Question 3: Changing what optional argument in the above barplot() function results in the following plot?  
 
 ```{r, echo=FALSE}
 barplot(as.matrix(uk_foods), beside = F, col = rainbow(nrow(uk_foods)))
 ```  
+  
 Changing the `beside` argument from `TRUE` to `FALSE`  
 
 >Question 5: Generating all pairwise plots may help somewhat. Can you make sense of the following code and resulting figure? What does it mean if a given point lies on the diagonal for a given plot?  
@@ -88,12 +92,27 @@ summary(uk_foods_pca)
 plot(uk_foods_pca)
 ```
 
-### Plot the data using PCs
-Use the two PCs which explain the most variance to plot the UKFoods data set.
+### Plot the data using PCs  
+  
+Use the two PCs which explain the most variance to plot the UKFoods data set (PC1
+and PC2)  
+
+>Question 7: 
+  
 ```{r}
 plot(uk_foods_pca$x[,1:2])
 text(uk_foods_pca$x[,1:2], colnames(uk_foods))
 ```
+  
+>Question 8: Customize your plot so that the colors of the country names match 
+the colors in our UK and Ireland map and table at start of this document.
+
+```{r}
+color_vector <- c("orange", "red", "blue", "green")
+plot(uk_foods_pca$x[,1:2], col = "#DDDDDD", xlim = c(-300, 600))
+text(uk_foods_pca$x[,1:2], colnames(uk_foods), col = color_vector)
+```
+
 ```{r}
 uk_foods_pca$rotation
 ```
@@ -135,7 +154,7 @@ Plot the data using PC1 and PC2
 plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 ```
 
-Check if the gorupings make sense
+Check if the groupings make sense
 ```{r}
 rna_pca_variance <- rna_pca$sdev^2
 rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
@@ -150,7 +169,8 @@ plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
 
 text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
 ```
-## Session Info
+  
+## Session Info  
 ```{r}
 sessionInfo()
 ```

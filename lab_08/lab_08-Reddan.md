@@ -21,6 +21,8 @@ dim(uk_foods)
 
     ## [1] 17  4
 
+17 rows and 4 columns (*17 food categories and 4 countries*)
+
 ## Checking the Data
 
 ``` r
@@ -40,20 +42,23 @@ head(uk_foods)
 > than another under certain circumstances?
 
 I prefer to read in the row-names when I read in the csv data (in
-*read.csv*). This is less dangerous since it does not mutate our data to
-in the body of the code, and instead restricts it to data initiation.
+*read.csv*). This is less dangerous since it does not mutate our data in
+the body of the code, and instead restricts it to when the data is read
+in.
 
-# Looking for differences
+# Looking for differences and trends
 
 ``` r
 barplot(as.matrix(uk_foods), beside = T, col = rainbow(nrow(uk_foods)))
 ```
 
 ![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-\>Question 3: Changing what optional argument in the above barplot()
-function results in the following plot?
+
+> Question 3: Changing what optional argument in the above barplot()
+> function results in the following plot?
 
 ![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
 Changing the `beside` argument from `TRUE` to `FALSE`
 
 > Question 5: Generating all pairwise plots may help somewhat. Can you
@@ -133,7 +138,9 @@ plot(uk_foods_pca)
 ### Plot the data using PCs
 
 Use the two PCs which explain the most variance to plot the UKFoods data
-set.
+set (PC1 and PC2)
+
+> Question 7:
 
 ``` r
 plot(uk_foods_pca$x[,1:2])
@@ -141,6 +148,10 @@ text(uk_foods_pca$x[,1:2], colnames(uk_foods))
 ```
 
 ![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+> Question 8: Customize your plot so that the colors of the country
+> names match the colors in our UK and Ireland map and table at start of
+> this document.
 
 ``` r
 uk_foods_pca$rotation
@@ -235,7 +246,7 @@ plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 
 ![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
-Check if the gorupings make sense
+Check if the groupings make sense
 
 ``` r
 rna_pca_variance <- rna_pca$sdev^2
@@ -252,8 +263,9 @@ plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
 text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-18-1.png)<!-- --> ##
-Session Info
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+## Session Info
 
 ``` r
 sessionInfo()
