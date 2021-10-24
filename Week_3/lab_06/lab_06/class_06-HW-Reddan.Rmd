@@ -2,8 +2,8 @@
 title: 'HW Class 6: Write a Function'
 author: "Jack Reddan"
 date: "10/17/2021"
-#output: github_document
-output: pdf_document
+output: github_document
+#output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -12,8 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Section 1: Improving analysis code by writing functions
 
-## A
-Improve the below code:
+## A  
+Improve the below code:  
 ```{r, results='hide'}
 df <- data.frame(a=1:10, b=seq(200, 400, length = 10), c=11:20, d=NA)
 
@@ -26,7 +26,7 @@ df$c <- (df$c - min(df$c)) / (max(df$c) - min(df$c))
 df$d <- (df$d - min(df$d)) / (max(df$d) - min(df$d))
 ```
 
-A function can be written to apply over the data frame.
+A function can be written to apply over the data frame.  
 ```{r}
 # Argument 'x' should be a numeric vector where all values are not equal
 # (e.g. length(unique(x)) != 1)
@@ -43,17 +43,17 @@ norm_diff_to_min <- function(x){
 df2 <- as.data.frame(apply(df, 2, norm_diff_to_min))
 ```
 
-The two data frames, df ad df2, are identical.
+The two data frames, df ad df2, are identical.  
 ```{r}
 identical(df, df2)
 ```
 
-## B
+## B  
 
 ```{r}
 library(bio3d)
 ```
-
+  
 ```{r, results='hide', fig.keep='none'}
 s1 <- read.pdb("4AKE") # kinase with drug
 s2 <- read.pdb("1AKE") # kinase no drug
@@ -69,57 +69,57 @@ plotb3(s2.b, sse=s2.chainA, typ="l", ylab="Bfactor")
 plotb3(s3.b, sse=s3.chainA, typ="l", ylab="Bfactor")
 ```
 
-### Question 1:
-#### What type of object is returned from the read.pdb() function? 
+### Question 1:  
+#### What type of object is returned from the read.pdb() function?  
 
 ```{r}
 s1 <- read.pdb("4AKE")
 str(s1)
 ```
 
-Returns a list.
+Returns a list.  
 
-### Question 2:
-#### What does the trim.pdb() function do?
+### Question 2:  
+#### What does the trim.pdb() function do?  
 
 ```{r}
 help("trim.pdb")
 ```
 
-It trims the original PDB object to contain a subset of the original atoms.
+It trims the original PDB object to contain a subset of the original atoms.  
 
-### Question 3:
-#### What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?
+### Question 3:  
+#### What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?  
 
 ```{r}
 help("plotb3")
 ```
 
 The *sse* parameter is what sets the marginal grey and black rectangles,
-which represents the major secondary structure elements (SSEs) of the protein.
+which represents the major secondary structure elements (SSEs) of the protein.  
 
-### Question 4:
-#### What would be a better plot to compare across the different proteins? 
+### Question 4:  
+#### What would be a better plot to compare across the different proteins?  
 A scatterplot of RMSD data from aligned protein sequences.
-Alignment would allow for significant residue-residue comparisons.
+Alignment would allow for significant residue-residue comparisons.  
 
-### Question 5:
-#### Which proteins are more similar to each other in their B-factor trends. How could you quantify this?
-Use hierarchical clustering with the calculated distances between protein structures to identify which are more similar.
+### Question 5:  
+#### Which proteins are more similar to each other in their B-factor trends. How could you quantify this?  
+Use hierarchical clustering with the calculated distances between protein structures to identify which are more similar.  
 
 ```{r}
 hc <- hclust(dist(rbind(s1.b, s2.b, s3.b)))
 plot(hc)
 ```
   
-The kinases with drugs (4AKE and 1E4Y) are more similar to each other than to the kinase without drugs (1AKE).
+The kinases with drugs (4AKE and 1E4Y) are more similar to each other than to the kinase without drugs (1AKE).  
 
-### Question 6:
-#### How would you generalize the original code above to work with any set of input protein structures?
+### Question 6:  
+#### How would you generalize the original code above to work with any set of input protein structures?  
 
 The function below is used to construct plots for proteins of interest where
 B-factor is plotted across the residues of the proteins, and secondary structure
-is represented by boxes at the top and bottom of the figure. This function will print these plots while invisibly returning a NULL list.
+is represented by boxes at the top and bottom of the figure. This function will print these plots while invisibly returning a NULL list.  
 
 ```{r}
 # Argument          (type)              [Description]
@@ -129,6 +129,8 @@ is represented by boxes at the top and bottom of the figure. This function will 
 # trim_elety        character vector    Identifiers for atoms for trim.pdb
 # plotb3_typ        character string    Identifier of plot type for plotb3
 # plotb3_ylab       character string    Desired y-axis label of graph for plotb3
+#===============================================================================
+
 structure_analysis <- function(protein_vector,
                                trim_chain = "A", 
                                trim_elety = "CA", 

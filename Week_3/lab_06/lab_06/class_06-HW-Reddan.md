@@ -78,7 +78,7 @@ s1 <- read.pdb("4AKE")
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
     ## 4AKE.pdb exists. Skipping download
 
 ``` r
@@ -200,6 +200,8 @@ NULL list.
 # trim_elety        character vector    Identifiers for atoms for trim.pdb
 # plotb3_typ        character string    Identifier of plot type for plotb3
 # plotb3_ylab       character string    Desired y-axis label of graph for plotb3
+#===============================================================================
+
 structure_analysis <- function(protein_vector,
                                trim_chain = "A", 
                                trim_elety = "CA", 
@@ -239,12 +241,12 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
     ## 4AKE.pdb exists. Skipping download
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
     ## 1AKE.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -253,7 +255,7 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmp3iiNZj/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpgaMXMV/
     ## 1E4Y.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
