@@ -342,9 +342,15 @@ library(ggplot2)
 
 # Convert PCA results to a data frame for ggplot
 rna_pca_df <- as.data.frame(rna_pca$x)
+
+# Plot samples on PC1 and PC2
+ggplot(rna_pca_df) +
+  aes(x = PC1, y = PC2) +
+  geom_point()
 ```
 
-## Session Info
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-23-1.png)<!-- --> ##
+Session Info
 
 ``` r
 sessionInfo()
@@ -379,7 +385,7 @@ sessionInfo()
     ## [13] grid_4.1.1        gtable_0.3.0      xfun_0.24         utf8_1.2.1       
     ## [17] DBI_1.1.1         withr_2.4.2       htmltools_0.5.1.1 ellipsis_0.3.2   
     ## [21] assertthat_0.2.1  yaml_2.2.1        digest_0.6.27     tibble_3.1.2     
-    ## [25] lifecycle_1.0.0   crayon_1.4.1      purrr_0.3.4       vctrs_0.3.8      
-    ## [29] glue_1.4.2        evaluate_0.14     rmarkdown_2.11    stringi_1.7.2    
-    ## [33] compiler_4.1.1    pillar_1.6.1      generics_0.1.0    scales_1.1.1     
-    ## [37] pkgconfig_2.0.3
+    ## [25] lifecycle_1.0.0   crayon_1.4.1      farver_2.1.0      purrr_0.3.4      
+    ## [29] vctrs_0.3.8       glue_1.4.2        evaluate_0.14     rmarkdown_2.11   
+    ## [33] labeling_0.4.2    stringi_1.7.2     compiler_4.1.1    pillar_1.6.1     
+    ## [37] generics_0.1.0    scales_1.1.1      pkgconfig_2.0.3

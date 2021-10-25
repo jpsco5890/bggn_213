@@ -219,6 +219,11 @@ library(ggplot2)
 
 # Convert PCA results to a data frame for ggplot
 rna_pca_df <- as.data.frame(rna_pca$x)
+
+# Plot samples on PC1 and PC2
+ggplot(rna_pca_df) +
+  aes(x = PC1, y = PC2) +
+  geom_point()
 ```
 ## Session Info  
 ```{r}
