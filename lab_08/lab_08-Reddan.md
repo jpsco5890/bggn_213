@@ -261,10 +261,12 @@ head(rna_data)
 > Question 10: How many genes and samples are in this data set?
 
 ``` r
-nrow(rna_data)
+dim(rna_data)
 ```
 
-    ## [1] 100
+    ## [1] 100  10
+
+100 genes and 10 samples in the data set.
 
 ## PCA for RNA-Seq Data
 
@@ -283,13 +285,30 @@ summary(rna_pca)
     ## Proportion of Variance 0.00385 0.00364 0.000e+00
     ## Cumulative Proportion  0.99636 1.00000 1.000e+00
 
-Scree plot of the PCs
+Scree plot of the PCs helps to show how much variance is explained by
+each PC. Here it is clear that PC1 dominates compared to the others,
+explaining \>92% of the total variance.
 
 ``` r
-plot(rna_pca)
+plot(rna_pca, main = "Scree plot")
 ```
 
 ![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+Replicate the Scree plot method for the pca object with base R plotting.
+
+``` r
+rna_pca_variance <- rna_pca$sdev^2
+rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
+
+barplot(rna_pca_varience_percent, main="Mimicked Scree Plot", 
+        names.arg = paste0("PC", 1:10),
+        ylim = c(0, 100),
+        xlab="Principal Component", 
+        ylab="Percent Variation")
+```
+
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 Plot the data using PC1 and PC2
 
@@ -297,14 +316,11 @@ Plot the data using PC1 and PC2
 plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 Check if the groupings make sense
 
 ``` r
-rna_pca_variance <- rna_pca$sdev^2
-rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
-
 color_vector <- colnames(rna_data)
 color_vector[grep("wt", color_vector)] <- "red"
 color_vector[grep("ko", color_vector)] <- "blue"
@@ -316,7 +332,17 @@ plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
 text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+### Plotting PCA using ggplot
+
+``` r
+# Load the ggplot2 library
+library(ggplot2)
+
+# Convert PCA results to a data frame for ggplot
+rna_pca_df <- as.data.frame(rna_pca$x)
+```
 
 ## Session Info
 
@@ -343,8 +369,17 @@ sessionInfo()
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
+    ## other attached packages:
+    ## [1] ggplot2_3.3.5
+    ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] compiler_4.1.1    magrittr_2.0.1    tools_4.1.1       htmltools_0.5.1.1
-    ##  [5] yaml_2.2.1        stringi_1.7.2     rmarkdown_2.11    highr_0.9        
-    ##  [9] knitr_1.33        stringr_1.4.0     xfun_0.24         digest_0.6.27    
-    ## [13] rlang_0.4.11      evaluate_0.14
+    ##  [1] knitr_1.33        magrittr_2.0.1    tidyselect_1.1.1  munsell_0.5.0    
+    ##  [5] colorspace_2.0-2  R6_2.5.0          rlang_0.4.11      fansi_0.5.0      
+    ##  [9] dplyr_1.0.7       stringr_1.4.0     highr_0.9         tools_4.1.1      
+    ## [13] grid_4.1.1        gtable_0.3.0      xfun_0.24         utf8_1.2.1       
+    ## [17] DBI_1.1.1         withr_2.4.2       htmltools_0.5.1.1 ellipsis_0.3.2   
+    ## [21] assertthat_0.2.1  yaml_2.2.1        digest_0.6.27     tibble_3.1.2     
+    ## [25] lifecycle_1.0.0   crayon_1.4.1      purrr_0.3.4       vctrs_0.3.8      
+    ## [29] glue_1.4.2        evaluate_0.14     rmarkdown_2.11    stringi_1.7.2    
+    ## [33] compiler_4.1.1    pillar_1.6.1      generics_0.1.0    scales_1.1.1     
+    ## [37] pkgconfig_2.0.3

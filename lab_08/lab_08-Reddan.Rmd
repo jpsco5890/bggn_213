@@ -161,20 +161,38 @@ head(rna_data)
 >Question 10: How many genes and samples are in this data set?  
 
 ```{r}
-nrow(rna_data)
+dim(rna_data)
 ```
-
+  
+100 genes and 10 samples in the data set.
+  
 ## PCA for RNA-Seq Data
 ```{r}
 rna_pca <- prcomp(t(rna_data), scale = TRUE)
 summary(rna_pca)
 ```
 
-Scree plot of the PCs
+Scree plot of the PCs helps to show how much variance is explained by each PC.
+Here it is clear that PC1 dominates compared to the others,
+explaining >92% of the total variance.
+  
 ```{r}
-plot(rna_pca)
+plot(rna_pca, main = "Scree plot")
 ```
 
+Replicate the Scree plot method for the pca object with base R plotting.
+  
+```{r}
+rna_pca_variance <- rna_pca$sdev^2
+rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
+
+barplot(rna_pca_varience_percent, main="Mimicked Scree Plot", 
+        names.arg = paste0("PC", 1:10),
+        ylim = c(0, 100),
+        xlab="Principal Component", 
+        ylab="Percent Variation")
+```
+  
 Plot the data using PC1 and PC2
 ```{r}
 plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
@@ -182,9 +200,6 @@ plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 
 Check if the groupings make sense
 ```{r}
-rna_pca_variance <- rna_pca$sdev^2
-rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
-
 color_vector <- colnames(rna_data)
 color_vector[grep("wt", color_vector)] <- "red"
 color_vector[grep("ko", color_vector)] <- "blue"
@@ -196,6 +211,15 @@ plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
 text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
 ```
   
+### Plotting PCA using ggplot
+
+```{r}
+# Load the ggplot2 library
+library(ggplot2)
+
+# Convert PCA results to a data frame for ggplot
+rna_pca_df <- as.data.frame(rna_pca$x)
+```
 ## Session Info  
 ```{r}
 sessionInfo()
