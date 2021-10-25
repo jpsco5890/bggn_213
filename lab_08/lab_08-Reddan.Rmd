@@ -1,6 +1,6 @@
 ---
 title: "Lab 08"
-author: "Jack Reddan"
+author: "Jack Reddan (PID: A59010543)"
 date: "10/22/2021"
 #output: github_document
 output: pdf_document
