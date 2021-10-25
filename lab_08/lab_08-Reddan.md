@@ -349,8 +349,59 @@ ggplot(rna_pca_df) +
   geom_point()
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-23-1.png)<!-- --> ##
-Session Info
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+To make the figure clearer, plot the labels instead of just a point, and
+map color to sample condition.
+
+``` r
+# Create columns in the data frame for labeling samples and conditions
+rna_pca_df$samples <- colnames(rna_data)
+rna_pca_df$conditions <- substr(colnames(rna_data),1,2)
+
+ggplot(data = rna_pca_df) +
+  aes(x = PC1, y = PC2, label = samples, color = conditions) +
+  geom_label(show.legend = FALSE)
+```
+
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+> Refine the ggplot figure with themes and labels
+
+``` r
+ggplot(data = rna_pca_df) +
+  aes(x = PC1, y = PC2, label = samples, color = conditions) +
+  geom_label(show.legend = FALSE) +
+  labs(
+    title = "PCA of RNA-sequencing data",
+    x = paste0("PC1 (", rna_pca_varience_percent[1], "%)"),
+    y = paste0("PC2 (", rna_pca_varience_percent[2], "%)"),
+    caption = "BGGN 213 example data (AY21 F)") +
+  theme_minimal()
+```
+
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+### Gene loadings
+
+Explore which genes contribute most to PC1 to determine what the key,
+differentiating genes are between the two condition groups.
+
+``` r
+# Save gene loading scores for PC1
+gene_loading_scores <- rna_pca$rotation[,1]
+
+# Rank by absolute value from high to low
+ranked_absolute_loading_scores <- sort(abs(gene_loading_scores), decreasing=TRUE)
+
+# Print the gene names with the first 10 (top 10) scores
+names(ranked_absolute_loading_scores[1:10])
+```
+
+    ##  [1] "gene100" "gene66"  "gene45"  "gene68"  "gene98"  "gene60"  "gene21" 
+    ##  [8] "gene56"  "gene10"  "gene90"
+
+## Session Info
 
 ``` r
 sessionInfo()
