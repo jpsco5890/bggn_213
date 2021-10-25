@@ -84,7 +84,12 @@ column plotted on the y-axis.
 
 > > Without PCA
 
-Identify the log2 fold change and order as decreasing
+This is difficult to do without using a PCA, but a way could be to look
+at the maximum differences, pairwise, in log2 fold-changes between
+Northern Ireland and the other UK countries.
+
+Identify the log2 fold change and identify the component with the
+maximum absolute change
 
 ``` r
 n_ireland_v_england <- log(uk_foods$N.Ireland, base = 2)/log(uk_foods$England, base = 2)
@@ -95,22 +100,25 @@ names(n_ireland_v_england) <- row.names(uk_foods)
 names(n_ireland_v_wales) <- row.names(uk_foods)
 names(n_ireland_v_scotland) <- row.names(uk_foods)
 
-order(n_ireland_v_england, decreasing = T)
+which.max(abs(n_ireland_v_england))
 ```
 
-    ##  [1]  7  2  5 15 13 10 11  6  3 14  9 17 12  4  1  8 16
+    ## Fresh_potatoes  
+    ##               7
 
 ``` r
-order(n_ireland_v_wales, decreasing = T)
+which.max(abs(n_ireland_v_wales))
 ```
 
-    ##  [1]  2 15  7 13 11 10  5  6  3 12  9  1 14  4 17  8 16
+    ## Carcass_meat  
+    ##             2
 
 ``` r
-order(n_ireland_v_scotland, decreasing = T)
+which.max(abs(n_ireland_v_scotland))
 ```
 
-    ##  [1]  7  5  2 13 11 15  6  9 10 14  8  3 12  4  1 17 16
+    ## Fresh_potatoes  
+    ##               7
 
 ## PCA
 
@@ -154,6 +162,25 @@ text(uk_foods_pca$x[,1:2], colnames(uk_foods))
 > this document.
 
 ``` r
+color_vector <- c("orange", "red", "blue", "green")
+plot(uk_foods_pca$x[,1:2], col = "#DDDDDD", xlim = c(-300, 600))
+text(uk_foods_pca$x[,1:2], colnames(uk_foods), col = color_vector)
+```
+
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+### Plot the proportions of variences explained by each PC
+
+``` r
+variance_per <- round(((uk_foods_pca$sdev^2)/sum(uk_foods_pca$sdev^2)) * 100)
+
+barplot(variance_per, xlab="Principal Component", ylab="Percent Variation")
+```
+
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-12-1.png)<!-- --> ###
+Digging Deeper: Variable Loadings
+
+``` r
 uk_foods_pca$rotation
 ```
 
@@ -176,16 +203,42 @@ uk_foods_pca$rotation
     ## Alcoholic_drinks    -0.463968168  0.113536523 -0.49858320 -0.316290619
     ## Confectionery       -0.029650201  0.005949921 -0.05232164  0.001847469
 
+Since PC1 accounts for the most variance, the contribution of each
+component on the distribution of countries on this PC will be the most
+helpful.
+
 ``` r
 op <- par(mar=c(10,3,0.35,0))
 barplot(uk_foods_pca$rotation[,1], las = 2)
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 par(op)
 ```
+
+> Question 9: Generate a similar ‘loadings plot’ for PC2. What two food
+> groups feature prominantely and what does PC2 maninly tell us about?
+
+``` r
+op <- par(mar=c(10,3,0.35,0))
+barplot(uk_foods_pca$rotation[,2], las = 2)
+```
+
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+par(op)
+```
+
+The two most prominent features are Fresh potatoes and soft drinks. This
+PC is mainly telling us which features most contribute to the
+differences between the other three UK countries (England to Scotland to
+Wales) since it is on this PC that these countries are differentiated
+upon. Therefore, these features (fresh potatoes and soft drinks) are the
+components which contribute to the differences among these three
+countries.
 
 #PCA of RNA-Seq Data
 
@@ -236,7 +289,7 @@ Scree plot of the PCs
 plot(rna_pca)
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 Plot the data using PC1 and PC2
 
@@ -244,7 +297,7 @@ Plot the data using PC1 and PC2
 plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 Check if the groupings make sense
 
@@ -263,7 +316,7 @@ plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
 text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
 ```
 
-![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ## Session Info
 
