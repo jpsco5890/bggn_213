@@ -150,7 +150,7 @@ other three UK countries (England to Scotland to Wales) since it is on this PC
 that these countries are differentiated upon. Therefore, these features (fresh potatoes and soft drinks) are the components which contribute to the differences
 among these three countries.  
   
-#PCA of RNA-Seq Data
+# PCA of RNA-Seq Data
 
 ## Import the Data
 ```{r}
@@ -240,7 +240,7 @@ ggplot(data = rna_pca_df) +
   geom_label(show.legend = FALSE)
 ```
   
->Refine the ggplot figure with themes and labels
+>Refine the ggplot figure with themes and labels:
   
 ```{r}
 ggplot(data = rna_pca_df) +

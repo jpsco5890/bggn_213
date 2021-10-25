@@ -1,6 +1,6 @@
 Lab 08
 ================
-Jack Reddan
+Jack Reddan (PID: A59010543)
 10/22/2021
 
 ## Import the Data
@@ -240,7 +240,7 @@ upon. Therefore, these features (fresh potatoes and soft drinks) are the
 components which contribute to the differences among these three
 countries.
 
-#PCA of RNA-Seq Data
+# PCA of RNA-Seq Data
 
 ## Import the Data
 
@@ -366,7 +366,7 @@ ggplot(data = rna_pca_df) +
 
 ![](lab_08-Reddan_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
-> Refine the ggplot figure with themes and labels
+> Refine the ggplot figure with themes and labels:
 
 ``` r
 ggplot(data = rna_pca_df) +
