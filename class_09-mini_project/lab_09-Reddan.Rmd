@@ -105,6 +105,22 @@ Seven PCs [PC1 - PC7], explains 91.010%.
 ## Interpreting PCA Results  
   
 ```{r}
+biplot(wisconsin_pca)
+```
+  
+>[Q7]: What stands out to you about this plot? Is it easy or difficult to 
+understand? Why?  
+  
+```{r}
+plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2], 
+     col = diagnosis, 
+     xlab = "PC1", ylab = "PC2")
+```
 
+```{r}
+plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3], 
+     col = diagnosis, 
+     xlab = "PC1", 
+     ylab = "PC3")
 ```
 

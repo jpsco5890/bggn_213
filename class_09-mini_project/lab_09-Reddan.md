@@ -203,3 +203,28 @@ Three PCs \[PC1 - PC3\], explains 72.636%.
 Seven PCs \[PC1 - PC7\], explains 91.010%.
 
 ## Interpreting PCA Results
+
+``` r
+biplot(wisconsin_pca)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+> understand? Why?
+
+``` r
+plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2], 
+     col = diagnosis, 
+     xlab = "PC1", ylab = "PC2")
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3], 
+     col = diagnosis, 
+     xlab = "PC1", 
+     ylab = "PC3")
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
