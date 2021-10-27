@@ -5,6 +5,13 @@ date: "10/27/2021"
 #output: pdf_document
 output: github_document
 ---
+>Load libraries  
+
+```{r}
+library(ggplot2)
+```
+
+
 # Exploratroy data analysis  
   
 ## Organizing the data  
@@ -116,11 +123,45 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2],
      col = diagnosis, 
      xlab = "PC1", ylab = "PC2")
 ```
-
+  
+>[Q8]: Generate a similar plot for principal components 1 and 3. What do you 
+notice about these plots?
+  
 ```{r}
 plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3], 
      col = diagnosis, 
      xlab = "PC1", 
      ylab = "PC3")
 ```
+  
+```{r}
+wisconsin_pca_df <- as.data.frame(wisconsin_pca$x)
+wisconsin_pca_df$diagnosis <- diagnosis 
+```
 
+```{r}
+ggplot(data = wisconsin_pca_df) +
+  aes(x = PC1, y = PC2,
+      col = diagnosis) +
+  geom_point()
+```
+  
+## Variance Explained  
+  
+```{r}
+wisconsin_pca_variance <- wisconsin_pca$sdev^2
+head(wisconsin_pca_variance)
+```
+  
+```{r}
+wisconsin_pca_variance_prop <- wisconsin_pca_variance / sum(wisconsin_pca_variance)
+```
+
+```{r}
+plot(wisconsin_pca_variance_prop, 
+     xlab = "Principal Component",
+     ylab = "Proportion of Variance Explained",
+     ylim = c(0, 1),
+     type = "o")
+```
+  
