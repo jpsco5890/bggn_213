@@ -3,6 +3,15 @@ Mini Project
 Jack Reddan (PID: A59010543)
 10/27/2021
 
+> Load libraries
+
+``` r
+library(ggplot2)
+library(factoextra)
+```
+
+    ## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
+
 # Exploratroy data analysis
 
 ## Organizing the data
@@ -208,7 +217,7 @@ Seven PCs \[PC1 - PC7\], explains 91.010%.
 biplot(wisconsin_pca)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 > understand? Why?
 
@@ -218,7 +227,9 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2],
      xlab = "PC1", ylab = "PC2")
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+> notice about these plots?
 
 ``` r
 plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3], 
@@ -227,4 +238,95 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3],
      ylab = "PC3")
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+wisconsin_pca_df <- as.data.frame(wisconsin_pca$x)
+wisconsin_pca_df$diagnosis <- diagnosis 
+```
+
+``` r
+ggplot(data = wisconsin_pca_df) +
+  aes(x = PC1, y = PC2,
+      col = diagnosis) +
+  geom_point()
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+## Variance Explained
+
+``` r
+wisconsin_pca_variance <- wisconsin_pca$sdev^2
+head(wisconsin_pca_variance)
+```
+
+    ## [1] 13.281608  5.691355  2.817949  1.980640  1.648731  1.207357
+
+``` r
+wisconsin_pca_variance_prop <- wisconsin_pca_variance / sum(wisconsin_pca_variance)
+```
+
+``` r
+plot(wisconsin_pca_variance_prop, 
+     xlab = "Principal Component",
+     ylab = "Proportion of Variance Explained",
+     ylim = c(0, 1),
+     type = "o")
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+barplot(wisconsin_pca_variance_prop,
+        ylab = "Percent of Variance Explained",
+        names.arg = paste0("PC", 1:length(wisconsin_pca_variance_prop)),
+        las = 2,
+        axes = FALSE)
+axis(2, 
+     at=wisconsin_pca_variance_prop,
+     labels = round(wisconsin_pca_variance_prop, 2)*100)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+fviz_eig(wisconsin_pca, 
+         addlabels = TRUE)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+## Communicatin PCA Results
+
+> \[Q9\] For the first principal component, what is the component of the
+> loading vector (i.e. `wisc.pr$rotation[,1]`) for the feature
+> `concave.points_mean`?
+
+``` r
+wisconsin_pca$rotation[grep("concave.points_mean", row.names(wisconsin_pca$rotation)),1]
+```
+
+    ## [1] -0.2608538
+
+> \[Q10\] What is the minimum number of principal components required to
+> explain 80% of the variance of the data?
+
+``` r
+vals = c("sum" = 0, "count" = 1)
+while(vals[1] < 0.8){
+  vals[1] = vals[1] + wisconsin_pca_variance_prop[vals[2]]
+  vals[2] = vals[2] + 1
+}
+
+paste0("It takes a minimum of ",  vals[2] - 1, " PCs to explain ", round(vals[1]*100, 2), "% of the data",
+       sep = "")
+```
+
+    ## [1] "It takes a minimum of 5 PCs to explain 84.73% of the data"
+
+# Hierarchical Clustering
+
+``` r
+wisconsin_data_scaled <- scale(naive_wisconsin_df)
+```

@@ -9,6 +9,7 @@ output: github_document
 
 ```{r}
 library(ggplot2)
+library(factoextra)
 ```
 
 
@@ -165,3 +166,48 @@ plot(wisconsin_pca_variance_prop,
      type = "o")
 ```
   
+```{r}
+barplot(wisconsin_pca_variance_prop,
+        ylab = "Percent of Variance Explained",
+        names.arg = paste0("PC", 1:length(wisconsin_pca_variance_prop)),
+        las = 2,
+        axes = FALSE)
+axis(2, 
+     at=wisconsin_pca_variance_prop,
+     labels = round(wisconsin_pca_variance_prop, 2)*100)
+```
+  
+```{r}
+fviz_eig(wisconsin_pca, 
+         addlabels = TRUE)
+```
+
+
+## Communicatin PCA Results  
+  
+>[Q9] For the first principal component, what is the component of the loading 
+vector (i.e. `wisc.pr$rotation[,1]`) for the feature `concave.points_mean`?  
+  
+```{r}
+wisconsin_pca$rotation[grep("concave.points_mean", row.names(wisconsin_pca$rotation)),1]
+```
+  
+>[Q10] What is the minimum number of principal components required to explain 80%
+of the variance of the data?  
+  
+```{r}
+vals = c("sum" = 0, "count" = 1)
+while(vals[1] < 0.8){
+  vals[1] = vals[1] + wisconsin_pca_variance_prop[vals[2]]
+  vals[2] = vals[2] + 1
+}
+
+paste0("It takes a minimum of ",  vals[2] - 1, " PCs to explain ", round(vals[1]*100, 2), "% of the data",
+       sep = "")
+```
+  
+# Hierarchical Clustering  
+  
+```{r}
+wisconsin_data_scaled <- scale(naive_wisconsin_df)
+```
