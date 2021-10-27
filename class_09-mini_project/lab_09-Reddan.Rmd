@@ -5,6 +5,8 @@ date: "10/27/2021"
 #output: pdf_document
 output: github_document
 ---
+# Exploratroy data analysis  
+  
 ## Organizing the data  
 
 First I read in the data from 'WisconsinCancer.csv" with the first column as the row names.  
@@ -25,7 +27,9 @@ derive from the data. This will be removed to generate the naive dataframe.
 Additionally, these results are saved as the vector 'diagnosis'.
 
 ```{r}
-naive_wisconsin_df <- wisconsin_df[,-1]
+# The data seems to have a extraneous ',' at the end of the column names
+# Take out the artifact column 'X' from the read-in.
+naive_wisconsin_df <- wisconsin_df[,-c(1, ncol(wisconsin_df))]
 diagnosis <- factor(wisconsin_df[,1])
 ```
 
@@ -42,9 +46,26 @@ There are 569 rows/observations.
 >[Q2]: How many of the observations have a malignant diagnoses?  
   
 ```{r}
-sum(diagnosis == "M")
+table(diagnosis)
 ```
   
 212 of the observations have a "M" or malignant diagnoses.  
   
->[Q3]: 
+>[Q3]: How many variables/features in the data are suffixed with `_mean`?  
+  
+```{r}
+length(grep("_mean", colnames(naive_wisconsin_df)))
+```
+  
+There are 10 variables/features (columns) which are suffixed with `_mean`.  
+  
+# Principal Component Analysis  
+  
+## Performing PCA  
+  
+```{r}
+colMeans(naive_wisconsin_df)
+```
+
+  
+  

@@ -60,5 +60,25 @@ dataframe. Additionally, these results are saved as the vector
 
 ``` r
 naive_wisconsin_df <- wisconsin_df[,-1]
-diagnosis <- wisconsin_df[,1]
+diagnosis <- factor(wisconsin_df[,1])
 ```
+
+## Explore the data
+
+``` r
+nrow(wisconsin_df)
+```
+
+    ## [1] 569
+
+There are 569 rows/observations.
+
+``` r
+table(diagnosis)
+```
+
+    ## diagnosis
+    ##   B   M 
+    ## 357 212
+
+212 of the observations have a “M” or malignant diagnoses.
