@@ -29,7 +29,7 @@ Additionally, these results are saved as the vector 'diagnosis'.
 ```{r}
 # The data seems to have a extraneous ',' at the end of the column names
 # Take out the artifact column 'X' from the read-in.
-naive_wisconsin_df <- wisconsin_df[,-c(1, ncol(wisconsin_df))]
+naive_wisconsin_df <- wisconsin_df[,c(-1, -ncol(wisconsin_df))]
 diagnosis <- factor(wisconsin_df[,1])
 ```
 
@@ -63,9 +63,48 @@ There are 10 variables/features (columns) which are suffixed with `_mean`.
   
 ## Performing PCA  
   
+Check the means and Standard deviations of the variables.  
+
 ```{r}
 colMeans(naive_wisconsin_df)
 ```
+  
+```{r}
+apply(naive_wisconsin_df, 2, sd)
+```
 
+Run the 'prcomp()' on the Wisconsin dataframe with scaling to account for 
+different variables having variable scales of values.  
   
+```{r}
+wisconsin_pca <- prcomp(naive_wisconsin_df, scale = TRUE)
+```
+
+```{r}
+summary(wisconsin_pca)
+```
+
+>[Q4]: From your results, what proportion of the original variance is captured 
+by the first principal component (PC1)?  
   
+*See above*  
+44.27%  
+  
+>[Q5]: How many principal components (PCs) are required to describe at least 70% 
+of the original variance in the data?  
+  
+*See above*  
+Three PCs [PC1 - PC3], explains 72.636%.  
+  
+>[Q6]: How many principal components (PCs) are required to describe at least 90%
+of the original variance in the data?  
+  
+*See above*  
+Seven PCs [PC1 - PC7], explains 91.010%.  
+  
+## Interpreting PCA Results  
+  
+```{r}
+
+```
+
