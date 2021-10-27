@@ -11,3 +11,12 @@ fna_data <- "WisconsinCancer.csv"
 wisconsin_df <- read.csv(fna_data, row.names = 1)
 ```
 
+```{r}
+wisconsin_df
+```
+
+```{r}
+naive_wisconsin_df <- wisconsin_df[,-1]
+```
+
+
