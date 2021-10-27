@@ -235,4 +235,14 @@ wisconsin_hclust_clusters <- cutree(wisconsin_data_hclust, k = 4)
 table(wisconsin_hclust_clusters, diagnosis)
 ```
 
-  
+>[Q12]: Can you find a better cluster vs diagnoses match by cutting into a 
+different number of clusters between 2 and 10?
+
+```{r}
+for(i in 2:10){
+  wisconsin_hclust_clusters <- cutree(wisconsin_data_hclust, k = i)
+  cat(paste0(i, "\n", sep = ""))
+  print(table(wisconsin_hclust_clusters, diagnosis))
+}
+```
+

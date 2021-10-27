@@ -361,3 +361,95 @@ table(wisconsin_hclust_clusters, diagnosis)
     ##                         2   2   5
     ##                         3 343  40
     ##                         4   0   2
+
+> different number of clusters between 2 and 10?
+
+``` r
+for(i in 2:10){
+  wisconsin_hclust_clusters <- cutree(wisconsin_data_hclust, k = i)
+  cat(paste0(i, "\n", sep = ""))
+  print(table(wisconsin_hclust_clusters, diagnosis))
+}
+```
+
+    ## 2
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1 357 210
+    ##                         2   0   2
+    ## 3
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1 355 205
+    ##                         2   2   5
+    ##                         3   0   2
+    ## 4
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12 165
+    ##                         2   2   5
+    ##                         3 343  40
+    ##                         4   0   2
+    ## 5
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12 165
+    ##                         2   0   5
+    ##                         3 343  40
+    ##                         4   2   0
+    ##                         5   0   2
+    ## 6
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12 165
+    ##                         2   0   5
+    ##                         3 331  39
+    ##                         4   2   0
+    ##                         5  12   1
+    ##                         6   0   2
+    ## 7
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12 165
+    ##                         2   0   3
+    ##                         3 331  39
+    ##                         4   2   0
+    ##                         5  12   1
+    ##                         6   0   2
+    ##                         7   0   2
+    ## 8
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12  86
+    ##                         2   0  79
+    ##                         3   0   3
+    ##                         4 331  39
+    ##                         5   2   0
+    ##                         6  12   1
+    ##                         7   0   2
+    ##                         8   0   2
+    ## 9
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12  86
+    ##                         2   0  79
+    ##                         3   0   3
+    ##                         4 331  39
+    ##                         5   2   0
+    ##                         6  12   0
+    ##                         7   0   2
+    ##                         8   0   2
+    ##                         9   0   1
+    ## 10
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                        1   12  86
+    ##                        2    0  59
+    ##                        3    0   3
+    ##                        4  331  39
+    ##                        5    0  20
+    ##                        6    2   0
+    ##                        7   12   0
+    ##                        8    0   2
+    ##                        9    0   2
+    ##                        10   0   1
