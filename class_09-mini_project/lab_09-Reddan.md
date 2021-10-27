@@ -199,13 +199,13 @@ summary(wisconsin_pca)
 *See above*  
 44.27%
 
-> \[Q5\]: How many principal components (PCs) are required to describe
+> \[Q05\]: How many principal components (PCs) are required to describe
 > at least 70% of the original variance in the data?
 
 *See above*  
 Three PCs \[PC1 - PC3\], explains 72.636%.
 
-> \[Q6\]: How many principal components (PCs) are required to describe
+> \[Q06\]: How many principal components (PCs) are required to describe
 > at least 90% of the original variance in the data?
 
 *See above*  
@@ -299,8 +299,8 @@ fviz_eig(wisconsin_pca,
 
 ## Communicatin PCA Results
 
-> \[Q9\] For the first principal component, what is the component of the
-> loading vector (i.e. `wisc.pr$rotation[,1]`) for the feature
+> \[Q09\] For the first principal component, what is the component of
+> the loading vector (i.e. `wisc.pr$rotation[,1]`) for the feature
 > `concave.points_mean`?
 
 ``` r
@@ -329,4 +329,35 @@ paste0("It takes a minimum of ",  vals[2] - 1, " PCs to explain ", round(vals[1]
 
 ``` r
 wisconsin_data_scaled <- scale(naive_wisconsin_df)
+wisconsin_data_distance <- dist(wisconsin_data_scaled)
 ```
+
+``` r
+wisconsin_data_hclust <- hclust(wisconsin_data_distance, method = "complete")
+```
+
+> clustering model has 4 clusters?
+
+``` r
+plot(wisconsin_data_hclust)
+abline(a= 19, b = 0,
+       col = "red",
+       lty = 2)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+``` r
+wisconsin_hclust_clusters <- cutree(wisconsin_data_hclust, k = 4)
+```
+
+``` r
+table(wisconsin_hclust_clusters, diagnosis)
+```
+
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                         1  12 165
+    ##                         2   2   5
+    ##                         3 343  40
+    ##                         4   0   2

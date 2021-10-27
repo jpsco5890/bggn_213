@@ -43,7 +43,7 @@ diagnosis <- factor(wisconsin_df[,1])
 
 ## Explore the data
 
->[Q1]: How many observations are in the dataset?  
+>[Q01]: How many observations are in the dataset?  
 
 ```{r}
 nrow(wisconsin_df)
@@ -51,7 +51,7 @@ nrow(wisconsin_df)
   
 There are 569 rows/observations.  
   
->[Q2]: How many of the observations have a malignant diagnoses?  
+>[Q02]: How many of the observations have a malignant diagnoses?  
   
 ```{r}
 table(diagnosis)
@@ -59,7 +59,7 @@ table(diagnosis)
   
 212 of the observations have a "M" or malignant diagnoses.  
   
->[Q3]: How many variables/features in the data are suffixed with `_mean`?  
+>[Q03]: How many variables/features in the data are suffixed with `_mean`?  
   
 ```{r}
 length(grep("_mean", colnames(naive_wisconsin_df)))
@@ -92,19 +92,19 @@ wisconsin_pca <- prcomp(naive_wisconsin_df, scale = TRUE)
 summary(wisconsin_pca)
 ```
 
->[Q4]: From your results, what proportion of the original variance is captured 
+>[Q04]: From your results, what proportion of the original variance is captured 
 by the first principal component (PC1)?  
   
 *See above*  
 44.27%  
   
->[Q5]: How many principal components (PCs) are required to describe at least 70% 
+>[Q05]: How many principal components (PCs) are required to describe at least 70% 
 of the original variance in the data?  
   
 *See above*  
 Three PCs [PC1 - PC3], explains 72.636%.  
   
->[Q6]: How many principal components (PCs) are required to describe at least 90%
+>[Q06]: How many principal components (PCs) are required to describe at least 90%
 of the original variance in the data?  
   
 *See above*  
@@ -116,7 +116,7 @@ Seven PCs [PC1 - PC7], explains 91.010%.
 biplot(wisconsin_pca)
 ```
   
->[Q7]: What stands out to you about this plot? Is it easy or difficult to 
+>[Q07]: What stands out to you about this plot? Is it easy or difficult to 
 understand? Why?  
   
 ```{r}
@@ -125,7 +125,7 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2],
      xlab = "PC1", ylab = "PC2")
 ```
   
->[Q8]: Generate a similar plot for principal components 1 and 3. What do you 
+>[Q08]: Generate a similar plot for principal components 1 and 3. What do you 
 notice about these plots?
   
 ```{r}
@@ -185,7 +185,7 @@ fviz_eig(wisconsin_pca,
 
 ## Communicatin PCA Results  
   
->[Q9] For the first principal component, what is the component of the loading 
+>[Q09] For the first principal component, what is the component of the loading 
 vector (i.e. `wisc.pr$rotation[,1]`) for the feature `concave.points_mean`?  
   
 ```{r}
@@ -210,4 +210,29 @@ paste0("It takes a minimum of ",  vals[2] - 1, " PCs to explain ", round(vals[1]
   
 ```{r}
 wisconsin_data_scaled <- scale(naive_wisconsin_df)
+wisconsin_data_distance <- dist(wisconsin_data_scaled)
 ```
+
+```{r}
+wisconsin_data_hclust <- hclust(wisconsin_data_distance, method = "complete")
+```
+  
+>[Q11]: Using the `plot()` and `abline()` functions, what is the height at which the
+clustering model has 4 clusters?
+
+```{r}
+plot(wisconsin_data_hclust)
+abline(a= 19, b = 0,
+       col = "red",
+       lty = 2)
+```
+  
+```{r}
+wisconsin_hclust_clusters <- cutree(wisconsin_data_hclust, k = 4)
+```
+  
+```{r}
+table(wisconsin_hclust_clusters, diagnosis)
+```
+
+  
