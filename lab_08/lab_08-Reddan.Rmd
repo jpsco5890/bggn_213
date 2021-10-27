@@ -1,9 +1,8 @@
 ---
 title: "Lab 08"
-author: "Jack Reddan (PID: A59010543)"
+author: "Jack Reddan"
 date: "10/22/2021"
-#output: github_document
-output: pdf_document
+output: github_document
 ---
 
 ## Import the Data
@@ -150,7 +149,13 @@ other three UK countries (England to Scotland to Wales) since it is on this PC
 that these countries are differentiated upon. Therefore, these features (fresh potatoes and soft drinks) are the components which contribute to the differences
 among these three countries.  
   
-# PCA of RNA-Seq Data
+#### Biplots
+
+```{r}
+biplot(uk_foods_pca)
+```
+  
+#PCA of RNA-Seq Data
 
 ## Import the Data
 ```{r}
@@ -162,10 +167,10 @@ head(rna_data)
 >Question 10: How many genes and samples are in this data set?  
 
 ```{r}
-dim(rna_data)
+nrow(rna_data)
 ```
   
-100 genes and 10 samples in the data set.
+100 genes in the data set.
   
 ## PCA for RNA-Seq Data
 ```{r}
@@ -173,27 +178,11 @@ rna_pca <- prcomp(t(rna_data), scale = TRUE)
 summary(rna_pca)
 ```
 
-Scree plot of the PCs helps to show how much variance is explained by each PC.
-Here it is clear that PC1 dominates compared to the others,
-explaining >92% of the total variance.
-  
+Scree plot of the PCs
 ```{r}
-plot(rna_pca, main = "Scree plot")
+plot(rna_pca)
 ```
 
-Replicate the Scree plot method for the pca object with base R plotting.
-  
-```{r}
-rna_pca_variance <- rna_pca$sdev^2
-rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
-
-barplot(rna_pca_varience_percent, main="Mimicked Scree Plot", 
-        names.arg = paste0("PC", 1:10),
-        ylim = c(0, 100),
-        xlab="Principal Component", 
-        ylab="Percent Variation")
-```
-  
 Plot the data using PC1 and PC2
 ```{r}
 plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
@@ -201,6 +190,9 @@ plot(rna_pca$x[,1], rna_pca$x[,2], xlab = "PC1", ylab = "PC2")
 
 Check if the groupings make sense
 ```{r}
+rna_pca_variance <- rna_pca$sdev^2
+rna_pca_varience_percent <- round(rna_pca_variance/sum(rna_pca_variance)*100, 1)
+
 color_vector <- colnames(rna_data)
 color_vector[grep("wt", color_vector)] <- "red"
 color_vector[grep("ko", color_vector)] <- "blue"
@@ -212,63 +204,6 @@ plot(rna_pca$x[,1], rna_pca$x[,2], col=color_vector, pch=16,
 text(rna_pca$x[,1], rna_pca$x[,2], labels = colnames(rna_data), pos=c(rep(4,5), rep(2,5)))
 ```
   
-### Plotting PCA using ggplot
-
-```{r}
-# Load the ggplot2 library
-library(ggplot2)
-
-# Convert PCA results to a data frame for ggplot
-rna_pca_df <- as.data.frame(rna_pca$x)
-
-# Plot samples on PC1 and PC2
-ggplot(rna_pca_df) +
-  aes(x = PC1, y = PC2) +
-  geom_point()
-```
-  
-To make the figure clearer, plot the labels instead of just a point, and map
-color to sample condition.
-
-```{r}
-# Create columns in the data frame for labeling samples and conditions
-rna_pca_df$samples <- colnames(rna_data)
-rna_pca_df$conditions <- substr(colnames(rna_data),1,2)
-
-ggplot(data = rna_pca_df) +
-  aes(x = PC1, y = PC2, label = samples, color = conditions) +
-  geom_label(show.legend = FALSE)
-```
-  
->Refine the ggplot figure with themes and labels:
-  
-```{r}
-ggplot(data = rna_pca_df) +
-  aes(x = PC1, y = PC2, label = samples, color = conditions) +
-  geom_label(show.legend = FALSE) +
-  labs(
-    title = "PCA of RNA-sequencing data",
-    x = paste0("PC1 (", rna_pca_varience_percent[1], "%)"),
-    y = paste0("PC2 (", rna_pca_varience_percent[2], "%)"),
-    caption = "BGGN 213 example data (AY21 F)") +
-  theme_minimal()
-```
-  
-### Gene loadings
-
-Explore which genes contribute most to PC1 to determine what the key, differentiating genes are between the two condition groups.
-  
-```{r}
-# Save gene loading scores for PC1
-gene_loading_scores <- rna_pca$rotation[,1]
-
-# Rank by absolute value from high to low
-ranked_absolute_loading_scores <- sort(abs(gene_loading_scores), decreasing=TRUE)
-
-# Print the gene names with the first 10 (top 10) scores
-names(ranked_absolute_loading_scores[1:10])
-```
-
 ## Session Info  
 ```{r}
 sessionInfo()
