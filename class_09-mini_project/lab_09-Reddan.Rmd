@@ -5,18 +5,28 @@ date: "10/27/2021"
 #output: pdf_document
 output: github_document
 ---
+## Organizing the data  
+
+First I read in the data from 'WisconsinCancer.csv" with the first column as the row names.  
 
 ```{r}
 fna_data <- "WisconsinCancer.csv"
 wisconsin_df <- read.csv(fna_data, row.names = 1)
 ```
 
+Then I look at the data to asses the structure of the data.  
+
 ```{r}
-wisconsin_df
+str(wisconsin_df)
 ```
+  
+The first row contains the diagnoses which are the outputs we are trying to
+derive from the data. This will be removed to generate the naive dataframe.
+Additionally, these results are saved as the vector 'diagnosis'.
 
 ```{r}
 naive_wisconsin_df <- wisconsin_df[,-1]
+diagnosis <- wisconsin_df[,1]
 ```
 
 
