@@ -10,6 +10,7 @@ output: github_document
 ```{r}
 library(ggplot2)
 library(factoextra)
+library(rgl)
 ```
 
 
@@ -261,4 +262,49 @@ table(wisconsin_hclust_clusters, wisconsin_kmeans$cluster)
 
 # Combining Methods  
   
+```{r}
+wisconsin_data_hclust_wD2 <- hclust(wisconsin_data_distance, method = "ward.D2")
+```
+
   
+```{r}
+groups <- cutree(wisconsin_data_hclust_wD2, k = 2)
+table(groups)
+```
+
+```{r}
+table(groups, diagnosis)
+```
+
+```{r}
+plot(wisconsin_pca$x[,1:2], col=groups)
+```
+
+```{r}
+plot(wisconsin_pca$x[,1:2], col=diagnosis)
+```
+
+```{r}
+re_group <- as.factor(groups)
+levels(re_group)
+
+re_group <- relevel(re_group, 2)
+levels(re_group)
+```
+
+```{r}
+plot(wisconsin_pca$x[,1:2], col=re_group)
+
+```
+
+```{r}
+plot3d(wisconsin_pca$x[,1:3], 
+       xlab = "PC 1",
+       ylab = "PC 2",
+       zlab = "PC 3",
+       cex = 1.5,
+       size = 1,
+       type = "s",
+       col = groups)
+```
+
