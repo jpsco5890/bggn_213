@@ -10,6 +10,7 @@ output: github_document
 ```{r}
 library(skimr)
 library(dplyr)
+library(ggplot2)
 ```
 
 
@@ -122,4 +123,49 @@ choco_vs_furity_stat$p.value
 ```{r}
 candy %>% arrange(winpercent) %>% head(5)
 ```
+
+>[Q14]: What are the top 5 all time favorite candy types out of this set?  
+  
+```{r}
+candy %>% arrange(desc(winpercent)) %>% head(5)
+```
+  
+>[Q15]: Make a first barplot of candy ranking based on winpercent values.  
+  
+```{r}
+ggplot(data = candy) +
+  aes(x = winpercent, y = rownames(candy)) +
+  geom_col()
+```
+  
+  
+>[Q16]: This is quite ugly, use the `reorder()` function to get the bars sorted 
+by `winpercent`?  
+  
+```{r}
+ggplot(data = candy) +
+  aes(x = winpercent, y = reorder(rownames(candy), winpercent)) +
+  geom_col()
+```
+
+```{r}
+my_cols=rep("black", nrow(candy))
+my_cols[as.logical(candy$chocolate)] = "chocolate"
+my_cols[as.logical(candy$bar)] = "brown"
+my_cols[as.logical(candy$fruity)] = "pink"
+```
+  
+```{r}
+ggplot(data = candy) +
+  aes(x = winpercent, y = reorder(rownames(candy), winpercent)) +
+  geom_col(fill = my_cols)
+```
+  
+>[Q17]: What is the worst ranked chocolate candy?  
+
+Boston Baked Beans  
+  
+>[Q18]: What is the best ranked fruity candy?  
+  
+
 
