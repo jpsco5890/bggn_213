@@ -333,3 +333,70 @@ corrplot(candy_cor)
 Chocolate and fruity.
 
 Winpercent and chocolate.
+
+# Principal Component Analysis
+
+``` r
+candy_pca <- prcomp(candy, scale = TRUE)
+summary(candy_pca)
+```
+
+    ## Importance of components:
+    ##                           PC1    PC2    PC3     PC4    PC5     PC6     PC7
+    ## Standard deviation     2.0788 1.1378 1.1092 1.07533 0.9518 0.81923 0.81530
+    ## Proportion of Variance 0.3601 0.1079 0.1025 0.09636 0.0755 0.05593 0.05539
+    ## Cumulative Proportion  0.3601 0.4680 0.5705 0.66688 0.7424 0.79830 0.85369
+    ##                            PC8     PC9    PC10    PC11    PC12
+    ## Standard deviation     0.74530 0.67824 0.62349 0.43974 0.39760
+    ## Proportion of Variance 0.04629 0.03833 0.03239 0.01611 0.01317
+    ## Cumulative Proportion  0.89998 0.93832 0.97071 0.98683 1.00000
+
+``` r
+plot(candy_pca$x[,1:2],
+     xlab = "PC 1",
+     ylab = "PC 2")
+```
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+``` r
+plot(candy_pca$x[,1:2],
+     col = my_cols,
+     pch = 16,
+     xlab = "PC 1",
+     ylab = "PC 2")
+```
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+``` r
+candy_df <- cbind(candy, candy_pca$x[,1:3])
+```
+
+``` r
+p <- ggplot(candy_df) + 
+  aes(x=PC1, y=PC2, 
+      size=winpercent/100,
+      text=rownames(candy_df),
+      label=rownames(candy_df)) + 
+  geom_point(col=my_cols) +
+  labs(x = "PC 1", y = "PC 2")
+
+p
+```
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+
+``` r
+p + 
+  geom_text_repel(size=3.3, col=my_cols, max.overlaps = 7)  + 
+  theme(legend.position = "none") + 
+  labs(title="Halloween Candy PCA Space", 
+       subtitle="Colored by type: chocolate bar (dark brown), chocolate other (light brown), fruity (red), other (black)",
+       caption="Data from 538")
+```
+
+    ## Warning: ggrepel: 42 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
