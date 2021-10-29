@@ -9,6 +9,7 @@ output: github_document
 # Library loading  
 ```{r}
 library(skimr)
+library(dplyr)
 ```
 
 
@@ -55,5 +56,70 @@ candy["Tootsie Roll Snack Bars",]$winpercent
   
 ```{r}
 skim(candy)
+```
+
+>[Q6]: Is there any variable/column that looks to be on a different scale to the
+majority of the other columns in the dataset?  
+  
+Yes, the 'winpercent' column, the mean is two orders of magnitude larger than the
+others.  
+  
+>[Q7]: What do you think a zero and one represent for the `candy$chocolate` 
+column?  
+
+1 and 0 represent TRUE and FALSE for whether the category could be used to
+describe the candy of interest.  
+  
+>[Q8]: Plot a histogram of `winpercent` values.  
+  
+```{r}
+hist(x = candy$winpercent)
+```
+  
+>[Q9]: Is the distribution of winpercent values symmetrical?  
+  
+```{r}
+hist(x = candy$winpercent)
+abline(v = mean(candy$winpercent), col = 'red')
+abline(v = median(candy$winpercent), col = 'blue')
+```
+  
+No, the data has a higher density below the mean, since the median is shifted 
+below the mean. Therefore, the distribution of the data is not symmetrical.  
+  
+>[Q10]: Is the center of the distribution above or below 50%?  
+  
+*See plot above* The median/center of the distribution is below 50%.
+  
+>[Q11]: On average is chocolate candy higher or lower ranked than fruit candy?  
+  
+```{r}
+fruity_logi <- as.logical(candy$fruity)
+choco_logi <- as.logical(candy$chocolate)
+
+fruity_win <- candy$winpercent[fruity_logi]
+names(fruity_win) <- rownames(candy)[fruity_logi]
+
+choco_win <- candy$winpercent[choco_logi]
+names(choco_win) <- candy$winpercent[choco_logi]
+
+mean(choco_win)
+mean(fruity_win)
+```
+
+>[Q12]: Is this difference statistically significant?  
+  
+```{r}
+choco_vs_furity_stat <- t.test(choco_win, fruity_win)
+choco_vs_furity_stat$p.value
+```
+  
+  
+# Overall Candy Rankings  
+  
+>[Q13]: What are the five least liked candy types in this set?  
+  
+```{r}
+candy %>% arrange(winpercent) %>% head(5)
 ```
 
