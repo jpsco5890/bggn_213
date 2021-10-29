@@ -12,6 +12,7 @@ library(skimr)
 library(dplyr)
 library(ggplot2)
 library(ggrepel)
+library(corrplot)
 ```
 
 
@@ -188,7 +189,49 @@ Reese's Miniatures.
 these which is the least popular?  
   
 ```{r}
-candy %>% arrange(desc(pricepercent)) %>% head(5)
+candy %>% 
+  arrange(desc(pricepercent)) %>% 
+  head(5) %>% 
+  arrange(winpercent) %>% 
+  head(1)
 ```
   
-Nik L Nip.
+Nik L Nip.  
+  
+>[Q21]: Make a barplot again with geom_col() this time using pricepercent.
+
+```{r}
+ggplot(data = candy) +
+  aes(x = pricepercent, y = reorder(rownames(candy), pricepercent)) +
+  geom_col()
+```
+  
+```{r}
+ggplot(candy) +
+  aes(pricepercent, reorder(rownames(candy), pricepercent)) +
+  geom_segment(aes(yend = reorder(rownames(candy), pricepercent), xend = 0), 
+               col="gray40") +
+    geom_point()
+```
+
+# Exploring the Correlation Structure  
+  
+```{r}
+candy_cor <- cor(candy)
+corrplot(candy_cor)
+```
+
+>[Q22]: Examining this plot what two variables are anti-correlated (i.e. have 
+minus values)?  
+  
+Chocolate and fruity.  
+  
+>[Q23]: Similarly, what two variables are most positively correlated?  
+  
+Winpercent and chocolate.  
+  
+
+```{r}
+
+```
+

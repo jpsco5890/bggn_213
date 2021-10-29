@@ -24,7 +24,10 @@ library(dplyr)
 ``` r
 library(ggplot2)
 library(ggrepel)
+library(corrplot)
 ```
+
+    ## corrplot 0.90 loaded
 
 # Importing candy data
 
@@ -283,26 +286,50 @@ Reese’s Miniatures.
 > these which is the least popular?
 
 ``` r
-candy %>% arrange(desc(pricepercent)) %>% head(5)
+candy %>% 
+  arrange(desc(pricepercent)) %>% 
+  head(5) %>% 
+  arrange(winpercent) %>% 
+  head(1)
 ```
 
-    ##                          chocolate fruity caramel peanutyalmondy nougat
-    ## Nik L Nip                        0      1       0              0      0
-    ## Nestle Smarties                  1      0       0              0      0
-    ## Ring pop                         0      1       0              0      0
-    ## HersheyÕs Krackel                1      0       0              0      0
-    ## HersheyÕs Milk Chocolate         1      0       0              0      0
-    ##                          crispedricewafer hard bar pluribus sugarpercent
-    ## Nik L Nip                               0    0   0        1        0.197
-    ## Nestle Smarties                         0    0   0        1        0.267
-    ## Ring pop                                0    1   0        0        0.732
-    ## HersheyÕs Krackel                       1    0   1        0        0.430
-    ## HersheyÕs Milk Chocolate                0    0   1        0        0.430
-    ##                          pricepercent winpercent
-    ## Nik L Nip                       0.976   22.44534
-    ## Nestle Smarties                 0.976   37.88719
-    ## Ring pop                        0.965   35.29076
-    ## HersheyÕs Krackel               0.918   62.28448
-    ## HersheyÕs Milk Chocolate        0.918   56.49050
+    ##           chocolate fruity caramel peanutyalmondy nougat crispedricewafer hard
+    ## Nik L Nip         0      1       0              0      0                0    0
+    ##           bar pluribus sugarpercent pricepercent winpercent
+    ## Nik L Nip   0        1        0.197        0.976   22.44534
 
 Nik L Nip.
+
+``` r
+ggplot(data = candy) +
+  aes(x = pricepercent, y = reorder(rownames(candy), pricepercent)) +
+  geom_col()
+```
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+``` r
+ggplot(candy) +
+  aes(pricepercent, reorder(rownames(candy), pricepercent)) +
+  geom_segment(aes(yend = reorder(rownames(candy), pricepercent), xend = 0), 
+               col="gray40") +
+    geom_point()
+```
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+# Exploring the Correlation Structure
+
+``` r
+candy_cor <- cor(candy)
+corrplot(candy_cor)
+```
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+> \[Q22\]: Examining this plot what two variables are anti-correlated
+> (i.e. have minus values)?
+
+Chocolate and fruity.
+
+Winpercent and chocolate.
