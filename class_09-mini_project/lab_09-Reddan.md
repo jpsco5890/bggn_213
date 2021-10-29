@@ -352,19 +352,19 @@ abline(a= 19, b = 0,
 ![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
 ``` r
-wisconsin_hclust_clusters <- cutree(wisconsin_data_hclust, k = 4)
+wisconsin_hclust_clusters_k4 <- cutree(wisconsin_data_hclust, k = 4)
 ```
 
 ``` r
-table(wisconsin_hclust_clusters, diagnosis)
+table(wisconsin_hclust_clusters_k4, diagnosis)
 ```
 
-    ##                          diagnosis
-    ## wisconsin_hclust_clusters   B   M
-    ##                         1  12 165
-    ##                         2   2   5
-    ##                         3 343  40
-    ##                         4   0   2
+    ##                             diagnosis
+    ## wisconsin_hclust_clusters_k4   B   M
+    ##                            1  12 165
+    ##                            2   2   5
+    ##                            3 343  40
+    ##                            4   0   2
 
 > different number of clusters between 2 and 10?
 
@@ -468,25 +468,19 @@ table(wisconsin_kmeans$cluster, diagnosis)
 
     ##    diagnosis
     ##       B   M
-    ##   1 343  37
-    ##   2  14 175
+    ##   1  14 175
+    ##   2 343  37
 
 ``` r
-table(wisconsin_hclust_clusters, wisconsin_kmeans$cluster)
+table(wisconsin_hclust_clusters_k4, wisconsin_kmeans$cluster)
 ```
 
-    ##                          
-    ## wisconsin_hclust_clusters   1   2
-    ##                        1   17  81
-    ##                        2    0  59
-    ##                        3    0   3
-    ##                        4  358  12
-    ##                        5    0  20
-    ##                        6    0   2
-    ##                        7    5   7
-    ##                        8    0   2
-    ##                        9    0   2
-    ##                        10   0   1
+    ##                             
+    ## wisconsin_hclust_clusters_k4   1   2
+    ##                            1 160  17
+    ##                            2   7   0
+    ##                            3  20 363
+    ##                            4   2   0
 
 # Combining Methods
 
@@ -512,17 +506,25 @@ table(groups, diagnosis)
     ##      1  28 188
     ##      2 329  24
 
+**Accuracy**
+
+``` r
+(188 + 329)/(length(diagnosis))
+```
+
+    ## [1] 0.9086116
+
 ``` r
 plot(wisconsin_pca$x[,1:2], col=groups)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 ``` r
 plot(wisconsin_pca$x[,1:2], col=diagnosis)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
 
 ``` r
 re_group <- as.factor(groups)
@@ -542,7 +544,7 @@ levels(re_group)
 plot(wisconsin_pca$x[,1:2], col=re_group)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
 
 ``` r
 plot3d(wisconsin_pca$x[,1:3], 
@@ -559,7 +561,7 @@ rglwidget(width = 400, height = 400)
     ## Warning in snapshot3d(scene = x, width = width, height = height): webshot = TRUE
     ## requires the webshot2 package; using rgl.snapshot() instead
 
-![](/tmp/RtmppWKI9x/file4ab74b04102.png)<!-- -->
+![](/tmp/RtmpBr6qVO/file5c0712f765ef.png)<!-- -->
 
 ``` r
 table(wisconsin_kmeans$cluster, diagnosis)
@@ -567,22 +569,149 @@ table(wisconsin_kmeans$cluster, diagnosis)
 
     ##    diagnosis
     ##       B   M
-    ##   1 343  37
-    ##   2  14 175
+    ##   1  14 175
+    ##   2 343  37
 
 ``` r
-table(wisconsin_hclust_clusters, diagnosis)
+table(wisconsin_hclust_clusters_k4, diagnosis)
 ```
 
-    ##                          diagnosis
-    ## wisconsin_hclust_clusters   B   M
-    ##                        1   12  86
-    ##                        2    0  59
-    ##                        3    0   3
-    ##                        4  331  39
-    ##                        5    0  20
-    ##                        6    2   0
-    ##                        7   12   0
-    ##                        8    0   2
-    ##                        9    0   2
-    ##                        10   0   1
+    ##                             diagnosis
+    ## wisconsin_hclust_clusters_k4   B   M
+    ##                            1  12 165
+    ##                            2   2   5
+    ##                            3 343  40
+    ##                            4   0   2
+
+# Sensitivity and Specifity
+
+**Sensitivity**  
+hclust-pca:
+
+``` r
+165/(165 + 47)
+```
+
+    ## [1] 0.7783019
+
+hclust-no_pca:
+
+``` r
+2/(2+210)
+```
+
+    ## [1] 0.009433962
+
+kmeans-no_pca:
+
+``` r
+175/(175+37)
+```
+
+    ## [1] 0.8254717
+
+**Specificity**  
+hclust-pca:
+
+``` r
+351/(351+47)
+```
+
+    ## [1] 0.8819095
+
+hclust-no_pca:
+
+``` r
+357/(357+210)
+```
+
+    ## [1] 0.6296296
+
+kmeans-no_pca:
+
+``` r
+343/(343+37)
+```
+
+    ## [1] 0.9026316
+
+# Prediction
+
+``` r
+#url <- "new_samples.csv"
+url <- "https://tinyurl.com/new-samples-CSV"
+new <- read.csv(url)
+npc <- predict(wisconsin_pca, newdata=new)
+npc
+```
+
+    ##            PC1       PC2        PC3        PC4       PC5        PC6        PC7
+    ## [1,]  2.576616 -3.135913  1.3990492 -0.7631950  2.781648 -0.8150185 -0.3959098
+    ## [2,] -4.754928 -3.009033 -0.1660946 -0.6052952 -1.140698 -1.2189945  0.8193031
+    ##             PC8       PC9       PC10      PC11      PC12      PC13     PC14
+    ## [1,] -0.2307350 0.1029569 -0.9272861 0.3411457  0.375921 0.1610764 1.187882
+    ## [2,] -0.3307423 0.5281896 -0.4855301 0.7173233 -1.185917 0.5893856 0.303029
+    ##           PC15       PC16        PC17        PC18        PC19       PC20
+    ## [1,] 0.3216974 -0.1743616 -0.07875393 -0.11207028 -0.08802955 -0.2495216
+    ## [2,] 0.1299153  0.1448061 -0.40509706  0.06565549  0.25591230 -0.4289500
+    ##            PC21       PC22       PC23       PC24        PC25         PC26
+    ## [1,]  0.1228233 0.09358453 0.08347651  0.1223396  0.02124121  0.078884581
+    ## [2,] -0.1224776 0.01732146 0.06316631 -0.2338618 -0.20755948 -0.009833238
+    ##              PC27        PC28         PC29         PC30
+    ## [1,]  0.220199544 -0.02946023 -0.015620933  0.005269029
+    ## [2,] -0.001134152  0.09638361  0.002795349 -0.019015820
+
+``` r
+plot(wisconsin_pca$x[,1:2], col=groups)
+points(npc[,1], npc[,2], col="blue", pch=16, cex=3)
+text(npc[,1], npc[,2], c(1,2), col="white")
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+
+# Session Information
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.1.1 (2021-08-10)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Arch Linux
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /usr/lib/libblas.so.3.10.0
+    ## LAPACK: /usr/lib/liblapack.so.3.10.0
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ## [1] rgl_0.107.14     factoextra_1.0.7 ggplot2_3.3.5   
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] tidyselect_1.1.1  xfun_0.24         purrr_0.3.4       haven_2.4.1      
+    ##  [5] carData_3.0-4     colorspace_2.0-2  vctrs_0.3.8       generics_0.1.0   
+    ##  [9] htmltools_0.5.1.1 yaml_2.2.1        utf8_1.2.1        rlang_0.4.11     
+    ## [13] pillar_1.6.1      ggpubr_0.4.0      foreign_0.8-81    glue_1.4.2       
+    ## [17] withr_2.4.2       DBI_1.1.1         readxl_1.3.1      lifecycle_1.0.0  
+    ## [21] stringr_1.4.0     cellranger_1.1.0  munsell_0.5.0     ggsignif_0.6.3   
+    ## [25] gtable_0.3.0      zip_2.2.0         htmlwidgets_1.5.4 evaluate_0.14    
+    ## [29] forcats_0.5.1     rio_0.5.27        labeling_0.4.2    knitr_1.33       
+    ## [33] extrafont_0.17    curl_4.3.2        fansi_0.5.0       Rttf2pt1_1.3.8   
+    ## [37] highr_0.9         broom_0.7.8       Rcpp_1.0.7        scales_1.1.1     
+    ## [41] backports_1.2.1   jsonlite_1.7.2    abind_1.4-5       farver_2.1.0     
+    ## [45] hms_1.1.0         digest_0.6.27     openxlsx_4.2.4    stringi_1.7.2    
+    ## [49] rstatix_0.7.0     dplyr_1.0.7       ggrepel_0.9.1     grid_4.1.1       
+    ## [53] tools_4.1.1       magrittr_2.0.1    tibble_3.1.2      crayon_1.4.1     
+    ## [57] extrafontdb_1.0   tidyr_1.1.3       car_3.0-11        pkgconfig_2.0.3  
+    ## [61] ellipsis_0.3.2    data.table_1.14.0 assertthat_0.2.1  rmarkdown_2.11   
+    ## [65] R6_2.5.0          compiler_4.1.1

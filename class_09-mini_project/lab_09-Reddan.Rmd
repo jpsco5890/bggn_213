@@ -356,3 +356,26 @@ kmeans-no_pca:
 ```{r}
 343/(343+37)
 ```
+
+
+# Prediction
+
+```{r}
+#url <- "new_samples.csv"
+url <- "https://tinyurl.com/new-samples-CSV"
+new <- read.csv(url)
+npc <- predict(wisconsin_pca, newdata=new)
+npc
+```
+
+```{r}
+plot(wisconsin_pca$x[,1:2], col=groups)
+points(npc[,1], npc[,2], col="blue", pch=16, cex=3)
+text(npc[,1], npc[,2], c(1,2), col="white")
+```
+
+# Session Information
+```{r}
+sessionInfo()
+```
+
