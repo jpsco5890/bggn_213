@@ -26,6 +26,12 @@ candy <- read.csv(candy_file, row.names = 1)
 head(candy)
 ```
 
+**Correct for wrong character**  
+```{r}
+rownames(candy) <- gsub("Õ", "'", rownames(candy))
+```
+
+
 >[Q1]: How many different candy types are in this dataset?  
   
 ```{r}
