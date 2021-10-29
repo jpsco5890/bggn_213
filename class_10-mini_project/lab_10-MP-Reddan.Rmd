@@ -13,6 +13,7 @@ library(dplyr)
 library(ggplot2)
 library(ggrepel)
 library(corrplot)
+library(plotly)
 ```
 
 
@@ -268,11 +269,29 @@ p
 ```
   
 ```{r}
-p + 
+p <- p + 
   geom_text_repel(size=3.3, col=my_cols, max.overlaps = 7)  + 
   theme(legend.position = "none") + 
   labs(title="Halloween Candy PCA Space", 
        subtitle="Colored by type: chocolate bar (dark brown), chocolate other (light brown), fruity (red), other (black)",
        caption="Data from 538")
+
+p
 ```
 
+```{r}
+ggplotly(p)
+```
+  
+```{r}
+op <- par(mar=c(8,4,2,2))
+barplot(candy_pca$rotation[,1], las=2, ylab="PC1 Contribution")
+par(op)
+```
+  
+>[Q24]: What original variables are picked up strongly by PC1 in the positive 
+direction? Do these make sense to you?  
+  
+Fruity, hard and pluribus.
+Yes, these variables are found together often, and can easily differentiate 
+between types of candy.
