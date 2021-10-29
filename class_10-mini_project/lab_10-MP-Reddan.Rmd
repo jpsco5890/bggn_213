@@ -1,0 +1,7 @@
+---
+title: "Halloween Mini-Project"
+author: 'Jack Reddan (PID: A59010543)'
+date: "10/29/2021"
+output: github_document
+#output: pdf_document
+---
