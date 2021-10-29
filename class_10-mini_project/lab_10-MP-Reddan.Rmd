@@ -11,6 +11,7 @@ output: github_document
 library(skimr)
 library(dplyr)
 library(ggplot2)
+library(ggrepel)
 ```
 
 
@@ -167,5 +168,27 @@ Boston Baked Beans
   
 >[Q18]: What is the best ranked fruity candy?  
   
-
-
+Starbursts  
+  
+# Taking a look at pricepercent  
+  
+```{r}
+ggplot(candy) + 
+  aes(winpercent, pricepercent, label = rownames(candy)) +
+  geom_point(col = my_cols) +
+  geom_text_repel(col=my_cols, size=3.3, max.overlaps = 5)
+```
+  
+>[Q19]: Which candy type is the highest ranked in terms of winpercent for the 
+least money - i.e. offers the most bang for your buck?  
+  
+Reese's Miniatures.  
+  
+>[Q20]: What are the top 5 most expensive candy types in the dataset and of 
+these which is the least popular?  
+  
+```{r}
+candy %>% arrange(desc(pricepercent)) %>% head(5)
+```
+  
+Nik L Nip.

@@ -23,6 +23,7 @@ library(dplyr)
 
 ``` r
 library(ggplot2)
+library(ggrepel)
 ```
 
 # Importing candy data
@@ -258,3 +259,50 @@ ggplot(data = candy) +
 ![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 Boston Baked Beans
+
+Starbursts
+
+# Taking a look at pricepercent
+
+``` r
+ggplot(candy) + 
+  aes(winpercent, pricepercent, label = rownames(candy)) +
+  geom_point(col = my_cols) +
+  geom_text_repel(col=my_cols, size=3.3, max.overlaps = 5)
+```
+
+    ## Warning: ggrepel: 52 unlabeled data points (too many overlaps). Consider
+    ## increasing max.overlaps
+
+![](lab_10-MP-Reddan_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+> least money - i.e. offers the most bang for your buck?
+
+Reese’s Miniatures.
+
+> these which is the least popular?
+
+``` r
+candy %>% arrange(desc(pricepercent)) %>% head(5)
+```
+
+    ##                          chocolate fruity caramel peanutyalmondy nougat
+    ## Nik L Nip                        0      1       0              0      0
+    ## Nestle Smarties                  1      0       0              0      0
+    ## Ring pop                         0      1       0              0      0
+    ## HersheyÕs Krackel                1      0       0              0      0
+    ## HersheyÕs Milk Chocolate         1      0       0              0      0
+    ##                          crispedricewafer hard bar pluribus sugarpercent
+    ## Nik L Nip                               0    0   0        1        0.197
+    ## Nestle Smarties                         0    0   0        1        0.267
+    ## Ring pop                                0    1   0        0        0.732
+    ## HersheyÕs Krackel                       1    0   1        0        0.430
+    ## HersheyÕs Milk Chocolate                0    0   1        0        0.430
+    ##                          pricepercent winpercent
+    ## Nik L Nip                       0.976   22.44534
+    ## Nestle Smarties                 0.976   37.88719
+    ## Ring pop                        0.965   35.29076
+    ## HersheyÕs Krackel               0.918   62.28448
+    ## HersheyÕs Milk Chocolate        0.918   56.49050
+
+Nik L Nip.
