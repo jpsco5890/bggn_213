@@ -246,3 +246,19 @@ for(i in 2:10){
 }
 ```
 
+```{r}
+wisconsin_kmeans <- kmeans(wisconsin_data_scaled, centers = 2, nstart = 20)
+```
+
+```{r}
+table(wisconsin_kmeans$cluster, diagnosis)
+```
+
+```{r}
+table(wisconsin_hclust_clusters, wisconsin_kmeans$cluster)
+
+```
+
+# Combining Methods  
+  
+  
