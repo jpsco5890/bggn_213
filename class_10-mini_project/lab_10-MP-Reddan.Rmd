@@ -6,3 +6,54 @@ output: github_document
 #output: pdf_document
 ---
 
+# Library loading  
+```{r}
+library(skimr)
+```
+
+
+
+# Importing candy data  
+  
+```{r}
+candy_file <- "candy-data.csv"
+candy <- read.csv(candy_file, row.names = 1)
+head(candy)
+```
+
+>[Q1]: How many different candy types are in this dataset?  
+  
+```{r}
+nrow(candy)
+```
+  
+>[Q2]: How many fruity candy types are in the dataset?
+  
+```{r}
+sum(candy$fruity)
+```
+
+>[Q3]: What is your favorite candy in the dataset and what is it’s `winpercent`
+value?  
+  
+```{r}
+candy["100 Grand",]$winpercent
+```
+
+>[Q4]: Waht is the `winpercent` value of "Kit Kat"?  
+  
+```{r}
+candy["Kit Kat",]$winpercent
+```
+  
+>[Q5] What is the `winpercent` value for "Tootsie Roll Snack Bars"  
+  
+```{r}
+candy["Tootsie Roll Snack Bars",]$winpercent
+
+```
+  
+```{r}
+skim(candy)
+```
+
