@@ -12,6 +12,10 @@ library(factoextra)
 
     ## Welcome! Want to learn more? See two factoextra-related books at https://goo.gl/ve3WBa
 
+``` r
+library(rgl)
+```
+
 # Exploratroy data analysis
 
 ## Organizing the data
@@ -441,6 +445,135 @@ for(i in 2:10){
     ##                         8   0   2
     ##                         9   0   1
     ## 10
+    ##                          diagnosis
+    ## wisconsin_hclust_clusters   B   M
+    ##                        1   12  86
+    ##                        2    0  59
+    ##                        3    0   3
+    ##                        4  331  39
+    ##                        5    0  20
+    ##                        6    2   0
+    ##                        7   12   0
+    ##                        8    0   2
+    ##                        9    0   2
+    ##                        10   0   1
+
+``` r
+wisconsin_kmeans <- kmeans(wisconsin_data_scaled, centers = 2, nstart = 20)
+```
+
+``` r
+table(wisconsin_kmeans$cluster, diagnosis)
+```
+
+    ##    diagnosis
+    ##       B   M
+    ##   1 343  37
+    ##   2  14 175
+
+``` r
+table(wisconsin_hclust_clusters, wisconsin_kmeans$cluster)
+```
+
+    ##                          
+    ## wisconsin_hclust_clusters   1   2
+    ##                        1   17  81
+    ##                        2    0  59
+    ##                        3    0   3
+    ##                        4  358  12
+    ##                        5    0  20
+    ##                        6    0   2
+    ##                        7    5   7
+    ##                        8    0   2
+    ##                        9    0   2
+    ##                        10   0   1
+
+# Combining Methods
+
+``` r
+wisconsin_pr_hclust <- hclust(dist(wisconsin_pca$x[,1:7]), method = "ward.D2")
+```
+
+``` r
+groups <- cutree(wisconsin_pr_hclust, k = 2)
+table(groups)
+```
+
+    ## groups
+    ##   1   2 
+    ## 216 353
+
+``` r
+table(groups, diagnosis)
+```
+
+    ##       diagnosis
+    ## groups   B   M
+    ##      1  28 188
+    ##      2 329  24
+
+``` r
+plot(wisconsin_pca$x[,1:2], col=groups)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+``` r
+plot(wisconsin_pca$x[,1:2], col=diagnosis)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+
+``` r
+re_group <- as.factor(groups)
+levels(re_group)
+```
+
+    ## [1] "1" "2"
+
+``` r
+re_group <- relevel(re_group, 2)
+levels(re_group)
+```
+
+    ## [1] "2" "1"
+
+``` r
+plot(wisconsin_pca$x[,1:2], col=re_group)
+```
+
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+``` r
+plot3d(wisconsin_pca$x[,1:3], 
+       xlab = "PC 1",
+       ylab = "PC 2",
+       zlab = "PC 3",
+       cex = 1.5,
+       size = 1,
+       type = "s",
+       col = groups)
+rglwidget(width = 400, height = 400)
+```
+
+    ## Warning in snapshot3d(scene = x, width = width, height = height): webshot = TRUE
+    ## requires the webshot2 package; using rgl.snapshot() instead
+
+![](/tmp/RtmppWKI9x/file4ab74b04102.png)<!-- -->
+
+``` r
+table(wisconsin_kmeans$cluster, diagnosis)
+```
+
+    ##    diagnosis
+    ##       B   M
+    ##   1 343  37
+    ##   2  14 175
+
+``` r
+table(wisconsin_hclust_clusters, diagnosis)
+```
+
     ##                          diagnosis
     ## wisconsin_hclust_clusters   B   M
     ##                        1   12  86
