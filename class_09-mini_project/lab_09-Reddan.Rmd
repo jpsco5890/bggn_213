@@ -276,6 +276,11 @@ table(groups)
 table(groups, diagnosis)
 ```
 
+**Accuracy**  
+```{r}
+(188 + 329)/(length(diagnosis))
+```
+
 ```{r}
 plot(wisconsin_pca$x[,1:2], col=groups)
 ```
@@ -318,3 +323,36 @@ table(wisconsin_kmeans$cluster, diagnosis)
 table(wisconsin_hclust_clusters_k4, diagnosis)
 ```
 
+# Sensitivity and Specifity
+
+**Sensitivity**  
+hclust-pca: 
+```{r}
+165/(165 + 47)
+```
+
+hclust-no_pca: 
+```{r}
+2/(2+210)
+```
+
+kmeans-no_pca: 
+```{r}
+175/(175+37)
+```
+
+**Specificity**  
+hclust-pca: 
+```{r}
+351/(351+47)
+```
+
+hclust-no_pca: 
+```{r}
+357/(357+210)
+```
+
+kmeans-no_pca: 
+```{r}
+343/(343+37)
+```
