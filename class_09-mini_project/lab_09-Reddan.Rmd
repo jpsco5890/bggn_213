@@ -83,7 +83,7 @@ apply(naive_wisconsin_df, 2, sd)
 ```
 
 Run the 'prcomp()' on the Wisconsin dataframe with scaling to account for 
-different variables having variable scales of values.  
+different variables having varying scales of values.  
   
 ```{r}
 wisconsin_pca <- prcomp(naive_wisconsin_df, scale = TRUE)
@@ -96,22 +96,39 @@ summary(wisconsin_pca)
 >[Q04]: From your results, what proportion of the original variance is captured 
 by the first principal component (PC1)?  
   
-*See above*  
-44.27%  
+```{r}
+summary(wisconsin_pca)$importance[2,1]
+```
+
+0.44272 is the proportion of the variance captured by PC 1.    
   
 >[Q05]: How many principal components (PCs) are required to describe at least 70% 
 of the original variance in the data?  
   
-*See above*  
-Three PCs [PC1 - PC3], explains 72.636%.  
+```{r}
+PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.7)[1]
+PC
+
+summary(wisconsin_pca)$importance[3,PC]
+```
+  
+Three PCs [PC1 - PC3], explains 72.636% of the original variance.  
   
 >[Q06]: How many principal components (PCs) are required to describe at least 90%
 of the original variance in the data?  
   
-*See above*  
+```{r}
+PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.9)[1]
+PC
+
+summary(wisconsin_pca)$importance[3,PC]
+```
+  
 Seven PCs [PC1 - PC7], explains 91.010%.  
   
 ## Interpreting PCA Results  
+  
+Biplot for the Wisconsin cancer data set principal component analysis. 
   
 ```{r}
 biplot(wisconsin_pca)
@@ -120,12 +137,19 @@ biplot(wisconsin_pca)
 >[Q07]: What stands out to you about this plot? Is it easy or difficult to 
 understand? Why?  
   
+While it shows a lot of data regarding the influence of each variable on the 
+the visualized PCs, it is a bit overwhelming and difficult to extract any useful
+information from it.  
+  
+  
+Distribution of data points on PCs 1 and 2.  
+  
 ```{r}
 plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2], 
      col = diagnosis, 
      xlab = "PC1", ylab = "PC2")
 ```
-  
+
 >[Q08]: Generate a similar plot for principal components 1 and 3. What do you 
 notice about these plots?
   
@@ -135,6 +159,12 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3],
      xlab = "PC1", 
      ylab = "PC3")
 ```
+  
+Since this plot uses PC 3 instead of PC 2, which explains less of the total
+variance than PC 2 does, the two groups in the data set, Benign and Malignant,
+appear less distinct.
+  
+### Using ggplot  
   
 ```{r}
 wisconsin_pca_df <- as.data.frame(wisconsin_pca$x)
@@ -158,7 +188,9 @@ head(wisconsin_pca_variance)
 ```{r}
 wisconsin_pca_variance_prop <- wisconsin_pca_variance / sum(wisconsin_pca_variance)
 ```
-
+  
+Scree Plots
+  
 ```{r}
 plot(wisconsin_pca_variance_prop, 
      xlab = "Principal Component",
@@ -178,12 +210,13 @@ axis(2,
      labels = round(wisconsin_pca_variance_prop, 2)*100)
 ```
   
+### Using the 'factoextra' package  
+  
 ```{r}
 fviz_eig(wisconsin_pca, 
          addlabels = TRUE)
 ```
-
-
+  
 ## Communicatin PCA Results  
   
 >[Q09] For the first principal component, what is the component of the loading 
@@ -197,15 +230,12 @@ wisconsin_pca$rotation[grep("concave.points_mean", row.names(wisconsin_pca$rotat
 of the variance of the data?  
   
 ```{r}
-vals = c("sum" = 0, "count" = 1)
-while(vals[1] < 0.8){
-  vals[1] = vals[1] + wisconsin_pca_variance_prop[vals[2]]
-  vals[2] = vals[2] + 1
-}
+PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.8)[1]
+PC
 
-paste0("It takes a minimum of ",  vals[2] - 1, " PCs to explain ", round(vals[1]*100, 2), "% of the data",
-       sep = "")
+summary(wisconsin_pca)$importance[3,PC]
 ```
+It takes a minimum of 5 PCs to explain 80% (84.734%) of the data.  
   
 # Hierarchical Clustering  
   
@@ -228,6 +258,10 @@ abline(a= 19, b = 0,
        lty = 2)
 ```
   
+A height of 19 results in a clustering model with 4 clusters.  
+  
+## Selecting numbers of clusters  
+  
 ```{r}
 wisconsin_hclust_clusters_k4 <- cutree(wisconsin_data_hclust, k = 4)
 ```
@@ -246,21 +280,69 @@ for(i in 2:10){
   print(table(wisconsin_hclust_clusters, diagnosis))
 }
 ```
+  
+## Using different methods  
+  
+>[Q13]: Which method gives your favorite results for the same data.dist dataset?
+Explain your reasoning.
+  
+```{r}
+wisconsin_hclust_clusters_single <- cutree(hclust(wisconsin_data_distance, 
+                                                  method = "single"), 
+                                           k = 2)
+wisconsin_hclust_clusters_average <- cutree(hclust(wisconsin_data_distance, 
+                                                   method = "average"), 
+                                            k = 2)
+wisconsin_hclust_clusters_wardD2 <- cutree(hclust(wisconsin_data_distance, 
+                                                  method = "ward.D2"), 
+                                           k = 2)
+wisconsin_hclust_clusters_complete <- cutree(hclust(wisconsin_data_distance, 
+                                                  method = "complete"), 
+                                           k = 2)
 
+table(wisconsin_hclust_clusters_single, diagnosis)
+table(wisconsin_hclust_clusters_average, diagnosis)
+table(wisconsin_hclust_clusters_wardD2, diagnosis)
+table(wisconsin_hclust_clusters_complete, diagnosis)
+```
+  
+Ward.D2 is my favorite since it is effective at splitting the data points into 
+two groups which can differentiate between benign and malignant observations, 
+unlike 'single', 'average', or 'complete' which essentially lump all of these
+observations together.  
+  
+# K-means clustering
+  
 ```{r}
 wisconsin_kmeans <- kmeans(wisconsin_data_scaled, centers = 2, nstart = 20)
 ```
 
+>[Q14]: How well does k-means separate the two diagnoses? How does it compare to
+your hclust results?  
+
 ```{r}
 table(wisconsin_kmeans$cluster, diagnosis)
 ```
-
+  
+```{r}
+table(wisconsin_hclust_clusters_k4, diagnosis)
+```
+  
+For K-means, the resolution of two 'distinct' groups is achieved at k=2 while a
+similar resolution for hierarchical clustering is achieved at k=4. Additionally,
+taking groups 1, 2 and 4 as Malignant and 3 as Benign, the false
+positive and false negative rate for hclust at k=4 are both higher than k-means 
+at k=2.  
+  
+Compare the cluster assignments between hclust and k-means.  
+  
 ```{r}
 table(wisconsin_hclust_clusters_k4, wisconsin_kmeans$cluster)
-
 ```
-
-# Combining Methods  
+ 
+# Combining methods  
+  
+## Clustering the PCA results   
   
 ```{r}
 wisconsin_pr_hclust <- hclust(dist(wisconsin_pca$x[,1:7]), method = "ward.D2")
@@ -275,12 +357,9 @@ table(groups)
 ```{r}
 table(groups, diagnosis)
 ```
-
-**Accuracy**  
-```{r}
-(188 + 329)/(length(diagnosis))
-```
-
+  
+Plot against PCs 1 and 2 while coloring by groups and then by diagnosis.  
+  
 ```{r}
 plot(wisconsin_pca$x[,1:2], col=groups)
 ```
@@ -288,7 +367,9 @@ plot(wisconsin_pca$x[,1:2], col=groups)
 ```{r}
 plot(wisconsin_pca$x[,1:2], col=diagnosis)
 ```
-
+  
+The colors are flipped, so we can recolor by flipping the factor levels.  
+  
 ```{r}
 re_group <- as.factor(groups)
 levels(re_group)
@@ -296,12 +377,14 @@ levels(re_group)
 re_group <- relevel(re_group, 2)
 levels(re_group)
 ```
-
+  
 ```{r}
 plot(wisconsin_pca$x[,1:2], col=re_group)
 
 ```
-
+  
+Three dimensional plotting on PCs 1 through 3 while coloring by groups.  
+  
 ```{r}
 plot3d(wisconsin_pca$x[,1:3], 
        xlab = "PC 1",
@@ -313,16 +396,43 @@ plot3d(wisconsin_pca$x[,1:3],
        col = groups)
 rglwidget(width = 400, height = 400)
 ```
-
+  
+>[Q15]: How well does the newly created model with four clusters separate out 
+the two diagnoses?  
+  
+```{r}
+table(groups, diagnosis)
+```
+  
+```{r}
+(188 + 329)/(length(diagnosis))
+```
+  
+In terms of accuracy, the model is approximately 91% accurate.  
+  
+>[Q16]: How well do the k-means and hierarchical clustering models you created in previous sections (i.e. before PCA) do in terms of separating the diagnoses? Again, use the table() function to compare the output of each model (wisc.km$cluster and wisc.hclust.clusters) with the vector containing the actual diagnoses.  
+  
 ```{r}
 table(wisconsin_kmeans$cluster, diagnosis)
 ```
+  
+```{r}
+(175 + 343)/length(diagnosis)
+```
 
-
+  
 ```{r}
 table(wisconsin_hclust_clusters_k4, diagnosis)
 ```
-
+  
+```{r}
+(165 + 5 + 2 + 343)/length(diagnosis)
+```
+  
+The original kmeans before PCA had an accuracy of ~91% and the original hclust
+model had an accuracy of ~90%. Indicating that with PCA the hclust method became 
+marginally more accurate.  
+  
 # Sensitivity and Specifity
 
 **Sensitivity**  
@@ -356,12 +466,16 @@ kmeans-no_pca:
 ```{r}
 343/(343+37)
 ```
-
-
+  
+>[Q17]: Which of your analysis procedures resulted in a clustering model with 
+the best specificity? How about sensitivity?  
+  
+K-means, much like with accuracy, showed the highest specificity and sensitivity
+of all three models.  
+  
 # Prediction
 
 ```{r}
-#url <- "new_samples.csv"
 url <- "https://tinyurl.com/new-samples-CSV"
 new <- read.csv(url)
 npc <- predict(wisconsin_pca, newdata=new)
@@ -373,7 +487,19 @@ plot(wisconsin_pca$x[,1:2], col=groups)
 points(npc[,1], npc[,2], col="blue", pch=16, cex=3)
 text(npc[,1], npc[,2], c(1,2), col="white")
 ```
-
+  
+>[Q18]: Which of these new patients should we prioritize for follow up based on 
+your results?
+  
+```{r}
+table(groups, diagnosis)
+```
+  
+Since observations which cluster as group 1 are more likely to be malignant than
+benign and vice-versa for observations which cluster as group 2, I would 
+prioritize patient '2' for a follow up, given they cluster with group 1 on the 
+PCA plot.  
+  
 # Session Information
 ```{r}
 sessionInfo()

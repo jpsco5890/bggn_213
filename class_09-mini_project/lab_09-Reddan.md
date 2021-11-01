@@ -166,7 +166,7 @@ apply(naive_wisconsin_df, 2, sd)
     ##            6.573234e-02            6.186747e-02            1.806127e-02
 
 Run the ‘prcomp()’ on the Wisconsin dataframe with scaling to account
-for different variables having variable scales of values.
+for different variables having varying scales of values.
 
 ``` r
 wisconsin_pca <- prcomp(naive_wisconsin_df, scale = TRUE)
@@ -200,30 +200,69 @@ summary(wisconsin_pca)
 
 > by the first principal component (PC1)?
 
-*See above*  
-44.27%
+``` r
+summary(wisconsin_pca)$importance[2,1]
+```
+
+    ## [1] 0.44272
+
+0.44272 is the proportion of the variance captured by PC 1.
 
 > \[Q05\]: How many principal components (PCs) are required to describe
 > at least 70% of the original variance in the data?
 
-*See above*  
-Three PCs \[PC1 - PC3\], explains 72.636%.
+``` r
+PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.7)[1]
+PC
+```
+
+    ## PC3 
+    ##   3
+
+``` r
+summary(wisconsin_pca)$importance[3,PC]
+```
+
+    ## [1] 0.72636
+
+Three PCs \[PC1 - PC3\], explains 72.636% of the original variance.
 
 > \[Q06\]: How many principal components (PCs) are required to describe
 > at least 90% of the original variance in the data?
 
-*See above*  
+``` r
+PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.9)[1]
+PC
+```
+
+    ## PC7 
+    ##   7
+
+``` r
+summary(wisconsin_pca)$importance[3,PC]
+```
+
+    ## [1] 0.9101
+
 Seven PCs \[PC1 - PC7\], explains 91.010%.
 
 ## Interpreting PCA Results
+
+Biplot for the Wisconsin cancer data set principal component analysis.
 
 ``` r
 biplot(wisconsin_pca)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 > understand? Why?
+
+While it shows a lot of data regarding the influence of each variable on
+the the visualized PCs, it is a bit overwhelming and difficult to
+extract any useful information from it.
+
+Distribution of data points on PCs 1 and 2.
 
 ``` r
 plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2], 
@@ -231,7 +270,7 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2],
      xlab = "PC1", ylab = "PC2")
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 > notice about these plots?
 
@@ -242,7 +281,13 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3],
      ylab = "PC3")
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+Since this plot uses PC 3 instead of PC 2, which explains less of the
+total variance than PC 2 does, the two groups in the data set, Benign
+and Malignant, appear less distinct.
+
+### Using ggplot
 
 ``` r
 wisconsin_pca_df <- as.data.frame(wisconsin_pca$x)
@@ -256,7 +301,7 @@ ggplot(data = wisconsin_pca_df) +
   geom_point()
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ## Variance Explained
 
@@ -271,6 +316,8 @@ head(wisconsin_pca_variance)
 wisconsin_pca_variance_prop <- wisconsin_pca_variance / sum(wisconsin_pca_variance)
 ```
 
+Scree Plots
+
 ``` r
 plot(wisconsin_pca_variance_prop, 
      xlab = "Principal Component",
@@ -279,7 +326,7 @@ plot(wisconsin_pca_variance_prop,
      type = "o")
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ``` r
 barplot(wisconsin_pca_variance_prop,
@@ -292,14 +339,16 @@ axis(2,
      labels = round(wisconsin_pca_variance_prop, 2)*100)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+### Using the ‘factoextra’ package
 
 ``` r
 fviz_eig(wisconsin_pca, 
          addlabels = TRUE)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ## Communicatin PCA Results
 
@@ -317,17 +366,20 @@ wisconsin_pca$rotation[grep("concave.points_mean", row.names(wisconsin_pca$rotat
 > explain 80% of the variance of the data?
 
 ``` r
-vals = c("sum" = 0, "count" = 1)
-while(vals[1] < 0.8){
-  vals[1] = vals[1] + wisconsin_pca_variance_prop[vals[2]]
-  vals[2] = vals[2] + 1
-}
-
-paste0("It takes a minimum of ",  vals[2] - 1, " PCs to explain ", round(vals[1]*100, 2), "% of the data",
-       sep = "")
+PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.8)[1]
+PC
 ```
 
-    ## [1] "It takes a minimum of 5 PCs to explain 84.73% of the data"
+    ## PC5 
+    ##   5
+
+``` r
+summary(wisconsin_pca)$importance[3,PC]
+```
+
+    ## [1] 0.84734
+
+It takes a minimum of 5 PCs to explain 80% (84.734%) of the data.
 
 # Hierarchical Clustering
 
@@ -349,7 +401,11 @@ abline(a= 19, b = 0,
        lty = 2)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+A height of 19 results in a clustering model with 4 clusters.
+
+## Selecting numbers of clusters
 
 ``` r
 wisconsin_hclust_clusters_k4 <- cutree(wisconsin_data_hclust, k = 4)
@@ -458,9 +514,71 @@ for(i in 2:10){
     ##                        9    0   2
     ##                        10   0   1
 
+## Using different methods
+
+> Explain your reasoning.
+
+``` r
+wisconsin_hclust_clusters_single <- cutree(hclust(wisconsin_data_distance, 
+                                                  method = "single"), 
+                                           k = 2)
+wisconsin_hclust_clusters_average <- cutree(hclust(wisconsin_data_distance, 
+                                                   method = "average"), 
+                                            k = 2)
+wisconsin_hclust_clusters_wardD2 <- cutree(hclust(wisconsin_data_distance, 
+                                                  method = "ward.D2"), 
+                                           k = 2)
+wisconsin_hclust_clusters_complete <- cutree(hclust(wisconsin_data_distance, 
+                                                  method = "complete"), 
+                                           k = 2)
+
+table(wisconsin_hclust_clusters_single, diagnosis)
+```
+
+    ##                                 diagnosis
+    ## wisconsin_hclust_clusters_single   B   M
+    ##                                1 357 210
+    ##                                2   0   2
+
+``` r
+table(wisconsin_hclust_clusters_average, diagnosis)
+```
+
+    ##                                  diagnosis
+    ## wisconsin_hclust_clusters_average   B   M
+    ##                                 1 357 209
+    ##                                 2   0   3
+
+``` r
+table(wisconsin_hclust_clusters_wardD2, diagnosis)
+```
+
+    ##                                 diagnosis
+    ## wisconsin_hclust_clusters_wardD2   B   M
+    ##                                1  20 164
+    ##                                2 337  48
+
+``` r
+table(wisconsin_hclust_clusters_complete, diagnosis)
+```
+
+    ##                                   diagnosis
+    ## wisconsin_hclust_clusters_complete   B   M
+    ##                                  1 357 210
+    ##                                  2   0   2
+
+Ward.D2 is my favorite since it is effective at splitting the data
+points into two groups which can differentiate between benign and
+malignant observations, unlike ‘single’, ‘average’, or ‘complete’ which
+essentially lump all of these observations together.
+
+# K-means clustering
+
 ``` r
 wisconsin_kmeans <- kmeans(wisconsin_data_scaled, centers = 2, nstart = 20)
 ```
+
+> your hclust results?
 
 ``` r
 table(wisconsin_kmeans$cluster, diagnosis)
@@ -470,6 +588,25 @@ table(wisconsin_kmeans$cluster, diagnosis)
     ##       B   M
     ##   1  14 175
     ##   2 343  37
+
+``` r
+table(wisconsin_hclust_clusters_k4, diagnosis)
+```
+
+    ##                             diagnosis
+    ## wisconsin_hclust_clusters_k4   B   M
+    ##                            1  12 165
+    ##                            2   2   5
+    ##                            3 343  40
+    ##                            4   0   2
+
+For K-means, the resolution of two ‘distinct’ groups is achieved at k=2
+while a similar resolution for hierarchical clustering is achieved at
+k=4. Additionally, taking groups 1, 2 and 4 as Malignant and 3 as
+Benign, the false positive and false negative rate for hclust at k=4 are
+both higher than k-means at k=2.
+
+Compare the cluster assignments between hclust and k-means.
 
 ``` r
 table(wisconsin_hclust_clusters_k4, wisconsin_kmeans$cluster)
@@ -482,7 +619,9 @@ table(wisconsin_hclust_clusters_k4, wisconsin_kmeans$cluster)
     ##                            3  20 363
     ##                            4   2   0
 
-# Combining Methods
+# Combining methods
+
+## Clustering the PCA results
 
 ``` r
 wisconsin_pr_hclust <- hclust(dist(wisconsin_pca$x[,1:7]), method = "ward.D2")
@@ -506,25 +645,21 @@ table(groups, diagnosis)
     ##      1  28 188
     ##      2 329  24
 
-**Accuracy**
-
-``` r
-(188 + 329)/(length(diagnosis))
-```
-
-    ## [1] 0.9086116
+Plot against PCs 1 and 2 while coloring by groups and then by diagnosis.
 
 ``` r
 plot(wisconsin_pca$x[,1:2], col=groups)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
 
 ``` r
 plot(wisconsin_pca$x[,1:2], col=diagnosis)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+
+The colors are flipped, so we can recolor by flipping the factor levels.
 
 ``` r
 re_group <- as.factor(groups)
@@ -544,7 +679,9 @@ levels(re_group)
 plot(wisconsin_pca$x[,1:2], col=re_group)
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+
+Three dimensional plotting on PCs 1 through 3 while coloring by groups.
 
 ``` r
 plot3d(wisconsin_pca$x[,1:3], 
@@ -561,7 +698,32 @@ rglwidget(width = 400, height = 400)
     ## Warning in snapshot3d(scene = x, width = width, height = height): webshot = TRUE
     ## requires the webshot2 package; using rgl.snapshot() instead
 
-![](/tmp/RtmpBr6qVO/file5c0712f765ef.png)<!-- -->
+![](/tmp/RtmpUgZa97/fileb65e59c9163b.png)<!-- -->
+
+> the two diagnoses?
+
+``` r
+table(groups, diagnosis)
+```
+
+    ##       diagnosis
+    ## groups   B   M
+    ##      1  28 188
+    ##      2 329  24
+
+``` r
+(188 + 329)/(length(diagnosis))
+```
+
+    ## [1] 0.9086116
+
+In terms of accuracy, the model is approximately 91% accurate.
+
+> \[Q16\]: How well do the k-means and hierarchical clustering models
+> you created in previous sections (i.e. before PCA) do in terms of
+> separating the diagnoses? Again, use the table() function to compare
+> the output of each model (wisc.km$cluster and wisc.hclust.clusters)
+> with the vector containing the actual diagnoses.
 
 ``` r
 table(wisconsin_kmeans$cluster, diagnosis)
@@ -573,6 +735,12 @@ table(wisconsin_kmeans$cluster, diagnosis)
     ##   2 343  37
 
 ``` r
+(175 + 343)/length(diagnosis)
+```
+
+    ## [1] 0.9103691
+
+``` r
 table(wisconsin_hclust_clusters_k4, diagnosis)
 ```
 
@@ -582,6 +750,16 @@ table(wisconsin_hclust_clusters_k4, diagnosis)
     ##                            2   2   5
     ##                            3 343  40
     ##                            4   0   2
+
+``` r
+(165 + 5 + 2 + 343)/length(diagnosis)
+```
+
+    ## [1] 0.9050967
+
+The original kmeans before PCA had an accuracy of \~91% and the original
+hclust model had an accuracy of \~90%. Indicating that with PCA the
+hclust method became marginally more accurate.
 
 # Sensitivity and Specifity
 
@@ -635,10 +813,14 @@ kmeans-no_pca:
 
     ## [1] 0.9026316
 
+> the best specificity? How about sensitivity?
+
+K-means, much like with accuracy, showed the highest specificity and
+sensitivity of all three models.
+
 # Prediction
 
 ``` r
-#url <- "new_samples.csv"
 url <- "https://tinyurl.com/new-samples-CSV"
 new <- read.csv(url)
 npc <- predict(wisconsin_pca, newdata=new)
@@ -667,7 +849,23 @@ points(npc[,1], npc[,2], col="blue", pch=16, cex=3)
 text(npc[,1], npc[,2], c(1,2), col="white")
 ```
 
-![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
+
+> your results?
+
+``` r
+table(groups, diagnosis)
+```
+
+    ##       diagnosis
+    ## groups   B   M
+    ##      1  28 188
+    ##      2 329  24
+
+Since observations which cluster as group 1 are more likely to be
+malignant than benign and vice-versa for observations which cluster as
+group 2, I would prioritize patient ‘2’ for a follow up, given they
+cluster with group 1 on the PCA plot.
 
 # Session Information
 
