@@ -15,9 +15,7 @@ library(ggrepel)
 library(corrplot)
 library(plotly)
 ```
-
-
-
+  
 # Importing candy data  
   
 ```{r}
@@ -94,8 +92,9 @@ abline(v = mean(candy$winpercent), col = 'red')
 abline(v = median(candy$winpercent), col = 'blue')
 ```
   
-No, the data has a higher density below the mean, since the median is shifted 
-below the mean. Therefore, the distribution of the data is not symmetrical.  
+No, the data has a higher mean than median, indicating more density at the 
+higher end of the distribution. Therefore, the distribution of the data is not 
+symmetrical.  
   
 >[Q10]: Is the center of the distribution above or below 50%?  
   
@@ -116,7 +115,10 @@ names(choco_win) <- candy$winpercent[choco_logi]
 mean(choco_win)
 mean(fruity_win)
 ```
-
+  
+On average, chocolate candy is ranked higher, 60.92%, compared to fruity candy
+(44.12%).  
+  
 >[Q12]: Is this difference statistically significant?  
   
 ```{r}
@@ -124,6 +126,7 @@ choco_vs_furity_stat <- t.test(choco_win, fruity_win)
 choco_vs_furity_stat$p.value
 ```
   
+Yes, the difference is significant with a p-value of 2.87x10^-8.  
   
 # Overall Candy Rankings  
   
@@ -172,11 +175,11 @@ ggplot(data = candy) +
   
 >[Q17]: What is the worst ranked chocolate candy?  
 
-Boston Baked Beans  
+Boston Baked Beans.  
   
 >[Q18]: What is the best ranked fruity candy?  
   
-Starbursts  
+Starbursts.   
   
 # Taking a look at pricepercent  
   
@@ -198,12 +201,19 @@ these which is the least popular?
 ```{r}
 candy %>% 
   arrange(desc(pricepercent)) %>% 
+  head(5)
+```
+   
+```{r}
+candy %>% 
+  arrange(desc(pricepercent)) %>% 
   head(5) %>% 
   arrange(winpercent) %>% 
   head(1)
 ```
-  
-Nik L Nip.  
+
+   
+Nik L Nip is the most expensive of the least favorite candy options.  
   
 >[Q21]: Make a barplot again with geom_col() this time using pricepercent.
 
