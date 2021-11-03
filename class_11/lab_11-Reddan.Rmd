@@ -35,5 +35,9 @@ protein_percent <-round(
 paste0("Proteins: ", protein_percent, "%", sep = "")
 ```
   
-### [Q03]: 
+### [Q03]: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?  
+  
+2343 structures.  
+  
+## The PDB Format  
   
