@@ -40,13 +40,13 @@ paste0("Proteins: ", protein_percent, "%", sep = "")
 2343 structures.
 
 ## The PDB Format
-  
-# Visualizing the HIV-1 Protease  
-  
-## Getting to Know VMD  
-  
-## Using Atom Selection  
-  
+
+# Visualizing the HIV-1 Protease
+
+## Getting to Know VMD
+
+## Using Atom Selection
+
 ### [Q04]: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?
 
 The hydrogen atom is extremely small and is not depicted because the oxygen atom sufficiently identifies the location and spatial occupation of the water molecule.
@@ -56,20 +56,18 @@ The hydrogen atom is extremely small and is not depicted because the oxygen atom
 HOH 308:O
 
 ![](1hsg_scene_03NOV2021.png)
-  
-## Sequence Viewer Extension  
-  
-### [Q06]: As you have hopefully observed HIV protease is a homodimer (i.e. it is composed of two identical chains). With the aid of the graphic display and the sequence viewer extension can you identify secondary structure elements that are likely to only form in the dimer rather than the monomer?  
-  
 
-  
-# Intorduction to Bio3D in R  
-  
+## Sequence Viewer Extension
+
+### [Q06]: As you have hopefully observed HIV protease is a homodimer (i.e. it is composed of two identical chains). With the aid of the graphic display and the sequence viewer extension can you identify secondary structure elements that are likely to only form in the dimer rather than the monomer?
+
+# Intorduction to Bio3D in R
+
 ```{r}
 library(bio3d)
-```  
-  
-## Reading PDB File Data into R  
+```
+
+## Reading PDB File Data into R
 
 ```{r}
 pdb_1hsg <- read.pdb("1hsg")
@@ -79,13 +77,38 @@ pdb_1hsg
 
 pdb_1hel
 ```
+
+### [Q07]: How many amino acid residues are there in this pdb object?
+
+```{r}
+length(pdb_1hsg$seqres)
+```
+
+### [Q08]: Name one of the two non-protein residues?
+
+```{r}
+unique(pdb_1hsg$atom$resid)
+```
   
+An example of a non-protein residue is 'HOH' for water.  
+  
+### [Q09]: How many protein chains are in this structure?  
+  
+```{r}
+length(unique(pdb_1hsg$atom$chain))
+```
+  
+# Comparative Structure Analysis of Adenylate Kinase  
+  
+
+  
+Conduct Normal Mode Analysis to predict variability in the protein's conformation.
+
 ```{r}
 m <- nma(pdb_1hel)
 plot(m)
 ```
-  
+
 ```{r}
 mktrj(m ,file = "1hel_nma.pdb")
 ```
-
