@@ -70,3 +70,5 @@ of the water molecule.
 ### \[Q05\]: There is a conserved water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have (see note below)?
 
 HOH 308:O
+
+![](1hsg_scene_03NOV2021.png)

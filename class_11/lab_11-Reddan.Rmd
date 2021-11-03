@@ -4,18 +4,18 @@ author: "Jack Reddan"
 output: github_document
 ---
 
-# Introduction to the RCSB Protein Data Bank (PDB)  
-  
-## PDB Statistics  
-  
+# Introduction to the RCSB Protein Data Bank (PDB)
+
+## PDB Statistics
+
 ```{r}
 pdb_stats <- read.csv("pdb_statistics.csv")
 
 pdb_stats
 ```
-  
-### [Q01]: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy?  
-  
+
+### [Q01]: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy?
+
 ```{r}
 # x_ray_percent <- round(((sum(pdb_stats$X.ray) / sum(pdb_stats$Total)) * 100), 2)
 # paste0("X-Ray: ", x_ray_percent, "%", sep = "")
@@ -25,27 +25,30 @@ pdb_stats
 
 round((colSums(pdb_stats[,2:(ncol(pdb_stats)-1)])/sum(pdb_stats$Total)*100), 2)
 ```
-  
-### [Q02]: What percentage of structures in the PDB are protein?  
-  
+
+### [Q02]: What percentage of structures in the PDB are protein?
+
 ```{r}
 protein_percent <-round(
   (sum(pdb_stats$Total[grep("Protein", pdb_stats$Molecular.Type)])/sum(pdb_stats$Total)*100), 
   2)
 paste0("Proteins: ", protein_percent, "%", sep = "")
 ```
-  
-### [Q03]: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?  
-  
-2343 structures.  
-  
-## The PDB Format  
 
-### [Q04]: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?  
-  
-The hydrogen atom is extremely small and is not depicted because the oxygen atom
-sufficiently identifies the location and spatial occupation of the water molecule.
-  
-### [Q05]: There is a conserved water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have (see note below)?  
-  
+### [Q03]: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?
+
+2343 structures.
+
+## The PDB Format
+
+### [Q04]: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?
+
+The hydrogen atom is extremely small and is not depicted because the oxygen atom sufficiently identifies the location and spatial occupation of the water molecule.
+
+### [Q05]: There is a conserved water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have (see note below)?
+
 HOH 308:O
+
+
+
+![](1hsg_scene_03NOV2021.png)
