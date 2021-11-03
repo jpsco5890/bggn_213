@@ -40,4 +40,12 @@ paste0("Proteins: ", protein_percent, "%", sep = "")
 2343 structures.  
   
 ## The PDB Format  
+
+### [Q04]: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?  
   
+The hydrogen atom is extremely small and is not depicted because the oxygen atom
+sufficiently identifies the location and spatial occupation of the water molecule.
+  
+### [Q05]: There is a conserved water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have (see note below)?  
+  
+HOH 308:O
