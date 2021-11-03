@@ -4,28 +4,36 @@ author: "Jack Reddan"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Introduction to the RCSB Protein Data Bank (PDB)  
+  
+## PDB Statistics  
+  
+```{r}
+pdb_stats <- read.csv("pdb_statistics.csv")
+
+pdb_stats
 ```
+  
+### [Q01]: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy?  
+  
+```{r}
+# x_ray_percent <- round(((sum(pdb_stats$X.ray) / sum(pdb_stats$Total)) * 100), 2)
+# paste0("X-Ray: ", x_ray_percent, "%", sep = "")
+# 
+# EM_percent <- round(((sum(pdb_stats$EM) / sum(pdb_stats$Total)) * 100), 2)
+# paste0("XElectron Microscopy: ", EM_percent, "%", sep = "")
 
-## GitHub Documents
-
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
-## Including Code
-
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
+round((colSums(pdb_stats[,2:(ncol(pdb_stats)-1)])/sum(pdb_stats$Total)*100), 2)
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+  
+### [Q02]: What percentage of structures in the PDB are protein?  
+  
+```{r}
+protein_percent <-round(
+  (sum(pdb_stats$Total[grep("Protein", pdb_stats$Molecular.Type)])/sum(pdb_stats$Total)*100), 
+  2)
+paste0("Proteins: ", protein_percent, "%", sep = "")
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+  
+### [Q03]: 
+  
