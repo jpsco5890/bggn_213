@@ -1,0 +1,7 @@
+---
+title: "Class 12: Structural Bioinformatics II"
+author: "Jack Reddan (PID: A59010543)"
+output: github_document
+---
+
+![](1hel_multiframe_nma.png)
