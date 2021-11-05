@@ -100,6 +100,94 @@ length(unique(pdb_1hsg$atom$chain))
   
 # Comparative Structure Analysis of Adenylate Kinase  
   
+## Setup  
+
+```{r}
+# install.packages("bio3d")
+# install.packages("ggplot2")
+# install.packages("ggrepel")
+# install.packages("devtools")
+# install.packages("BiocManager")
+# 
+# BiocManager::install("msa")
+# devtools::install_bitbucket("Grantlab/bio3d-view")
+```
+  
+### [Q10]: Which of the packages above is found only on BioConductor and not CRAN?  
+  
+The MSA package is only availible on BioConductor, not CRAN, since the base R
+function `install.packages()` does not work. Instead, to install the package
+you need to use the BioConductor package manager `BiocManager::install()`.  
+  
+### [Q11]: Which of the above packages is not found on BioConductor or CRAN?  
+  
+The 'Grantlab/bio3d-view' is not found on either BioCoductor or CRAN, instead
+it has a BitBucket repo, which is accessed using the `devtools` package.  
+  
+### [Q12]: True or False? Functions from the devtools package can be used to install packages from GitHub and BitBucket?  
+  
+`TRUE`  
+  
+## Search and Retrieve ADK Structures 
+  
+```{r}
+library(bio3d)
+library(msa)
+```
+
+```{r}
+aa <- get.seq("1ake_A")
+```
+  
+```{r}
+aa
+```
+  
+### [Q13]: How many amino acids are in this sequence, i.e. how long is this sequence?
+   
+```{r}
+length(aa$ali)
+```
+
+```{r}
+b <- blast.pdb(aa)
+```
+  
+```{r}
+blast_hits <- plot.blast(b)
+```
+  
+```{r}
+head(blast_hits$pdb.id)
+```
+  
+```{r}
+pdb_files <- get.pdb(blast_hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+```
+  
+## Align and Superimpose Structures  
+  
+```{r}
+pdbs <- pdbaln(pdb_files, fit = TRUE)
+```
+  
+```{r}
+ids <- basename.pdb(pdbs$id)
+plot(pdbs, labels=ids)
+```
+  
+## Principal Component Analysis  
+  
+```{r}
+pc.xray <- pca(pdbs)
+plot(pc.xray)
+```
+  
+# Optional Further Visualization  
+  
+```{r}
+pc1 <- mktrj(pc.xray, pc=1, file="pc_1.pdb")
+```
 
   
 Conduct Normal Mode Analysis to predict variability in the protein's conformation.
