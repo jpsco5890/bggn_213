@@ -133,6 +133,8 @@ it has a BitBucket repo, which is accessed using the `devtools` package.
 ```{r}
 library(bio3d)
 library(msa)
+library(bio3d.view)
+library(rgl)
 ```
 
 ```{r}
@@ -162,13 +164,13 @@ head(blast_hits$pdb.id)
 ```
   
 ```{r}
-pdb_files <- get.pdb(blast_hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+pdb <- get.pdb(blast_hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
 ```
   
 ## Align and Superimpose Structures  
   
 ```{r}
-pdbs <- pdbaln(pdb_files, fit = TRUE)
+pdbs <- pdbaln(pdb, fit = TRUE)
 ```
   
 ```{r}
@@ -176,6 +178,19 @@ ids <- basename.pdb(pdbs$id)
 plot(pdbs, labels=ids)
 ```
   
+## Viewing Superimposed Structures  
+  
+```{r}
+view.pdbs(pdbs)
+```  
+  
+## Annotate Collected PDB Structures  
+  
+```{r}
+#pdb_annotation <- pdb.annotate(ids)
+#unique(pdb_annotation$source)
+```
+
 ## Principal Component Analysis  
   
 ```{r}
@@ -183,10 +198,19 @@ pc.xray <- pca(pdbs)
 plot(pc.xray)
 ```
   
+```{r}
+
+```
+
+  
 # Optional Further Visualization  
   
 ```{r}
 pc1 <- mktrj(pc.xray, pc=1, file="pc_1.pdb")
+```
+
+```{r}
+view.xyz(pc1)
 ```
 
   
