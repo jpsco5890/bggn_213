@@ -11,6 +11,7 @@ library(dplyr)
 library(ggplot2)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
+library("EnhancedVolcano")
 ```
 
 # Import **countData** and **colData**
@@ -544,6 +545,39 @@ write.csv(res[p_val_order,], "deseq_results.csv")
 ``` r
 plot(x = res$log2FoldChange, y = -log(res$padj),
      xlab = "Log2(FC)", ylab = "-Log(P-Value)")
+
+abline(v=c(-2,2), col="lightgray", lty=2)
+abline(h=-log(0.05), col="lightgray", lty=2)
 ```
 
 ![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+``` r
+my_colors <- rep("gray", nrow(res))
+my_colors[abs(res$log2FoldChange) > 2]  <- "orchid3" 
+
+inds <- (res$padj < 0.01) & (abs(res$log2FoldChange) > 2 )
+my_colors[ inds ] <- "orange3"
+
+plot(x = res$log2FoldChange, y = -log(res$padj),
+     xlab = "Log2(FC)", ylab = "-Log(P-Value)",
+     col = my_colors)
+
+abline(v=c(-2,2), col="lightgray", lty=2)
+abline(h=-log(0.05), col="lightgray", lty=2)
+```
+
+![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+``` r
+x <- as.data.frame(res)
+
+EnhancedVolcano(x,
+                lab = x$symbol,
+                x = 'log2FoldChange',
+                y = 'pvalue')
+```
+
+![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+# Pathway Analysis
