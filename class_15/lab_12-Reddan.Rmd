@@ -14,6 +14,9 @@ library(ggplot2)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("EnhancedVolcano")
+library(pathview)
+library(gage)
+library(gageData)
 ```
 
 # Import **countData** and **colData**  
@@ -291,5 +294,92 @@ EnhancedVolcano(x,
   
 # Pathway Analysis  
   
+```{r}
+data(kegg.sets.hs)
+
+head(kegg.sets.hs, 2)
+```
+  
+```{r}
+foldchanges = res$log2FoldChange
+names(foldchanges) = res$entrez
+head(foldchanges)
+```
+  
+```{r}
+keggres = gage(foldchanges, gsets=kegg.sets.hs)
+
+attributes(keggres)
+```
+  
+```{r}
+head(keggres$less, 3)
+```
+  
+```{r}
+pathview(gene.data=foldchanges, pathway.id="hsa05310")
+pathview(gene.data=foldchanges, pathway.id="hsa05310", kegg.native=FALSE)
+```
+  
+![](hsa05310.png)
+  
+#### [Q12]: Can you do the same procedure as above to plot the pathview figures for the top 2 down-reguled pathways?  
+  
+Yes.  
+  
+```{r}
+pathview(gene.data=foldchanges, pathway.id=substr(rownames(keggres$less)[1], start = 0, stop = 8))
+pathview(gene.data=foldchanges, pathway.id=substr(rownames(keggres$less)[2], start = 0, stop = 8))
+```
+  
+![](hsa05332.png)
+![](hsa04940.png)
+  
+# Plotting Counts for Genes of Interest  
+  
+```{r}
+indx <- grep("CRISPLD2", res$symbol)
+res[indx,]
+```
+  
+```{r}
+rownames(res[indx,])
+```
+  
+```{r}
+plotCounts(dds = Dds,
+           gene = rownames(res[indx,]),
+           intgroup = "dex")
+```
+
+  
+```{r}
+pc <- plotCounts(dds = Dds,
+           gene = rownames(res[indx,]),
+           intgroup = "dex",
+           returnData = TRUE)
+head(pc)
+```
+  
+```{r}
+boxplot(count ~ dex,
+        data = pc)
+```
+  
+```{r}
+ggplot(data = pc) +
+  aes(x = dex, y = count, fill = dex) +
+  geom_boxplot() +
+  scale_y_log10() +
+  labs(title = "CRISPLD2")
+```
+  
+# Session Information  
+  
+```{r}
+sessionInfo()
+```
+
+```
 
 
