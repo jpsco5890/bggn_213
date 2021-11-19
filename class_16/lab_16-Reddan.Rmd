@@ -4,9 +4,214 @@ author: "Jack Reddan (PID: A59010543")
 output: github_document
 ---
 
-# Differential Expression Analysis  
+# Principal Component Analysis  
   
 ```{r}
-library(DESeq2)
+metadata_file <- "GSE37704_metadata.csv"
+counts_file <- "GSE37704_featurecounts.csv"
+
+column_data <- read.csv(metadata_file, row.names = 1)
+count_data <- read.csv(counts_file, row.names = 1)
+```
+  
+```{r}
+all(rownames(column_data) == colnames(count_data)[-1])
+```
+```{r}
+just_counts <- count_data[,-1]
+
+nonzero_counts <- just_counts[rowSums(just_counts) != 0,]
+```
+  
+  
+```{r}
+pca <- prcomp(t(nonzero_counts), scale = TRUE)
+```
+  
+```{r}
+plot(pca)
+```
+  
+```{r}
+condition_col <- column_data$condition
+condition_col[grep("control", column_data$condition)] <- "black"
+condition_col[grep("kd", column_data$condition)] <- "red"
+
+plot(pca$x[,1:2],
+     col = condition_col)
 ```
 
+  
+# Differential Expression Analysis  
+  
+```{r Load the DESeq2 Library, message=FALSE, warning=FALSE}
+library(DESeq2)
+```
+  
+## Running DESeq2
+  
+```{r Run the DESeq analysis, message=FALSE, warning=FALSE}
+Dds = DESeqDataSetFromMatrix(countData=just_counts,
+                             colData=column_data,
+                             design=~condition)
+Dds = DESeq(Dds)
+```
+  
+```{r Inspect the DESeq Object, message=FALSE, warning=FALSE}
+Dds
+```
+  
+```{r, Generate and inspect the DESeq Results, message=FALSE, warning=FALSE}
+Dds_res <- results(Dds)
+
+summary(Dds_res)
+```
+  
+## Volcano Plot
+  
+```{r Generate Volcano Plot, message=FALSE, warning=FALSE}
+plot(Dds_res$log2FoldChange, -log(Dds_res$padj),
+     xlab = "Log2(FC)",
+     ylab = "-Log(P-Value)")
+```
+  
+```{r Generate Volcano Plot wiht Color, message=FALSE, warning=FALSE}
+# Make a color vector for all genes
+my_colors <- rep("lightgray", nrow(Dds_res))
+
+# Color red the genes with absolute fold change above 2
+my_colors[abs(Dds_res$log2FoldChange) > 2] <- "tomato1"
+
+# Color blue those with adjusted p-value less than 0.01
+#  and absolute fold change more than 2
+inds <- (Dds_res$padj < 0.01) & (abs(Dds_res$log2FoldChange) > 2 )
+my_colors[inds] <- "blue3"
+
+plot(Dds_res$log2FoldChange, -log(Dds_res$padj),
+     col = my_colors,
+     xlab = "Log2(FC)",
+     ylab = "-Log(P-Value)")
+```
+  
+## Adding Gene Annotations  
+  
+```{r Load the AnnotationsDBi and org.Hs.eg.db Libraries, warning=FALSE, message=FALSE}
+library("AnnotationDbi")
+library("org.Hs.eg.db")
+```
+  
+```{r Map gene ENSEMBL Gene IDs to Alternatives, message=FALSE, warning=FALSE}
+Dds_res$symbol = mapIds(org.Hs.eg.db,
+                    keys=rownames(Dds_res), 
+                    keytype="ENSEMBL",
+                    column="SYMBOL",
+                    multiVals="first")
+
+Dds_res$entrez = mapIds(org.Hs.eg.db,
+                    keys=rownames(Dds_res),
+                    keytype="ENSEMBL",
+                    column="ENTREZID",
+                    multiVals="first")
+
+Dds_res$name =   mapIds(org.Hs.eg.db,
+                    keys=rownames(Dds_res),
+                    keytype="ENSEMBL",
+                    column="GENENAME",
+                    multiVals="first")
+```
+  
+```{r Inspect New IDs, message=FALSE, warning=FALSE}
+head(Dds_res, 10)
+```
+  
+```{r Reorder Results according to P-Value, message=TRUE, warning=FALSE}
+Dds_res = Dds_res[order(Dds_res$pvalue),]
+write.csv(Dds_res, file = "deseq_results.csv")
+```
+  
+# Pathway Analysis  
+  
+## KEGG Pathways  
+  
+```{r Load the Pathview, Gage and GageData library, message=FALSE, warning=FALSE}
+library(pathview)
+library(gage)
+library(gageData)
+```
+  
+```{r Import the KEGG Genesets and Indexes, message=FALSE, warning=FALSE}
+data(kegg.sets.hs)
+data(sigmet.idx.hs)
+
+kegg.sets.hs <- kegg.sets.hs[sigmet.idx.hs]
+```
+  
+```{r Inspect KEGG Pathways, message=FALSE, warning=FALSE}
+head(kegg.sets.hs, 3)
+```
+  
+```{r Assign ENTREZ IDs to Log2(FC) Values, message=FALSE, warning=FALSE}
+foldchanges <- Dds_res$log2FoldChange
+names(foldchanges) <- Dds_res$entrez
+head(foldchanges)
+```
+  
+```{r Run gage with the KEGG geneset, message=FALSE, warning=FALSE}
+kegg_res = gage(foldchanges, gsets=kegg.sets.hs)
+attributes(kegg_res)
+```
+  
+```{r Inspect KEGG Down-regulated Results, message=FALSE, warning=FALSE}
+head(kegg_res$less)
+```
+  
+```{r Generate Pathview for Cell Cycle, message=FALSE, warning=FALSE}
+pathview(gene.data = foldchanges, pathway.id = "hsa04110")
+```
+  
+```{r Generate list of Pathway IDs, message=FALSE, warning=FALSE}
+path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
+```
+  
+```{r Generate Pathviews for Paths of Interest, message=FALSE, warning=FALSE}
+pathview(gene.data = foldchanges, pathway.id = path_ids)
+```
+  
+```{r Generate list of Pathway IDs, message=FALSE, warning=FALSE}
+path_ids <- substr(rownames(kegg_res$less)[1:5], start = 0, stop = 8)
+```
+  
+```{r Generate Pathviews for Paths of Interest, message=FALSE, warning=FALSE}
+pathview(gene.data = foldchanges, pathway.id = path_ids)
+```
+  
+# Gene Ontology  
+  
+```{r Import the GO Terms and Subsets, message=FALSE, warning=FALSE}
+data(go.sets.hs)
+data(go.subs.hs)
+
+gobp_sets <- go.sets.hs[go.subs.hs$BP]
+```
+  
+```{r Run gage on GO Terms, message=FALSE, warning=FALSE}
+gobp_res <- gage(foldchanges, gsets = gobp_sets, same.dir = TRUE)
+```
+  
+```{r inspect the GO gage Results, message=FALSE, warning=FALSE}
+lapply(gobp_res, head, n = 10)
+```
+  
+# Reactome Analysis
+  
+```{r Identify Significantly Differentially Expressed Genes, message=F, warning=F}
+sig_genes <- Dds_res[Dds_res$padj <= 0.05 & !is.na(Dds_res$padj), "symbol"]
+```
+  
+There are `r length(sig_genes)` significantly differentially expressed genes.  
+  
+```{r Write Significant Data to Disc, message=FALSE, warning=FALSE}
+write.table(sig_genes, file="significant_DE_genes.txt", row.names=FALSE, col.names=FALSE, quote=FALSE)
+```
+  
+# GO Online
