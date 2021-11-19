@@ -1,6 +1,6 @@
 ---
 title: "RNA-Seq Anlysis Mini-Project"
-author: "Jack Reddan (PID: A59010543")
+author: "Jack Reddan (PID: A59010543)"
 output: github_document
 ---
 
@@ -75,7 +75,7 @@ plot(Dds_res$log2FoldChange, -log(Dds_res$padj),
      ylab = "-Log(P-Value)")
 ```
   
-```{r Generate Volcano Plot wiht Color, message=FALSE, warning=FALSE}
+```{r Generate Volcano Plot with Color, message=FALSE, warning=FALSE}
 # Make a color vector for all genes
 my_colors <- rep("lightgray", nrow(Dds_res))
 
@@ -169,7 +169,7 @@ head(kegg_res$less)
 pathview(gene.data = foldchanges, pathway.id = "hsa04110")
 ```
   
-```{r Generate list of Pathway IDs, message=FALSE, warning=FALSE}
+```{r Generate list of Up-regulated Pathway IDs, message=FALSE, warning=FALSE}
 path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
 ```
   
@@ -177,11 +177,11 @@ path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
 pathview(gene.data = foldchanges, pathway.id = path_ids)
 ```
   
-```{r Generate list of Pathway IDs, message=FALSE, warning=FALSE}
+```{r Generate list of Down-regulated Pathway IDs, message=FALSE, warning=FALSE}
 path_ids <- substr(rownames(kegg_res$less)[1:5], start = 0, stop = 8)
 ```
   
-```{r Generate Pathviews for Paths of Interest, message=FALSE, warning=FALSE}
+```{r Generate Pathviews for Paths of Interest Again, message=FALSE, warning=FALSE}
 pathview(gene.data = foldchanges, pathway.id = path_ids)
 ```
   
