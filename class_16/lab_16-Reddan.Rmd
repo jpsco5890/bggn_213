@@ -1,7 +1,8 @@
 ---
 title: "RNA-Seq Anlysis Mini-Project"
 author: "Jack Reddan (PID: A59010543)"
-output: github_document
+#output: github_document
+output: pdf_document
 ---
 
 # Principal Component Analysis  
