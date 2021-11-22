@@ -12,6 +12,9 @@ library(ggplot2)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("EnhancedVolcano")
+library(pathview)
+library(gage)
+library(gageData)
 ```
 
 # Import **countData** and **colData**
@@ -109,7 +112,7 @@ head(control_mean)
 
 #### \[Q3\]: How would you make the above code in either approach more robust?
 
-Change rowSums to rowMeans to avoid hard-coding number of smaples.
+Change rowSums to rowMeans to avoid hard-coding number of samples.
 
 ``` r
 control_md <- metadata %>% filter(dex=="control")
@@ -128,7 +131,7 @@ head(control_mean)
 ``` r
 treated_md <- metadata %>% filter(dex=="treated")
 treated_counts <- counts %>% dplyr::select(treated_md$id) 
-treated_mean <- rowSums(treated_counts)/nrow(treated_md)
+treated_mean <- rowMeans(treated_counts)
 head(treated_mean)
 ```
 
@@ -156,6 +159,8 @@ plot(x = mean_counts$control, y = mean_counts$treated,
 
 #### \[Q5b\]: You could also use the ggplot2 package to make this figure. What geom\_?() function would you use for this plot?
 
+You would use `geom_point()`.
+
 ``` r
 ggplot(mean_counts) +
   aes(x = control, y = treated) +
@@ -167,16 +172,12 @@ ggplot(mean_counts) +
 
 #### \[Q6\]: Try plotting both axes on a log scale. What is the argument to plot() that allows you to do this?
 
+The argument is `log`.
+
 ``` r
 plot(x = mean_counts$control, y = mean_counts$treated,
      xlab = "log(Control)", ylab = "log(Treated)", log = "yx")
 ```
-
-    ## Warning in xy.coords(x, y, xlabel, ylabel, log): 15032 x values <= 0 omitted
-    ## from logarithmic plot
-
-    ## Warning in xy.coords(x, y, xlabel, ylabel, log): 15281 y values <= 0 omitted
-    ## from logarithmic plot
 
 ![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
@@ -241,10 +242,11 @@ sum(down_indx)
 
 #### \[Q10\]: Do you trust these results? Why or why not?
 
-I do not trust these results since there is not accountability for genes
+I do not trust these results since there is no accountability for genes
 with a high variance in gene expression data. Means do not represent the
 data well enough to rely on solely, statistics would be needed to
-identify with the fold change is significance or is observed by chance.
+identify whether the fold change is significant or is observed by
+chance.
 
 # DESeq2 Analysis
 
@@ -390,6 +392,8 @@ summary(res_005)
 
 # Adding Annotation Data
 
+Available annotation formats.
+
 ``` r
 columns(org.Hs.eg.db)
 ```
@@ -435,7 +439,7 @@ head(res)
     ## ENSG00000000460  0.815849    C1orf112
     ## ENSG00000000938        NA         FGR
 
-#### \[Q11\]: Run the `mapIds()` function two more times to add the Entrez ID and UniProt accession and GENENAME as new columns called `res$entrez`, `res$uniprot` and `res$genename`.
+#### \[Q11\]: Run the `mapIds()` function \[three\] more times to add the Entrez ID and UniProt accession and GENENAME as new columns called `res$entrez`, `res$uniprot` and `res$genename`.
 
 ``` r
 res$entrez <- mapIds(org.Hs.eg.db,
@@ -498,6 +502,9 @@ head(res)
     ## ENSG00000000457 SCY1 like pseudokina..
     ## ENSG00000000460 chromosome 1 open re..
     ## ENSG00000000938 FGR proto-oncogene, ..
+
+Reorder the results so highly significant differential expression
+observations are listed first.
 
 ``` r
 p_val_order <- order(res$padj)
@@ -581,3 +588,239 @@ EnhancedVolcano(x,
 ![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
 
 # Pathway Analysis
+
+``` r
+data(kegg.sets.hs)
+
+head(kegg.sets.hs, 2)
+```
+
+    ## $`hsa00232 Caffeine metabolism`
+    ## [1] "10"   "1544" "1548" "1549" "1553" "7498" "9"   
+    ## 
+    ## $`hsa00983 Drug metabolism - other enzymes`
+    ##  [1] "10"     "1066"   "10720"  "10941"  "151531" "1548"   "1549"   "1551"  
+    ##  [9] "1553"   "1576"   "1577"   "1806"   "1807"   "1890"   "221223" "2990"  
+    ## [17] "3251"   "3614"   "3615"   "3704"   "51733"  "54490"  "54575"  "54576" 
+    ## [25] "54577"  "54578"  "54579"  "54600"  "54657"  "54658"  "54659"  "54963" 
+    ## [33] "574537" "64816"  "7083"   "7084"   "7172"   "7363"   "7364"   "7365"  
+    ## [41] "7366"   "7367"   "7371"   "7372"   "7378"   "7498"   "79799"  "83549" 
+    ## [49] "8824"   "8833"   "9"      "978"
+
+``` r
+foldchanges = res$log2FoldChange
+names(foldchanges) = res$entrez
+head(foldchanges)
+```
+
+    ##        7105       64102        8813       57147       55732        2268 
+    ## -0.35070302          NA  0.20610777  0.02452695 -0.14714205 -1.73228897
+
+``` r
+kegg_res = gage(foldchanges, gsets=kegg.sets.hs)
+
+attributes(kegg_res)
+```
+
+    ## $names
+    ## [1] "greater" "less"    "stats"
+
+``` r
+head(kegg_res$less, 3)
+```
+
+    ##                                       p.geomean stat.mean        p.val
+    ## hsa05332 Graft-versus-host disease 0.0004250461 -3.473346 0.0004250461
+    ## hsa04940 Type I diabetes mellitus  0.0017820293 -3.002352 0.0017820293
+    ## hsa05310 Asthma                    0.0020045888 -3.009050 0.0020045888
+    ##                                         q.val set.size         exp1
+    ## hsa05332 Graft-versus-host disease 0.09053483       40 0.0004250461
+    ## hsa04940 Type I diabetes mellitus  0.14232581       42 0.0017820293
+    ## hsa05310 Asthma                    0.14232581       29 0.0020045888
+
+``` r
+pathview(gene.data=foldchanges, pathway.id="hsa05310")
+```
+
+    ## 'select()' returned 1:1 mapping between keys and columns
+
+    ## Info: Working in directory /home/jack/UCSD_BioSci/Classes/AY2021/Fall21/BGGN_213/bggn_213-git_repo/class_15
+
+    ## Info: Writing image file hsa05310.pathview.png
+
+``` r
+pathview(gene.data=foldchanges, pathway.id="hsa05310", kegg.native=FALSE)
+```
+
+    ## 'select()' returned 1:1 mapping between keys and columns
+
+    ## Info: Working in directory /home/jack/UCSD_BioSci/Classes/AY2021/Fall21/BGGN_213/bggn_213-git_repo/class_15
+
+    ## Info: Writing image file hsa05310.pathview.pdf
+
+ASTHMA Pathview for RNA-Seq Data (hsa05310)
+
+![](hsa05310.png)
+
+#### \[Q12\]: Can you do the same procedure as above to plot the pathview figures for the top 2 down-reguled pathways?
+
+Yes.
+
+``` r
+pathview(gene.data=foldchanges, pathway.id=substr(rownames(kegg_res$less)[1], start = 0, stop = 8))
+```
+
+    ## 'select()' returned 1:1 mapping between keys and columns
+
+    ## Info: Working in directory /home/jack/UCSD_BioSci/Classes/AY2021/Fall21/BGGN_213/bggn_213-git_repo/class_15
+
+    ## Info: Writing image file hsa05332.pathview.png
+
+``` r
+pathview(gene.data=foldchanges, pathway.id=substr(rownames(kegg_res$less)[2], start = 0, stop = 8))
+```
+
+    ## 'select()' returned 1:1 mapping between keys and columns
+
+    ## Info: Working in directory /home/jack/UCSD_BioSci/Classes/AY2021/Fall21/BGGN_213/bggn_213-git_repo/class_15
+
+    ## Info: Writing image file hsa04940.pathview.png
+
+GRAFT VS HOST DISEASE Pathview (hsa05332)
+
+![](hsa05332.png)
+
+TYPE 1 DIABETES MELLITUS
+
+![](hsa04940.png)
+
+# Plotting Counts for Genes of Interest
+
+``` r
+indx <- grep("CRISPLD2", res$symbol)
+res[indx,]
+```
+
+    ## log2 fold change (MLE): dex treated vs control 
+    ## Wald test p-value: dex treated vs control 
+    ## DataFrame with 1 row and 10 columns
+    ##                  baseMean log2FoldChange     lfcSE      stat      pvalue
+    ##                 <numeric>      <numeric> <numeric> <numeric>   <numeric>
+    ## ENSG00000103196   3096.16        2.62603  0.267444   9.81899 9.32747e-23
+    ##                        padj      symbol      entrez     uniprot
+    ##                   <numeric> <character> <character> <character>
+    ## ENSG00000103196 3.36344e-20    CRISPLD2       83716  A0A140VK80
+    ##                              gene_name
+    ##                            <character>
+    ## ENSG00000103196 cysteine rich secret..
+
+``` r
+rownames(res[indx,])
+```
+
+    ## [1] "ENSG00000103196"
+
+``` r
+plotCounts(dds = Dds,
+           gene = rownames(res[indx,]),
+           intgroup = "dex")
+```
+
+![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+
+``` r
+pc <- plotCounts(dds = Dds,
+           gene = rownames(res[indx,]),
+           intgroup = "dex",
+           returnData = TRUE)
+head(pc)
+```
+
+    ##                count     dex
+    ## SRR1039508  774.5002 control
+    ## SRR1039509 6258.7915 treated
+    ## SRR1039512 1100.2741 control
+    ## SRR1039513 6093.0324 treated
+    ## SRR1039516  736.9483 control
+    ## SRR1039517 2742.1908 treated
+
+``` r
+boxplot(count ~ dex,
+        data = pc)
+```
+
+![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+
+``` r
+ggplot(data = pc) +
+  aes(x = dex, y = count, fill = dex) +
+  geom_boxplot() +
+  scale_y_log10() +
+  labs(title = "CRISPLD2")
+```
+
+![](lab_12-Reddan_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
+
+# Session Information
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.1.2 (2021-11-01)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Arch Linux
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /usr/lib/libblas.so.3.10.0
+    ## LAPACK: /usr/lib/liblapack.so.3.10.0
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+    ## [8] methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] gageData_2.30.0             gage_2.42.0                
+    ##  [3] pathview_1.32.0             EnhancedVolcano_1.13.2     
+    ##  [5] ggrepel_0.9.1               org.Hs.eg.db_3.13.0        
+    ##  [7] AnnotationDbi_1.54.1        ggplot2_3.3.5              
+    ##  [9] dplyr_1.0.7                 DESeq2_1.32.0              
+    ## [11] SummarizedExperiment_1.22.0 Biobase_2.52.0             
+    ## [13] MatrixGenerics_1.4.3        matrixStats_0.61.0         
+    ## [15] GenomicRanges_1.44.0        GenomeInfoDb_1.28.4        
+    ## [17] IRanges_2.26.0              S4Vectors_0.30.2           
+    ## [19] BiocGenerics_0.38.0         BiocManager_1.30.16        
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] httr_1.4.2             bit64_4.0.5            splines_4.1.2         
+    ##  [4] assertthat_0.2.1       highr_0.9              blob_1.2.2            
+    ##  [7] GenomeInfoDbData_1.2.6 yaml_2.2.1             pillar_1.6.4          
+    ## [10] RSQLite_2.2.8          lattice_0.20-45        glue_1.5.0            
+    ## [13] digest_0.6.28          RColorBrewer_1.1-2     XVector_0.32.0        
+    ## [16] colorspace_2.0-2       htmltools_0.5.2        Matrix_1.3-4          
+    ## [19] XML_3.99-0.8           pkgconfig_2.0.3        genefilter_1.74.1     
+    ## [22] zlibbioc_1.38.0        GO.db_3.13.0           purrr_0.3.4           
+    ## [25] xtable_1.8-4           scales_1.1.1           BiocParallel_1.26.2   
+    ## [28] tibble_3.1.6           annotate_1.70.0        KEGGREST_1.32.0       
+    ## [31] farver_2.1.0           generics_0.1.1         ellipsis_0.3.2        
+    ## [34] withr_2.4.2            cachem_1.0.6           survival_3.2-13       
+    ## [37] magrittr_2.0.1         crayon_1.4.2           KEGGgraph_1.52.0      
+    ## [40] memoise_2.0.0          evaluate_0.14          fansi_0.5.0           
+    ## [43] graph_1.70.0           tools_4.1.2            lifecycle_1.0.1       
+    ## [46] stringr_1.4.0          locfit_1.5-9.4         munsell_0.5.0         
+    ## [49] DelayedArray_0.18.0    Biostrings_2.60.2      compiler_4.1.2        
+    ## [52] rlang_0.4.12           grid_4.1.2             RCurl_1.98-1.5        
+    ## [55] labeling_0.4.2         bitops_1.0-7           rmarkdown_2.11        
+    ## [58] gtable_0.3.0           DBI_1.1.1              R6_2.5.1              
+    ## [61] knitr_1.36             fastmap_1.1.0          bit_4.0.4             
+    ## [64] utf8_1.2.2             Rgraphviz_2.36.0       stringi_1.7.5         
+    ## [67] Rcpp_1.0.7             vctrs_0.3.8            geneplotter_1.70.0    
+    ## [70] png_0.1-7              tidyselect_1.1.1       xfun_0.28
