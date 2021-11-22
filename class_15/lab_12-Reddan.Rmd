@@ -97,8 +97,8 @@ mean_counts <- data.frame("control" = control_mean, "treated" = treated_mean)
 colSums(mean_counts)
 ```
 
-#### [Q5a]: Create a scatter plot showing the mean of the treated samples against the mean of the control samples.
-
+#### [Q5a]: Create a scatter plot showing the mean of the treated samples against the mean of the control samples.  
+  
 ```{r}
 plot(x = mean_counts$control, y = mean_counts$treated,
      xlab = "Control", ylab = "Treated")
