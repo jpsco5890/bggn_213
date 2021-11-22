@@ -16,13 +16,22 @@ count_data <- read.csv(counts_file, row.names = 1)
   
 ```{r}
 all(rownames(column_data) == colnames(count_data)[-1])
-```
+```  
+  
+#### [Q]: Complete the code below to remove the troublesome first column in `countData`  
+  
 ```{r}
 just_counts <- count_data[,-1]
-
-nonzero_counts <- just_counts[rowSums(just_counts) != 0,]
 ```
   
+#### [Q]: Complete the code below to filter `countData` to exclude genes (i.e. rows) where we have 0 read count across all samples (i.e. columns).  
+
+By using `rowSums()`, 
+rows which sum to 0 are removed since the row contains no useful data.
+  
+```{r}
+nonzero_counts <- just_counts[rowSums(just_counts) != 0,]
+```
   
 ```{r}
 pca <- prcomp(t(nonzero_counts), scale = TRUE)
@@ -61,11 +70,15 @@ Dds = DESeq(Dds)
 Dds
 ```
   
+#### [Q]: Call the `summary()` function on your results to get a sense of how many genes are up or down-regulated at the default 0.1 p-value cutoff.  
+  
 ```{r, Generate and inspect the DESeq Results, message=FALSE, warning=FALSE}
 Dds_res <- results(Dds)
 
 summary(Dds_res)
 ```
+  
+4349 genes are up-regulated and 4393 genes are down-regulated.  
   
 ## Volcano Plot
   
@@ -74,6 +87,8 @@ plot(Dds_res$log2FoldChange, -log(Dds_res$padj),
      xlab = "Log2(FC)",
      ylab = "-Log(P-Value)")
 ```
+  
+#### [Q]: Improve this plot by completing the below code, which adds color and axis labels.  
   
 ```{r Generate Volcano Plot with Color, message=FALSE, warning=FALSE}
 # Make a color vector for all genes
@@ -100,6 +115,8 @@ library("AnnotationDbi")
 library("org.Hs.eg.db")
 ```
   
+#### [Q]: Use the `mapIDs()` function multiple times to add SYMBOL, ENTREZID and GENENAME annotation to our results by completing the code below.  
+  
 ```{r Map gene ENSEMBL Gene IDs to Alternatives, message=FALSE, warning=FALSE}
 Dds_res$symbol = mapIds(org.Hs.eg.db,
                     keys=rownames(Dds_res), 
@@ -123,6 +140,8 @@ Dds_res$name =   mapIds(org.Hs.eg.db,
 ```{r Inspect New IDs, message=FALSE, warning=FALSE}
 head(Dds_res, 10)
 ```
+  
+#### [Q]: Finally for this section let's reorder these results by adjusted p-value and save them to a CSV file in your current project directory.  
   
 ```{r Reorder Results according to P-Value, message=TRUE, warning=FALSE}
 Dds_res = Dds_res[order(Dds_res$pvalue),]
@@ -169,6 +188,8 @@ head(kegg_res$less)
 pathview(gene.data = foldchanges, pathway.id = "hsa04110")
 ```
   
+![](hsa00140.pathview.png)  
+  
 ```{r Generate list of Up-regulated Pathway IDs, message=FALSE, warning=FALSE}
 path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
 ```
@@ -177,6 +198,14 @@ path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
 pathview(gene.data = foldchanges, pathway.id = path_ids)
 ```
   
+![](hsa04740.pathview.png)   
+![](hsa04640.pathview.png)  
+![](hsa00140.pathview.png)  
+![](hsa04630.pathview.png)  
+![](hsa04976.pathview.png)  
+  
+#### [Q]: Can you do the same procedure as above to plot the pathview figures for the top 5 down-reguled pathways?  
+  
 ```{r Generate list of Down-regulated Pathway IDs, message=FALSE, warning=FALSE}
 path_ids <- substr(rownames(kegg_res$less)[1:5], start = 0, stop = 8)
 ```
@@ -184,6 +213,12 @@ path_ids <- substr(rownames(kegg_res$less)[1:5], start = 0, stop = 8)
 ```{r Generate Pathviews for Paths of Interest Again, message=FALSE, warning=FALSE}
 pathview(gene.data = foldchanges, pathway.id = path_ids)
 ```
+  
+![](hsa04110.pathview.png)  
+![](hsa03030.pathview.png)  
+![](hsa03013.pathview.png)  
+![](hsa04114.pathview.png)  
+![](hsa03440.pathview.png)  
   
 # Gene Ontology  
   
@@ -214,4 +249,16 @@ There are `r length(sig_genes)` significantly differentially expressed genes.
 write.table(sig_genes, file="significant_DE_genes.txt", row.names=FALSE, col.names=FALSE, quote=FALSE)
 ```
   
-# GO Online
+#### [Q]: What pathway has the most significant "Entities p-value"? Do the most significant pathways listed match your previous KEGG results? What factors could cause differences between the two methods?  
+  
+The pathway with the most significant "Entities p-value" is the **Endosomal/Vacuolar Pathway**.
+The most significant pathways seem to be related to the pathways identified with the KEGG database search. Where the adaptive immune system and cell signalling seem to be common themes.
+Reasons for differences in results between the two methods could be that the databases from which these results are obtained are different.
+Therefore, the genesets which are being used to compare to the expression data may be different and that would change the weight attributed to each category.
+  
+# Session Information  
+  
+```{r}
+sessionInfo()
+```
+

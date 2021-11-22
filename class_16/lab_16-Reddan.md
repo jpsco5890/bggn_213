@@ -18,9 +18,18 @@ all(rownames(column_data) == colnames(count_data)[-1])
 
     ## [1] TRUE
 
+#### \[Q\]: Complete the code below to remove the troublesome first column in `countData`
+
 ``` r
 just_counts <- count_data[,-1]
+```
 
+#### \[Q\]: Complete the code below to filter `countData` to exclude genes (i.e. rows) where we have 0 read count across all samples (i.e. columns).
+
+By using `rowSums()`, rows which sum to 0 are removed since the row
+contains no useful data.
+
+``` r
 nonzero_counts <- just_counts[rowSums(just_counts) != 0,]
 ```
 
@@ -32,7 +41,7 @@ pca <- prcomp(t(nonzero_counts), scale = TRUE)
 plot(pca)
 ```
 
-![](lab_16-Reddan_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](lab_16-Reddan_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 condition_col <- column_data$condition
@@ -43,7 +52,7 @@ plot(pca$x[,1:2],
      col = condition_col)
 ```
 
-![](lab_16-Reddan_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](lab_16-Reddan_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 # Differential Expression Analysis
 
@@ -74,6 +83,8 @@ Dds
     ## colnames(6): SRR493366 SRR493367 ... SRR493370 SRR493371
     ## colData names(2): condition sizeFactor
 
+#### \[Q\]: Call the `summary()` function on your results to get a sense of how many genes are up or down-regulated at the default 0.1 p-value cutoff.
+
 ``` r
 Dds_res <- results(Dds)
 
@@ -91,6 +102,8 @@ summary(Dds_res)
     ## [1] see 'cooksCutoff' argument of ?results
     ## [2] see 'independentFiltering' argument of ?results
 
+4349 genes are up-regulated and 4393 genes are down-regulated.
+
 ## Volcano Plot
 
 ``` r
@@ -100,6 +113,8 @@ plot(Dds_res$log2FoldChange, -log(Dds_res$padj),
 ```
 
 ![](lab_16-Reddan_files/figure-gfm/Generate%20Volcano%20Plot-1.png)<!-- -->
+
+#### \[Q\]: Improve this plot by completing the below code, which adds color and axis labels.
 
 ``` r
 # Make a color vector for all genes
@@ -127,6 +142,8 @@ plot(Dds_res$log2FoldChange, -log(Dds_res$padj),
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 ```
+
+#### \[Q\]: Use the `mapIDs()` function multiple times to add SYMBOL, ENTREZID and GENENAME annotation to our results by completing the code below.
 
 ``` r
 Dds_res$symbol = mapIds(org.Hs.eg.db,
@@ -179,6 +196,8 @@ head(Dds_res, 10)
     ## ENSG00000187961 1.13536e-07      KLHL17      339451 kelch like family me..
     ## ENSG00000187583 9.18988e-01     PLEKHN1       84069 pleckstrin homology ..
     ## ENSG00000187642 4.03817e-01       PERM1       84808 PPARGC1 and ESRR ind..
+
+#### \[Q\]: Finally for this section let’s reorder these results by adjusted p-value and save them to a CSV file in your current project directory.
 
 ``` r
 Dds_res = Dds_res[order(Dds_res$pvalue),]
@@ -281,6 +300,8 @@ head(kegg_res$less)
 pathview(gene.data = foldchanges, pathway.id = "hsa04110")
 ```
 
+![](hsa00140.pathview.png)
+
 ``` r
 path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
 ```
@@ -289,6 +310,14 @@ path_ids <- substr(rownames(kegg_res$greater)[1:5], start = 0, stop = 8)
 pathview(gene.data = foldchanges, pathway.id = path_ids)
 ```
 
+![](hsa04740.pathview.png)  
+![](hsa04640.pathview.png)  
+![](hsa00140.pathview.png)  
+![](hsa04630.pathview.png)  
+![](hsa04976.pathview.png)
+
+#### \[Q\]: Can you do the same procedure as above to plot the pathview figures for the top 5 down-reguled pathways?
+
 ``` r
 path_ids <- substr(rownames(kegg_res$less)[1:5], start = 0, stop = 8)
 ```
@@ -296,6 +325,12 @@ path_ids <- substr(rownames(kegg_res$less)[1:5], start = 0, stop = 8)
 ``` r
 pathview(gene.data = foldchanges, pathway.id = path_ids)
 ```
+
+![](hsa04110.pathview.png)  
+![](hsa03030.pathview.png)  
+![](hsa03013.pathview.png)  
+![](hsa04114.pathview.png)  
+![](hsa03440.pathview.png)
 
 # Gene Ontology
 
@@ -398,4 +433,76 @@ There are 8146 significantly differentially expressed genes.
 write.table(sig_genes, file="significant_DE_genes.txt", row.names=FALSE, col.names=FALSE, quote=FALSE)
 ```
 
-# GO Online
+#### \[Q\]: What pathway has the most significant “Entities p-value”? Do the most significant pathways listed match your previous KEGG results? What factors could cause differences between the two methods?
+
+The pathway with the most significant “Entities p-value” is the
+**Endosomal/Vacuolar Pathway**. The most significant pathways seem to be
+related to the pathways identified with the KEGG database search. Where
+the adaptive immune system and cell signalling seem to be common themes.
+Reasons for differences in results between the two methods could be that
+the databases from which these results are obtained are different.
+Therefore, the genesets which are being used to compare to the
+expression data may be different and that would change the weight
+attributed to each category.
+
+# Session Information
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.1.2 (2021-11-01)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Arch Linux
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /usr/lib/libblas.so.3.10.0
+    ## LAPACK: /usr/lib/liblapack.so.3.10.0
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+    ## [8] methods   base     
+    ## 
+    ## other attached packages:
+    ##  [1] gageData_2.30.0             gage_2.42.0                
+    ##  [3] pathview_1.32.0             org.Hs.eg.db_3.13.0        
+    ##  [5] AnnotationDbi_1.54.1        DESeq2_1.32.0              
+    ##  [7] SummarizedExperiment_1.22.0 Biobase_2.52.0             
+    ##  [9] MatrixGenerics_1.4.3        matrixStats_0.61.0         
+    ## [11] GenomicRanges_1.44.0        GenomeInfoDb_1.28.4        
+    ## [13] IRanges_2.26.0              S4Vectors_0.30.2           
+    ## [15] BiocGenerics_0.38.0        
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] httr_1.4.2             bit64_4.0.5            splines_4.1.2         
+    ##  [4] assertthat_0.2.1       highr_0.9              blob_1.2.2            
+    ##  [7] GenomeInfoDbData_1.2.6 yaml_2.2.1             pillar_1.6.4          
+    ## [10] RSQLite_2.2.8          lattice_0.20-45        glue_1.5.0            
+    ## [13] digest_0.6.28          RColorBrewer_1.1-2     XVector_0.32.0        
+    ## [16] colorspace_2.0-2       htmltools_0.5.2        Matrix_1.3-4          
+    ## [19] XML_3.99-0.8           pkgconfig_2.0.3        genefilter_1.74.1     
+    ## [22] zlibbioc_1.38.0        GO.db_3.13.0           purrr_0.3.4           
+    ## [25] xtable_1.8-4           scales_1.1.1           BiocParallel_1.26.2   
+    ## [28] tibble_3.1.6           annotate_1.70.0        KEGGREST_1.32.0       
+    ## [31] generics_0.1.1         ggplot2_3.3.5          ellipsis_0.3.2        
+    ## [34] cachem_1.0.6           survival_3.2-13        magrittr_2.0.1        
+    ## [37] crayon_1.4.2           KEGGgraph_1.52.0       memoise_2.0.0         
+    ## [40] evaluate_0.14          fansi_0.5.0            graph_1.70.0          
+    ## [43] tools_4.1.2            lifecycle_1.0.1        stringr_1.4.0         
+    ## [46] locfit_1.5-9.4         munsell_0.5.0          DelayedArray_0.18.0   
+    ## [49] Biostrings_2.60.2      compiler_4.1.2         rlang_0.4.12          
+    ## [52] grid_4.1.2             RCurl_1.98-1.5         bitops_1.0-7          
+    ## [55] rmarkdown_2.11         gtable_0.3.0           DBI_1.1.1             
+    ## [58] R6_2.5.1               knitr_1.36             dplyr_1.0.7           
+    ## [61] fastmap_1.1.0          bit_4.0.4              utf8_1.2.2            
+    ## [64] Rgraphviz_2.36.0       stringi_1.7.5          Rcpp_1.0.7            
+    ## [67] vctrs_0.3.8            geneplotter_1.70.0     png_0.1-7             
+    ## [70] tidyselect_1.1.1       xfun_0.28
