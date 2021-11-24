@@ -321,7 +321,7 @@ ggplot(data = ucsd) +
 # Compare to Similar Sized Areas
 
 ``` r
-vax.sd_pop <- vax %>%
+vax.lj_pop <- vax %>%
   filter(age5_plus_population >= ucsd$age5_plus_population) %>%
   filter(as_of_date == "2021-11-23")
 ```
@@ -336,7 +336,7 @@ ggplot(data = ucsd) +
       y = percent_of_population_fully_vaccinated) + 
   geom_point() +
   geom_line(group = 1) +
-  geom_hline(yintercept = mean(vax.sd_pop$percent_of_population_fully_vaccinated),
+  geom_hline(yintercept = mean(vax.lj_pop$percent_of_population_fully_vaccinated),
             linetype = 2,
             col = "red") +
   ylim(c(0,1)) +
@@ -346,3 +346,88 @@ ggplot(data = ucsd) +
 ```
 
 ![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+#### \[Q17\]: What is the 6 number summary (Min, 1st Qu., Median, Mean, 3rd Qu., and Max) of the “Percent of Population Fully Vaccinated” values for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”?
+
+``` r
+summary(vax.lj_pop$percent_of_population_fully_vaccinated)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##  0.3552  0.5939  0.6698  0.6678  0.7350  1.0000
+
+#### \[Q18\]: Using ggplot generate a histogram of this data.
+
+``` r
+ggplot(data = vax.lj_pop) + 
+  aes(x = percent_of_population_fully_vaccinated) +
+  geom_bar()
+```
+
+![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+
+#### \[Q20\]: Is the 92109 and 92040 ZIP code areas above or below the average value you calculated for all these above?
+
+``` r
+avg_vax_rate <- mean(vax.lj_pop$percent_of_population_fully_vaccinated)
+
+zc_92109 <- vax %>%
+  filter(as_of_date == "2021-11-23") %>%
+  filter(zip_code_tabulation_area == 92109)
+
+zc_92040 <- vax %>%
+  filter(as_of_date == "2021-11-23") %>%
+  filter(zip_code_tabulation_area == 92040)
+```
+
+``` r
+sd.lj_pop <- sd %>%
+  filter(age5_plus_population >= ucsd$age5_plus_population)
+
+length(unique(sd.lj_pop$zip_code_tabulation_area))
+```
+
+    ## [1] 44
+
+``` r
+ggplot(data = sd.lj_pop) +
+  aes(x = as_of_date,
+      y = percent_of_population_fully_vaccinated,
+      group = zip_code_tabulation_area) +
+  geom_line()
+```
+
+    ## Warning: Removed 1 row(s) containing missing values (geom_path).
+
+![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+``` r
+vax.lj_pop_all <- vax %>%
+  filter(age5_plus_population >= ucsd$age5_plus_population)
+
+length(unique(vax.lj_pop_all$zip_code_tabulation_area))
+```
+
+    ## [1] 412
+
+``` r
+mean.lj_pop <- mean(vax.lj_pop$percent_of_population_fully_vaccinated)
+
+ggplot(data = vax.lj_pop_all) +
+  aes(x = as_of_date,
+      y = percent_of_population_fully_vaccinated,
+      group = zip_code_tabulation_area) +
+  geom_line(alpha = 0.2,
+            color = "blue") +
+  geom_hline(yintercept = mean.lj_pop,
+             color = "red",
+             linetype = 2) +
+  labs(x = "Date",
+       y = "Percent Vaccinated",
+       title = "Vaccination Rates Across California",
+       subtitle = "Only areas with a population above or equalt othat of La Jolla")
+```
+
+    ## Warning: Removed 176 row(s) containing missing values (geom_path).
+
+![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->

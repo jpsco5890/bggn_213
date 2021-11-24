@@ -196,7 +196,7 @@ vax.lj_pop <- vax %>%
   
 #### [Q16]: Calculate the mean “Percent of Population Fully Vaccinated” for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”. Add this as a straight horizontal line to your plot from above with the geom_hline() function?
   
-The mean is `r paste(round(mean(vax.sd_pop$percent_of_population_fully_vaccinated)*100, 2), "%", sep = "")`.  
+The mean is `r paste(round(mean(vax.lj_pop$percent_of_population_fully_vaccinated)*100, 2), "%", sep = "")`.  
   
 ```{r}
 ggplot(data = ucsd) +
@@ -230,7 +230,7 @@ ggplot(data = vax.lj_pop) +
 #### [Q20]: Is the 92109 and 92040 ZIP code areas above or below the average value you calculated for all these above?  
   
 ```{r}
-avg_vax_rate <- mean(vax.sd_pop$percent_of_population_fully_vaccinated)
+avg_vax_rate <- mean(vax.lj_pop$percent_of_population_fully_vaccinated)
 
 zc_92109 <- vax %>%
   filter(as_of_date == "2021-11-23") %>%
