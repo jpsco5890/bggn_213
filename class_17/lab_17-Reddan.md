@@ -20,6 +20,22 @@ library(dplyr)
     ##     intersect, setdiff, setequal, union
 
 ``` r
+library(lubridate)
+```
+
+    ## 
+    ## Attaching package: 'lubridate'
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     date, intersect, setdiff, union
+
+``` r
+#library(zipcodeR)
+library(ggplot2)
+```
+
+``` r
 vax <- read.csv("covid19vaccinesbyzipcode_test.csv")
 ```
 
@@ -77,6 +93,34 @@ head(vax)
     ## 5 Information redacted in accordance with CA state privacy requirements
     ## 6 Information redacted in accordance with CA state privacy requirements
 
+#### \[Q01\]: What column details the total number of people fully vaccinated?
+
+`persons_fully_vaccinated`
+
+#### \[Q02\]: What column details the Zip code tabulation area?
+
+`zip_code_tabulation_area`
+
+#### \[Q03\]: What is the earliest date in this dataset?
+
+``` r
+vax %>% 
+  arrange(as_of_date) %>%
+  head(1)[1]
+```
+
+    ## [1] "2021-01-05"
+
+#### \[Q04\]: What is the latest date in this dataset?
+
+``` r
+vax %>%
+  arrange(desc(as_of_date)) %>%
+  head(1)[1]
+```
+
+    ## [1] "2021-11-23"
+
 ``` r
 skimr::skim(vax)
 ```
@@ -119,30 +163,186 @@ Data summary
 | percent_of_population_partially_vaccinated |      8355 |          0.90 |     0.10 |     0.10 |     0 |     0.06 |     0.07 |     0.11 |      1.0 | ▇▁▁▁▁ |
 | percent_of_population_with_1\_plus_dose    |      8355 |          0.90 |     0.51 |     0.26 |     0 |     0.31 |     0.53 |     0.71 |      1.0 | ▅▅▇▇▃ |
 
-#### \[Q01\]: What column details the total number of people fully vaccinated?
+#### \[Q05\]: How many numeric columns are in this dataset?
 
-`persons_fully_vaccinated`
+9
 
-#### \[Q02\]: What column details the Zip code tabulation area?
+#### \[Q06\]: Note that there are “missing values” in the dataset. How many `NA` values there in the `persons_fully_vaccinated` column?
 
-`zip_code_tabulation_area`
+8355
 
-#### \[Q03\]: What is the earliest date in this dataset?
+#### \[Q07\]: What percent of `persons_fully_vaccinated` values are missing (to 2 significant figures)?
 
 ``` r
-vax %>% 
-  arrange(as_of_date) %>%
-  head(1)[1]
+round((1 - 0.899)*100, 2)
 ```
 
-    ## [1] "2021-01-05"
+    ## [1] 10.1
 
-#### \[Q04\]: What is the latest date in this dataset?
+#### \[Q08\]: Why might this data be missing?
+
+# Working with Dates
 
 ``` r
-vax %>%
+today()
+```
+
+    ## [1] "2021-11-24"
+
+``` r
+vax$as_of_date <- ymd(vax$as_of_date)
+```
+
+``` r
+today() - vax$as_of_date[1]
+```
+
+    ## Time difference of 323 days
+
+``` r
+vax$as_of_date[nrow(vax)] - vax$as_of_date[1]
+```
+
+    ## Time difference of 322 days
+
+#### \[Q09\]: How many days have passed since the last update of the dataset?
+
+``` r
+last_update <- vax %>%
   arrange(desc(as_of_date)) %>%
   head(1)[1]
+
+today() - last_update
 ```
 
-    ## [1] "2021-11-23"
+    ## Time difference of 1 days
+
+#### \[Q10\]: How many unique dates are in the dataset (i.e. how many different dates are detailed)
+
+``` r
+length(unique(vax$as_of_date))
+```
+
+    ## [1] 47
+
+# Working with ZIP Codes
+
+\<!–>`{r}<--> <!-->geocode_zip("92037")<--> <!-->`\<–>
+
+\<!–>`{r}<--> <!-->zip_distan<--> <!-->`\<–>
+
+# Focus on the San Diego Area
+
+``` r
+sd <- vax[vax$county == "San Diego",]
+```
+
+With `dplyr`:
+
+``` r
+sd <- vax %>%
+  filter(county == "San Diego")
+```
+
+``` r
+sd.10 <- vax %>%
+  filter(county == "San Diego") %>%
+  filter(age5_plus_population > 10000)
+```
+
+#### \[Q11\]: How many distinct zip codes are listed for San Diego County?
+
+``` r
+length(unique(sd$zip_code_tabulation_area))
+```
+
+    ## [1] 107
+
+#### \[Q12\]: What San Diego County Zip code area has the largest 12 + Population in this dataset?
+
+``` r
+sd %>%
+  arrange(desc(age12_plus_population)) %>%
+  head(1)[2]
+```
+
+    ## [1] 92154
+
+#### \[Q13\]: What is the overall average “Percent of Population Fully Vaccinated” value for all San Diego “County” as of “2021-11-09”?
+
+``` r
+sd.yest <- sd %>%
+  filter(as_of_date == "2021-11-23") %>%
+  filter(!is.na(percent_of_population_fully_vaccinated))
+
+paste(round(mean(sd.yest$percent_of_population_fully_vaccinated)*100, 2), "%", sep = "")
+```
+
+    ## [1] "67.4%"
+
+#### \[Q14\]: Using either ggplot or base R graphics make a summary figure that shows the distribution of Percent of Population Fully Vaccinated values as of “2021-11-09”?
+
+``` r
+hist(sd.yest$percent_of_population_fully_vaccinated,
+     xlab = "Percent of Population Fully Vaccinated on 2021-11-23",
+     ylab = "Frequency",
+     main = "Histogram of Vaccination Rates Across San Diego County")
+```
+
+![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+# Focus on UCSD/La Jolla
+
+``` r
+ucsd <- sd %>%
+  filter(zip_code_tabulation_area == "92037")
+
+ucsd$age5_plus_population[1]
+```
+
+    ## [1] 36144
+
+#### \[Q15\]: Using ggplot make a graph of the vaccination rate time course for the 92037 ZIP code area:
+
+``` r
+ggplot(data = ucsd) +
+  aes(x = as_of_date, 
+      y = percent_of_population_fully_vaccinated) + 
+  geom_point() +
+  geom_line(group = 1) +
+  ylim(c(0,1)) +
+  labs(x = "Date",
+       y = "Percent Vaccinated",
+       title = "Vaccination Rate of UCSD/La Jolla Zipcode")
+```
+
+![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+# Compare to Similar Sized Areas
+
+``` r
+vax.sd_pop <- vax %>%
+  filter(age5_plus_population >= ucsd$age5_plus_population) %>%
+  filter(as_of_date == "2021-11-23")
+```
+
+#### \[Q16\]: Calculate the mean “Percent of Population Fully Vaccinated” for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”. Add this as a straight horizontal line to your plot from above with the geom_hline() function?
+
+The mean is 66.78%.
+
+``` r
+ggplot(data = ucsd) +
+  aes(x = as_of_date, 
+      y = percent_of_population_fully_vaccinated) + 
+  geom_point() +
+  geom_line(group = 1) +
+  geom_hline(yintercept = mean(vax.sd_pop$percent_of_population_fully_vaccinated),
+            linetype = 2,
+            col = "red") +
+  ylim(c(0,1)) +
+  labs(x = "Date",
+       y = "Percent Vaccinated",
+       title = "Vaccination Rate of UCSD/La Jolla Zipcode")
+```
+
+![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->

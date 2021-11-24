@@ -103,13 +103,13 @@ length(unique(vax$as_of_date))
   
 # Working with ZIP Codes  
   
-```{r}
-geocode_zip("92037")
-```  
+<!-->```{r}<-->
+<!-->geocode_zip("92037")<-->
+<!-->```<-->  
   
-```{r}
-zip_distan
-```
+<!-->```{r}<-->
+<!-->zip_distan<-->
+<!-->```<-->
 
 # Focus on the San Diego Area  
   
@@ -177,13 +177,112 @@ ucsd$age5_plus_population[1]
 ```{r}
 ggplot(data = ucsd) +
   aes(x = as_of_date, 
-      y = percent_of_population_with_1_plus_dose) + 
+      y = percent_of_population_fully_vaccinated) + 
   geom_point() +
   geom_line(group = 1) +
   ylim(c(0,1)) +
   labs(x = "Date",
-       y = "Percent Vaccinated")
+       y = "Percent Vaccinated",
+       title = "Vaccination Rate of UCSD/La Jolla Zipcode")
 ```
+  
+# Compare to Similar Sized Areas  
+  
+```{r}
+vax.lj_pop <- vax %>%
+  filter(age5_plus_population >= ucsd$age5_plus_population) %>%
+  filter(as_of_date == "2021-11-23")
+```
+  
+#### [Q16]: Calculate the mean “Percent of Population Fully Vaccinated” for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”. Add this as a straight horizontal line to your plot from above with the geom_hline() function?
+  
+The mean is `r paste(round(mean(vax.sd_pop$percent_of_population_fully_vaccinated)*100, 2), "%", sep = "")`.  
+  
+```{r}
+ggplot(data = ucsd) +
+  aes(x = as_of_date, 
+      y = percent_of_population_fully_vaccinated) + 
+  geom_point() +
+  geom_line(group = 1) +
+  geom_hline(yintercept = mean(vax.lj_pop$percent_of_population_fully_vaccinated),
+            linetype = 2,
+            col = "red") +
+  ylim(c(0,1)) +
+  labs(x = "Date",
+       y = "Percent Vaccinated",
+       title = "Vaccination Rate of UCSD/La Jolla Zipcode")
+```
+  
+#### [Q17]: What is the 6 number summary (Min, 1st Qu., Median, Mean, 3rd Qu., and Max) of the “Percent of Population Fully Vaccinated” values for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”?  
+  
+```{r}
+summary(vax.lj_pop$percent_of_population_fully_vaccinated)
+```
+  
+#### [Q18]: Using ggplot generate a histogram of this data.  
+  
+```{r}
+ggplot(data = vax.lj_pop) + 
+  aes(x = percent_of_population_fully_vaccinated) +
+  geom_bar()
+```
+  
+#### [Q20]: Is the 92109 and 92040 ZIP code areas above or below the average value you calculated for all these above?  
+  
+```{r}
+avg_vax_rate <- mean(vax.sd_pop$percent_of_population_fully_vaccinated)
+
+zc_92109 <- vax %>%
+  filter(as_of_date == "2021-11-23") %>%
+  filter(zip_code_tabulation_area == 92109)
+
+zc_92040 <- vax %>%
+  filter(as_of_date == "2021-11-23") %>%
+  filter(zip_code_tabulation_area == 92040)
+
+```
+  
+```{r}
+sd.lj_pop <- sd %>%
+  filter(age5_plus_population >= ucsd$age5_plus_population)
+
+length(unique(sd.lj_pop$zip_code_tabulation_area))
+```
+  
+```{r}
+ggplot(data = sd.lj_pop) +
+  aes(x = as_of_date,
+      y = percent_of_population_fully_vaccinated,
+      group = zip_code_tabulation_area) +
+  geom_line()
+```
+  
+```{r}
+vax.lj_pop_all <- vax %>%
+  filter(age5_plus_population >= ucsd$age5_plus_population)
+
+length(unique(vax.lj_pop_all$zip_code_tabulation_area))
+```
+  
+```{r}
+mean.lj_pop <- mean(vax.lj_pop$percent_of_population_fully_vaccinated)
+
+ggplot(data = vax.lj_pop_all) +
+  aes(x = as_of_date,
+      y = percent_of_population_fully_vaccinated,
+      group = zip_code_tabulation_area) +
+  geom_line(alpha = 0.2,
+            color = "blue") +
+  geom_hline(yintercept = mean.lj_pop,
+             color = "red",
+             linetype = 2) +
+  labs(x = "Date",
+       y = "Percent Vaccinated",
+       title = "Vaccination Rates Across California",
+       subtitle = "Only areas with a population above or equalt othat of La Jolla")
+```
+  
+
 
 
 
