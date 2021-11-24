@@ -1,0 +1,6 @@
+---
+title: "Vaccination Rate Mini Project"
+author: "Jack Reddan (PID: A59010543)"
+output: github_document
+---
+
