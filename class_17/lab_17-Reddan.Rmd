@@ -4,3 +4,41 @@ author: "Jack Reddan (PID: A59010543)"
 output: github_document
 ---
 
+# Getting Started  
+  
+```{r}
+library(dplyr)
+```
+  
+```{r}
+vax <- read.csv("covid19vaccinesbyzipcode_test.csv")
+```
+  
+```{r}
+head(vax)
+```
+  
+#### [Q01]: What column details the total number of people fully vaccinated?  
+  
+`persons_fully_vaccinated`  
+  
+#### [Q02]: What column details the Zip code tabulation area? 
+  
+`zip_code_tabulation_area`  
+  
+#### [Q03]: What is the earliest date in this dataset?  
+  
+```{r}
+vax %>% 
+  arrange(as_of_date) %>%
+  head(1)[1]
+```
+  
+#### [Q04]: What is the latest date in this dataset?  
+  
+```{r}
+vax %>%
+  arrange(desc(as_of_date)) %>%
+  head(1)[1]
+```
+
