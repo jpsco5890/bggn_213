@@ -1,2 +1,2 @@
-# bggn_213
-Bioinformatics class at UC - San Diego, AY21 Fall
+# BGGN 213
+Portfolio for Bioinformatics class at UC - San Diego, AY21 Fall
