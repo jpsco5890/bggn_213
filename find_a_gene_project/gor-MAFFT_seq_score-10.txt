@@ -1,0 +1,14 @@
+SEQUENCE_NAME	SEQUENCE_SCORE
+XP_028958518.1:33-541 glutathione reductase, chloroplastic-like [Malus domestica]	0.978
+XP_009367745.1:31-540 PREDICTED: glutathione reductase, chloroplastic [Pyrus x bretschneideri]	0.978
+XP_031258822.1:75-536 glutathione reductase, chloroplastic [Pistacia vera]	1.000
+XP_007199772.1:31-538 glutathione reductase, chloroplastic [Prunus persica]	0.977
+XP_025604791.1:54-535 glutathione reductase, chloroplastic isoform X1 [Arachis hypogaea]	0.981
+XP_015969716.1:54-535 glutathione reductase, chloroplastic isoform X1 [Arachis duranensis]	0.981
+XP_016204709.1:57-538 glutathione reductase, chloroplastic isoform X1 [Arachis ipaensis]	0.981
+XP_006349748.1:49-539 PREDICTED: glutathione reductase, chloroplastic [Solanum tuberosum]	0.977
+NP_001234243.2:49-539 glutathione reductase, chloroplastic [Solanum lycopersicum]	0.977
+XP_015087986.1:49-539 glutathione reductase, chloroplastic isoform X1 [Solanum pennellii]	0.977
+NP_191026.1 glutathione reductase [Arabidopsis thaliana]	0.965
+2451-3941_6 chlorokybus_71836.3_lrc301_c Chlorokybus atmophyticus EST library Chlorokybus atmophyticus cDNA 5', mRNA sequence [Chlorokybus atmophyticus]	0.971
+#END

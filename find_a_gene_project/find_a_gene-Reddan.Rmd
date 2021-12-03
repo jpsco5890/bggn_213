@@ -1,0 +1,48 @@
+---
+title: "Find a Gene Project"
+author: "Jack Reddan (PID: A59010543)"
+output: github_document
+---
+
+```{r}
+library(ape)
+
+BITree <- read.tree(file = "gor-MAFFT-20-NJ_tree.tre")
+
+plot(BITree, 
+     edge.width = 1,
+     label.offset = 0.05,
+     no.margin = TRUE,
+     underscore = FALSE,
+     lab4ut = "axial",
+     align.tip.label = TRUE,
+     type = "unrooted")
+```
+  
+```{r}
+library(bio3d)
+```
+```{r}
+aln <- read.fasta("gor-MAFFT_aln-20_short.faa")
+seq_id <- seqidentity(aln)
+heatmap(seq_id, margins = c(13,0))
+```
+
+```{r}
+hits <- blast.pdb(read.fasta("chlorokybus_gor_seq.faa"))
+blast_hits <- plot.blast(hits)
+```
+
+```{r}
+pdb <- get.pdb(blast_hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+```
+
+```{r}
+pdbs <- pdbaln(pdb[1:3], fit = TRUE)
+```
+```{r}
+ids <- basename.pdb(pdbs$id)
+plot(pdbs, labels=ids)
+```
+
+

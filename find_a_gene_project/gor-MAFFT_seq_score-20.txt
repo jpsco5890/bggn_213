@@ -1,0 +1,22 @@
+SEQUENCE_NAME	SEQUENCE_SCORE
+XP_028958518.1:33-541 glutathione reductase, chloroplastic-like [Malus domestica]	0.985
+XP_009367745.1:31-540 PREDICTED: glutathione reductase, chloroplastic [Pyrus x bretschneideri]	0.985
+XP_031258822.1:75-536 glutathione reductase, chloroplastic [Pistacia vera]	1.000
+XP_016709857.2:45-541 glutathione reductase, chloroplastic [Gossypium hirsutum]	0.981
+XP_024166425.1:66-527 glutathione reductase, chloroplastic [Rosa chinensis]	1.000
+XP_004289892.1:65-537 PREDICTED: glutathione reductase, chloroplastic [Fragaria vesca subsp. vesca]	0.997
+XP_025604791.1:54-535 glutathione reductase, chloroplastic isoform X1 [Arachis hypogaea]	0.985
+XP_015969716.1:54-535 glutathione reductase, chloroplastic isoform X1 [Arachis duranensis]	0.985
+XP_016204709.1:57-538 glutathione reductase, chloroplastic isoform X1 [Arachis ipaensis]	0.985
+XP_028758428.1:81-542 glutathione reductase, chloroplastic-like isoform X1 [Prosopis alba]	1.000
+XP_007199772.1:31-538 glutathione reductase, chloroplastic [Prunus persica]	0.986
+XP_006349748.1:49-539 PREDICTED: glutathione reductase, chloroplastic [Solanum tuberosum]	0.984
+NP_001234243.2:49-539 glutathione reductase, chloroplastic [Solanum lycopersicum]	0.984
+XP_015087986.1:49-539 glutathione reductase, chloroplastic isoform X1 [Solanum pennellii]	0.984
+XP_016565503.1:76-537 PREDICTED: glutathione reductase, chloroplastic isoform X1 [Capsicum annuum]	1.000
+XP_011079991.1:52-539 glutathione reductase, chloroplastic [Sesamum indicum]	0.985
+XP_020880886.1:43-550 glutathione reductase, chloroplastic [Arabidopsis lyrata subsp. lyrata]	0.985
+XP_010427174.1:37-545 PREDICTED: glutathione reductase, chloroplastic [Camelina sativa]	0.984
+NP_191026.1 glutathione reductase [Arabidopsis thaliana]	0.985
+2451-3941_6 chlorokybus_71836.3_lrc301_c Chlorokybus atmophyticus EST library Chlorokybus atmophyticus cDNA 5', mRNA sequence [Chlorokybus atmophyticus]	0.978
+#END

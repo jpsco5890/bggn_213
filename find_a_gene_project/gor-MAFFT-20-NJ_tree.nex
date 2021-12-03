@@ -1,0 +1,28 @@
+#NEXUS
+
+BEGIN TREES;
+
+	TRANSLATE
+		1	Malus_domestica,
+		2	Pyrus_x_bretschneideri,
+		3	Pistacia_vera,
+		4	Gossypium_hirsutum,
+		5	Rosa_chinensis,
+		6	Fragaria_vesca_subsp._vesca,
+		7	Arachis_hypogaea,
+		8	Arachis_duranensis,
+		9	Arachis_ipaensis,
+		10	Prosopis_alba,
+		11	Prunus_persica,
+		12	Solanum_tuberosum,
+		13	Solanum_lycopersicum,
+		14	Solanum_pennellii,
+		15	Capsicum_annuum,
+		16	Sesamum_indicum,
+		17	Arabidopsis_lyrata_subsp._lyrata,
+		18	Camelina_sativa,
+		19	Arabidopsis_thaliana,
+		20	Chlorokybus_atmophyticus
+		;
+	UTREE PAUP_1= ((((1:0.01791,2:0.02458):0.02728,11:0.05055):0.02262,(5:0.02604,6:0.04677):0.02209):0.01853,((3:0.03865,4:0.06096):0.00709,(((12:0.01003,(13:0.00033,14:0.00375):0.01279):0.01676,15:0.01258):0.03182,(16:0.06181,20:0.47867):0.00247):0.01560):0.00285,((((7:0.00223,8:-0.00015):0.00170,9:0.00456):0.05479,10:0.04303):0.01458,((17:0.00686,19:0.01513):0.00729,18:0.01394):0.08565):0.00438);
+ENDBLOCK;
