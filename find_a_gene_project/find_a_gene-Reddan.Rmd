@@ -11,12 +11,14 @@ BITree <- read.tree(file = "gor-MAFFT-20-NJ_tree.tre")
 
 plot(BITree, 
      edge.width = 1,
-     label.offset = 0.05,
+     label.offset = 0.02,
      no.margin = TRUE,
      underscore = FALSE,
      lab4ut = "axial",
      align.tip.label = TRUE,
-     type = "unrooted")
+     type = "u",
+     cex = 0.8,
+     rotate.tree = -40)
 ```
   
 ```{r}
@@ -25,7 +27,7 @@ library(bio3d)
 ```{r}
 aln <- read.fasta("gor-MAFFT_aln-20_short.faa")
 seq_id <- seqidentity(aln)
-heatmap(seq_id, margins = c(13,0))
+heatmap(seq_id, margins = c(13,0), scale = "none")
 ```
 
 ```{r}
