@@ -1,10 +1,10 @@
 ---
 title: "Vaccination Rate Mini Project"
 author: "Jack Reddan (PID: A59010543)"
-#output: github_document
-output:
-  pdf_document:
-    latex_engine: xelatex
+output: github_document
+#output:
+#  pdf_document:
+#    latex_engine: xelatex
 ---
 
 # Getting Started  

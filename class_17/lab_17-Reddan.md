@@ -93,15 +93,15 @@ head(vax)
     ## 5 Information redacted in accordance with CA state privacy requirements
     ## 6 Information redacted in accordance with CA state privacy requirements
 
-#### \[Q01\]: What column details the total number of people fully vaccinated?
+Q01: What column details the total number of people fully vaccinated?
 
 `persons_fully_vaccinated`
 
-#### \[Q02\]: What column details the Zip code tabulation area?
+Q02: What column details the Zip code tabulation area?
 
 `zip_code_tabulation_area`
 
-#### \[Q03\]: What is the earliest date in this dataset?
+Q03: What is the earliest date in this dataset?
 
 ``` r
 vax %>% 
@@ -111,7 +111,7 @@ vax %>%
 
     ## [1] "2021-01-05"
 
-#### \[Q04\]: What is the latest date in this dataset?
+Q04: What is the latest date in this dataset?
 
 ``` r
 vax %>%
@@ -163,15 +163,17 @@ Data summary
 | percent_of_population_partially_vaccinated |      8355 |          0.90 |     0.10 |     0.10 |     0 |     0.06 |     0.07 |     0.11 |      1.0 | ▇▁▁▁▁ |
 | percent_of_population_with_1\_plus_dose    |      8355 |          0.90 |     0.51 |     0.26 |     0 |     0.31 |     0.53 |     0.71 |      1.0 | ▅▅▇▇▃ |
 
-#### \[Q05\]: How many numeric columns are in this dataset?
+Q05: How many numeric columns are in this dataset?
 
 9
 
-#### \[Q06\]: Note that there are “missing values” in the dataset. How many `NA` values there in the `persons_fully_vaccinated` column?
+Q06: Note that there are “missing values” in the dataset. How many `NA`
+values there in the `persons_fully_vaccinated` column?
 
 8355
 
-#### \[Q07\]: What percent of `persons_fully_vaccinated` values are missing (to 2 significant figures)?
+Q07: What percent of `persons_fully_vaccinated` values are missing (to 2
+significant figures)?
 
 ``` r
 round((1 - 0.899)*100, 2)
@@ -179,7 +181,11 @@ round((1 - 0.899)*100, 2)
 
     ## [1] 10.1
 
-#### \[Q08\]: Why might this data be missing?
+Q08: Why might this data be missing?
+
+Some area codes, such as military bases, may have certain restrictions
+for data release and transparency, resulting in a lack of data in the
+report.
 
 # Working with Dates
 
@@ -187,7 +193,7 @@ round((1 - 0.899)*100, 2)
 today()
 ```
 
-    ## [1] "2021-11-24"
+    ## [1] "2021-12-05"
 
 ``` r
 vax$as_of_date <- ymd(vax$as_of_date)
@@ -197,7 +203,7 @@ vax$as_of_date <- ymd(vax$as_of_date)
 today() - vax$as_of_date[1]
 ```
 
-    ## Time difference of 323 days
+    ## Time difference of 334 days
 
 ``` r
 vax$as_of_date[nrow(vax)] - vax$as_of_date[1]
@@ -205,7 +211,7 @@ vax$as_of_date[nrow(vax)] - vax$as_of_date[1]
 
     ## Time difference of 322 days
 
-#### \[Q09\]: How many days have passed since the last update of the dataset?
+Q09: How many days have passed since the last update of the dataset?
 
 ``` r
 last_update <- vax %>%
@@ -215,9 +221,10 @@ last_update <- vax %>%
 today() - last_update
 ```
 
-    ## Time difference of 1 days
+    ## Time difference of 12 days
 
-#### \[Q10\]: How many unique dates are in the dataset (i.e. how many different dates are detailed)
+Q10: How many unique dates are in the dataset (i.e. how many different
+dates are detailed)
 
 ``` r
 length(unique(vax$as_of_date))
@@ -227,9 +234,12 @@ length(unique(vax$as_of_date))
 
 # Working with ZIP Codes
 
-\<!–>`{r}<--> <!-->geocode_zip("92037")<--> <!-->`\<–>
-
-\<!–>`{r}<--> <!-->zip_distan<--> <!-->`\<–>
+<!--```{r}-->
+<!--geocode_zip("92037")-->
+<!--```-->
+<!--```{r}-->
+<!--zip_distance-->
+<!--```-->
 
 # Focus on the San Diego Area
 
@@ -250,7 +260,7 @@ sd.10 <- vax %>%
   filter(age5_plus_population > 10000)
 ```
 
-#### \[Q11\]: How many distinct zip codes are listed for San Diego County?
+Q11: How many distinct zip codes are listed for San Diego County?
 
 ``` r
 length(unique(sd$zip_code_tabulation_area))
@@ -258,7 +268,8 @@ length(unique(sd$zip_code_tabulation_area))
 
     ## [1] 107
 
-#### \[Q12\]: What San Diego County Zip code area has the largest 12 + Population in this dataset?
+Q12: What San Diego County Zip code area has the largest 12 + Population
+in this dataset?
 
 ``` r
 sd %>%
@@ -268,7 +279,8 @@ sd %>%
 
     ## [1] 92154
 
-#### \[Q13\]: What is the overall average “Percent of Population Fully Vaccinated” value for all San Diego “County” as of “2021-11-09”?
+Q13: What is the overall average “Percent of Population Fully
+Vaccinated” value for all San Diego “County” as of “2021-11-09”?
 
 ``` r
 sd.yest <- sd %>%
@@ -280,7 +292,9 @@ paste(round(mean(sd.yest$percent_of_population_fully_vaccinated)*100, 2), "%", s
 
     ## [1] "67.4%"
 
-#### \[Q14\]: Using either ggplot or base R graphics make a summary figure that shows the distribution of Percent of Population Fully Vaccinated values as of “2021-11-09”?
+Q14: Using either ggplot or base R graphics make a summary figure that
+shows the distribution of Percent of Population Fully Vaccinated values
+as of “2021-11-09”?
 
 ``` r
 hist(sd.yest$percent_of_population_fully_vaccinated,
@@ -302,7 +316,8 @@ ucsd$age5_plus_population[1]
 
     ## [1] 36144
 
-#### \[Q15\]: Using ggplot make a graph of the vaccination rate time course for the 92037 ZIP code area:
+Q15: Using ggplot make a graph of the vaccination rate time course for
+the 92037 ZIP code area:
 
 ``` r
 ggplot(data = ucsd) +
@@ -326,7 +341,10 @@ vax.lj_pop <- vax %>%
   filter(as_of_date == "2021-11-23")
 ```
 
-#### \[Q16\]: Calculate the mean “Percent of Population Fully Vaccinated” for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”. Add this as a straight horizontal line to your plot from above with the geom_hline() function?
+Q16: Calculate the mean “Percent of Population Fully Vaccinated” for ZIP
+code areas with a population as large as 92037 (La Jolla) as_of_date
+“2021-11-23”. Add this as a straight horizontal line to your plot from
+above with the geom_hline() function?
 
 The mean is 66.78%.
 
@@ -347,7 +365,10 @@ ggplot(data = ucsd) +
 
 ![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
-#### \[Q17\]: What is the 6 number summary (Min, 1st Qu., Median, Mean, 3rd Qu., and Max) of the “Percent of Population Fully Vaccinated” values for ZIP code areas with a population as large as 92037 (La Jolla) as_of_date “2021-11-23”?
+Q17: What is the 6 number summary (Min, 1st Qu., Median, Mean, 3rd Qu.,
+and Max) of the “Percent of Population Fully Vaccinated” values for ZIP
+code areas with a population as large as 92037 (La Jolla) as_of_date
+“2021-11-23”?
 
 ``` r
 summary(vax.lj_pop$percent_of_population_fully_vaccinated)
@@ -356,17 +377,20 @@ summary(vax.lj_pop$percent_of_population_fully_vaccinated)
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
     ##  0.3552  0.5939  0.6698  0.6678  0.7350  1.0000
 
-#### \[Q18\]: Using ggplot generate a histogram of this data.
+Q18: Using ggplot generate a histogram of this data.
 
 ``` r
 ggplot(data = vax.lj_pop) + 
   aes(x = percent_of_population_fully_vaccinated) +
-  geom_bar()
+  geom_histogram()
 ```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
 
-#### \[Q20\]: Is the 92109 and 92040 ZIP code areas above or below the average value you calculated for all these above?
+Q20: Is the 92109 and 92040 ZIP code areas above or below the average
+value you calculated for all these above?
 
 ``` r
 avg_vax_rate <- mean(vax.lj_pop$percent_of_population_fully_vaccinated)
@@ -378,7 +402,17 @@ zc_92109 <- vax %>%
 zc_92040 <- vax %>%
   filter(as_of_date == "2021-11-23") %>%
   filter(zip_code_tabulation_area == 92040)
+
+zc_92109$percent_of_population_fully_vaccinated > avg_vax_rate
 ```
+
+    ## [1] TRUE
+
+``` r
+zc_92040$percent_of_population_fully_vaccinated > avg_vax_rate
+```
+
+    ## [1] FALSE
 
 ``` r
 sd.lj_pop <- sd %>%
@@ -431,3 +465,44 @@ ggplot(data = vax.lj_pop_all) +
     ## Warning: Removed 176 row(s) containing missing values (geom_path).
 
 ![](lab_17-Reddan_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+
+# Session Information
+
+``` r
+sessionInfo()
+```
+
+    ## R version 4.1.2 (2021-11-01)
+    ## Platform: x86_64-pc-linux-gnu (64-bit)
+    ## Running under: Arch Linux
+    ## 
+    ## Matrix products: default
+    ## BLAS:   /usr/lib/libblas.so.3.10.0
+    ## LAPACK: /usr/lib/liblapack.so.3.10.0
+    ## 
+    ## locale:
+    ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+    ##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+    ##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+    ##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+    ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+    ## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+    ## 
+    ## attached base packages:
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
+    ## 
+    ## other attached packages:
+    ## [1] ggplot2_3.3.5   lubridate_1.8.0 dplyr_1.0.7    
+    ## 
+    ## loaded via a namespace (and not attached):
+    ##  [1] highr_0.9        pillar_1.6.4     compiler_4.1.2   base64enc_0.1-3 
+    ##  [5] tools_4.1.2      digest_0.6.28    jsonlite_1.7.2   evaluate_0.14   
+    ##  [9] lifecycle_1.0.1  tibble_3.1.6     gtable_0.3.0     pkgconfig_2.0.3 
+    ## [13] rlang_0.4.12     DBI_1.1.1        yaml_2.2.1       xfun_0.28       
+    ## [17] fastmap_1.1.0    repr_1.1.3       withr_2.4.2      stringr_1.4.0   
+    ## [21] knitr_1.36       generics_0.1.1   vctrs_0.3.8      grid_4.1.2      
+    ## [25] tidyselect_1.1.1 glue_1.5.0       R6_2.5.1         fansi_0.5.0     
+    ## [29] rmarkdown_2.11   farver_2.1.0     tidyr_1.1.4      purrr_0.3.4     
+    ## [33] skimr_2.1.3      magrittr_2.0.1   scales_1.1.1     ellipsis_0.3.2  
+    ## [37] htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2 labeling_0.4.2  
+    ## [41] utf8_1.2.2       stringi_1.7.6    munsell_0.5.0    crayon_1.4.2
