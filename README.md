@@ -1,5 +1,6 @@
 # BGGN 213    
 Portfolio for Bioinformatics class at UC - San Diego, AY21 Fall    
+A collection of materials gnerated by Jack Reddan for the BGGN 213 course (Intorduction to Bioinformatics).
      
 ## Content    
   
