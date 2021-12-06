@@ -23,11 +23,12 @@ plot(BITree,
   
 ```{r}
 library(bio3d)
+library(pheatmap)
 ```
 ```{r}
 aln <- read.fasta("gor-MAFFT_aln-20_short.faa")
 seq_id <- seqidentity(aln)
-heatmap(seq_id, margins = c(13,0), scale = "none")
+pheatmap(seq_id)
 ```
 
 ```{r}
@@ -41,10 +42,25 @@ pdb <- get.pdb(blast_hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
 
 ```{r}
 pdbs <- pdbaln(pdb[1:3], fit = TRUE)
+hits$hit.tbl[1:3,]
 ```
 ```{r}
 ids <- basename.pdb(pdbs$id)
 plot(pdbs, labels=ids)
 ```
 
+```{r}
+con_seq <- read.fasta(file = "capsicum_annuum_gor_seq.faa")
+hits <- blast.pdb(con_seq)
+blast_hits <- plot.blast(hits)
+```
+
+```{r}
+pdb <- get.pdb(blast_hits$pdb.id, path="pdbs", split=TRUE, gzip=TRUE)
+```
+
+```{r}
+pdbs <- pdbaln(pdb[1:3], fit = TRUE)
+hits$hit.tbl[1:3,]
+```
 
