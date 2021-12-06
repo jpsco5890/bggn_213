@@ -3,7 +3,8 @@ title: "Halloween Mini-Project"
 author: 'Jack Reddan (PID: A59010543)'
 date: "10/29/2021"
 #output: html_document
-output: pdf_document
+#output: pdf_document
+output: github_document
 ---
 
 # Library loading  
