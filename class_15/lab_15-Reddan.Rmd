@@ -1,8 +1,8 @@
 ---
 title: "Lab 15"
 author: "Jack Reddan (PID: A59010543)"
-#output: github_document
-output: pdf_document
+output: github_document
+#output: pdf_document
 ---
 
 # Bioconductor and DESeq2 Setup
