@@ -503,6 +503,6 @@ sessionInfo()
     ## [55] rmarkdown_2.11         gtable_0.3.0           DBI_1.1.1             
     ## [58] R6_2.5.1               knitr_1.36             dplyr_1.0.7           
     ## [61] fastmap_1.1.0          bit_4.0.4              utf8_1.2.2            
-    ## [64] Rgraphviz_2.36.0       stringi_1.7.5          Rcpp_1.0.7            
+    ## [64] Rgraphviz_2.36.0       stringi_1.7.6          Rcpp_1.0.7            
     ## [67] vctrs_0.3.8            geneplotter_1.70.0     png_0.1-7             
     ## [70] tidyselect_1.1.1       xfun_0.28
