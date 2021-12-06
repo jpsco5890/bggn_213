@@ -82,6 +82,8 @@ diagnosis <- factor(wisconsin_df[,1])
 
 ## Explore the data
 
+##### \[Q01\]: How many observations are in the dataset?
+
 ``` r
 nrow(wisconsin_df)
 ```
@@ -89,6 +91,8 @@ nrow(wisconsin_df)
     ## [1] 569
 
 There are 569 rows/observations.
+
+##### \[Q02\]: How many of the observations have a malignant diagnoses?
 
 ``` r
 table(diagnosis)
@@ -99,6 +103,8 @@ table(diagnosis)
     ## 357 212
 
 212 of the observations have a “M” or malignant diagnoses.
+
+##### \[Q03\]: How many variables/features in the data are suffixed with `_mean`?
 
 ``` r
 length(grep("_mean", colnames(naive_wisconsin_df)))
@@ -198,7 +204,7 @@ summary(wisconsin_pca)
     ## Proportion of Variance 0.00002 0.00000
     ## Cumulative Proportion  1.00000 1.00000
 
-> by the first principal component (PC1)?
+##### \[Q04\]: From your results, what proportion of the original variance is captured by the first principal component (PC1)?
 
 ``` r
 summary(wisconsin_pca)$importance[2,1]
@@ -208,8 +214,7 @@ summary(wisconsin_pca)$importance[2,1]
 
 0.44272 is the proportion of the variance captured by PC 1.
 
-> \[Q05\]: How many principal components (PCs) are required to describe
-> at least 70% of the original variance in the data?
+##### \[Q05\]: How many principal components (PCs) are required to describe at least 70% of the original variance in the data?
 
 ``` r
 PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.7)[1]
@@ -227,8 +232,7 @@ summary(wisconsin_pca)$importance[3,PC]
 
 Three PCs \[PC1 - PC3\], explains 72.636% of the original variance.
 
-> \[Q06\]: How many principal components (PCs) are required to describe
-> at least 90% of the original variance in the data?
+##### \[Q06\]: How many principal components (PCs) are required to describe at least 90% of the original variance in the data?
 
 ``` r
 PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.9)[1]
@@ -256,7 +260,7 @@ biplot(wisconsin_pca)
 
 ![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-> understand? Why?
+##### \[Q07\]: What stands out to you about this plot? Is it easy or difficult to understand? Why?
 
 While it shows a lot of data regarding the influence of each variable on
 the the visualized PCs, it is a bit overwhelming and difficult to
@@ -272,7 +276,7 @@ plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,2],
 
 ![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
-> notice about these plots?
+##### \[Q08\]: Generate a similar plot for principal components 1 and 3. What do you notice about these plots?
 
 ``` r
 plot(x = wisconsin_pca$x[,1], y = wisconsin_pca$x[,3], 
@@ -352,9 +356,7 @@ fviz_eig(wisconsin_pca,
 
 ## Communicatin PCA Results
 
-> \[Q09\] For the first principal component, what is the component of
-> the loading vector (i.e. `wisc.pr$rotation[,1]`) for the feature
-> `concave.points_mean`?
+##### \[Q09\] For the first principal component, what is the component of the loading vector (i.e. `wisc.pr$rotation[,1]`) for the feature `concave.points_mean`?
 
 ``` r
 wisconsin_pca$rotation[grep("concave.points_mean", row.names(wisconsin_pca$rotation)),1]
@@ -362,8 +364,7 @@ wisconsin_pca$rotation[grep("concave.points_mean", row.names(wisconsin_pca$rotat
 
     ## [1] -0.2608538
 
-> \[Q10\] What is the minimum number of principal components required to
-> explain 80% of the variance of the data?
+##### \[Q10\] What is the minimum number of principal components required to explain 80% of the variance of the data?
 
 ``` r
 PC <- which(summary(wisconsin_pca)$importance[3,] >= 0.8)[1]
@@ -392,7 +393,7 @@ wisconsin_data_distance <- dist(wisconsin_data_scaled)
 wisconsin_data_hclust <- hclust(wisconsin_data_distance, method = "complete")
 ```
 
-> clustering model has 4 clusters?
+##### \[Q11\]: Using the `plot()` and `abline()` functions, what is the height at which the clustering model has 4 clusters?
 
 ``` r
 plot(wisconsin_data_hclust)
@@ -422,7 +423,7 @@ table(wisconsin_hclust_clusters_k4, diagnosis)
     ##                            3 343  40
     ##                            4   0   2
 
-> different number of clusters between 2 and 10?
+##### \[Q12\]: Can you find a better cluster vs diagnoses match by cutting into a different number of clusters between 2 and 10?
 
 ``` r
 for(i in 2:10){
@@ -516,7 +517,7 @@ for(i in 2:10){
 
 ## Using different methods
 
-> Explain your reasoning.
+##### \[Q13\]: Which method gives your favorite results for the same data.dist dataset? Explain your reasoning.
 
 ``` r
 wisconsin_hclust_clusters_single <- cutree(hclust(wisconsin_data_distance, 
@@ -578,7 +579,7 @@ essentially lump all of these observations together.
 wisconsin_kmeans <- kmeans(wisconsin_data_scaled, centers = 2, nstart = 20)
 ```
 
-> your hclust results?
+##### \[Q14\]: How well does k-means separate the two diagnoses? How does it compare to your hclust results?
 
 ``` r
 table(wisconsin_kmeans$cluster, diagnosis)
@@ -586,8 +587,8 @@ table(wisconsin_kmeans$cluster, diagnosis)
 
     ##    diagnosis
     ##       B   M
-    ##   1  14 175
-    ##   2 343  37
+    ##   1 343  37
+    ##   2  14 175
 
 ``` r
 table(wisconsin_hclust_clusters_k4, diagnosis)
@@ -614,10 +615,10 @@ table(wisconsin_hclust_clusters_k4, wisconsin_kmeans$cluster)
 
     ##                             
     ## wisconsin_hclust_clusters_k4   1   2
-    ##                            1 160  17
-    ##                            2   7   0
-    ##                            3  20 363
-    ##                            4   2   0
+    ##                            1  17 160
+    ##                            2   0   7
+    ##                            3 363  20
+    ##                            4   0   2
 
 # Combining methods
 
@@ -684,23 +685,18 @@ plot(wisconsin_pca$x[,1:2], col=re_group)
 Three dimensional plotting on PCs 1 through 3 while coloring by groups.
 
 ``` r
-plot3d(wisconsin_pca$x[,1:3], 
-       xlab = "PC 1",
-       ylab = "PC 2",
-       zlab = "PC 3",
-       cex = 1.5,
-       size = 1,
-       type = "s",
-       col = groups)
-rglwidget(width = 400, height = 400)
+# plot3d(wisconsin_pca$x[,1:3], 
+#        xlab = "PC 1",
+#        ylab = "PC 2",
+#        zlab = "PC 3",
+#        cex = 1.5,
+#        size = 1,
+#        type = "s",
+#        col = groups)
+# rglwidget(width = 400, height = 400)
 ```
 
-    ## Warning in snapshot3d(scene = x, width = width, height = height): webshot = TRUE
-    ## requires the webshot2 package; using rgl.snapshot() instead
-
-![](/tmp/RtmpUgZa97/fileb65e59c9163b.png)<!-- -->
-
-> the two diagnoses?
+##### \[Q15\]: How well does the newly created model with four clusters separate out the two diagnoses?
 
 ``` r
 table(groups, diagnosis)
@@ -719,11 +715,7 @@ table(groups, diagnosis)
 
 In terms of accuracy, the model is approximately 91% accurate.
 
-> \[Q16\]: How well do the k-means and hierarchical clustering models
-> you created in previous sections (i.e. before PCA) do in terms of
-> separating the diagnoses? Again, use the table() function to compare
-> the output of each model (wisc.km$cluster and wisc.hclust.clusters)
-> with the vector containing the actual diagnoses.
+##### \[Q16\]: How well do the k-means and hierarchical clustering models you created in previous sections (i.e. before PCA) do in terms of separating the diagnoses? Again, use the table() function to compare the output of each model (wisc.km$cluster and wisc.hclust.clusters) with the vector containing the actual diagnoses.
 
 ``` r
 table(wisconsin_kmeans$cluster, diagnosis)
@@ -731,8 +723,8 @@ table(wisconsin_kmeans$cluster, diagnosis)
 
     ##    diagnosis
     ##       B   M
-    ##   1  14 175
-    ##   2 343  37
+    ##   1 343  37
+    ##   2  14 175
 
 ``` r
 (175 + 343)/length(diagnosis)
@@ -813,7 +805,7 @@ kmeans-no_pca:
 
     ## [1] 0.9026316
 
-> the best specificity? How about sensitivity?
+##### \[Q17\]: Which of your analysis procedures resulted in a clustering model with the best specificity? How about sensitivity?
 
 K-means, much like with accuracy, showed the highest specificity and
 sensitivity of all three models.
@@ -851,7 +843,7 @@ text(npc[,1], npc[,2], c(1,2), col="white")
 
 ![](lab_09-Reddan_files/figure-gfm/unnamed-chunk-59-1.png)<!-- -->
 
-> your results?
+##### \[Q18\]: Which of these new patients should we prioritize for follow up based on your results?
 
 ``` r
 table(groups, diagnosis)
@@ -873,7 +865,7 @@ cluster with group 1 on the PCA plot.
 sessionInfo()
 ```
 
-    ## R version 4.1.1 (2021-08-10)
+    ## R version 4.1.2 (2021-11-01)
     ## Platform: x86_64-pc-linux-gnu (64-bit)
     ## Running under: Arch Linux
     ## 
@@ -896,20 +888,17 @@ sessionInfo()
     ## [1] rgl_0.107.14     factoextra_1.0.7 ggplot2_3.3.5   
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] tidyselect_1.1.1  xfun_0.24         purrr_0.3.4       haven_2.4.1      
-    ##  [5] carData_3.0-4     colorspace_2.0-2  vctrs_0.3.8       generics_0.1.0   
-    ##  [9] htmltools_0.5.1.1 yaml_2.2.1        utf8_1.2.1        rlang_0.4.11     
-    ## [13] pillar_1.6.1      ggpubr_0.4.0      foreign_0.8-81    glue_1.4.2       
-    ## [17] withr_2.4.2       DBI_1.1.1         readxl_1.3.1      lifecycle_1.0.0  
-    ## [21] stringr_1.4.0     cellranger_1.1.0  munsell_0.5.0     ggsignif_0.6.3   
-    ## [25] gtable_0.3.0      zip_2.2.0         htmlwidgets_1.5.4 evaluate_0.14    
-    ## [29] forcats_0.5.1     rio_0.5.27        labeling_0.4.2    knitr_1.33       
-    ## [33] extrafont_0.17    curl_4.3.2        fansi_0.5.0       Rttf2pt1_1.3.8   
-    ## [37] highr_0.9         broom_0.7.8       Rcpp_1.0.7        scales_1.1.1     
-    ## [41] backports_1.2.1   jsonlite_1.7.2    abind_1.4-5       farver_2.1.0     
-    ## [45] hms_1.1.0         digest_0.6.27     openxlsx_4.2.4    stringi_1.7.2    
-    ## [49] rstatix_0.7.0     dplyr_1.0.7       ggrepel_0.9.1     grid_4.1.1       
-    ## [53] tools_4.1.1       magrittr_2.0.1    tibble_3.1.2      crayon_1.4.1     
-    ## [57] extrafontdb_1.0   tidyr_1.1.3       car_3.0-11        pkgconfig_2.0.3  
-    ## [61] ellipsis_0.3.2    data.table_1.14.0 assertthat_0.2.1  rmarkdown_2.11   
-    ## [65] R6_2.5.0          compiler_4.1.1
+    ##  [1] tidyselect_1.1.1  xfun_0.28         purrr_0.3.4       carData_3.0-4    
+    ##  [5] colorspace_2.0-2  vctrs_0.3.8       generics_0.1.1    htmltools_0.5.2  
+    ##  [9] yaml_2.2.1        utf8_1.2.2        rlang_0.4.12      pillar_1.6.4     
+    ## [13] ggpubr_0.4.0      glue_1.5.0        withr_2.4.2       DBI_1.1.1        
+    ## [17] lifecycle_1.0.1   stringr_1.4.0     munsell_0.5.0     ggsignif_0.6.3   
+    ## [21] gtable_0.3.0      htmlwidgets_1.5.4 evaluate_0.14     labeling_0.4.2   
+    ## [25] knitr_1.36        fastmap_1.1.0     extrafont_0.17    fansi_0.5.0      
+    ## [29] Rttf2pt1_1.3.9    highr_0.9         broom_0.7.10      Rcpp_1.0.7       
+    ## [33] scales_1.1.1      backports_1.3.0   jsonlite_1.7.2    abind_1.4-5      
+    ## [37] farver_2.1.0      digest_0.6.28     stringi_1.7.6     rstatix_0.7.0    
+    ## [41] dplyr_1.0.7       ggrepel_0.9.1     grid_4.1.2        tools_4.1.2      
+    ## [45] magrittr_2.0.1    tibble_3.1.6      car_3.0-12        crayon_1.4.2     
+    ## [49] extrafontdb_1.0   tidyr_1.1.4       pkgconfig_2.0.3   ellipsis_0.3.2   
+    ## [53] assertthat_0.2.1  rmarkdown_2.11    R6_2.5.1          compiler_4.1.2
