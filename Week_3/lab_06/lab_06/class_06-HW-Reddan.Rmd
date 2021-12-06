@@ -2,8 +2,8 @@
 title: 'HW Class 6: Write a Function'
 author: "Jack Reddan (PID: A59010543)"
 date: "10/17/2021"
-#output: github_document
-output: pdf_document
+output: github_document
+#output: pdf_document
 ---
 
 ```{r setup, include=FALSE}

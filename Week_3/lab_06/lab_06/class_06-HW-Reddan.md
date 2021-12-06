@@ -1,6 +1,6 @@
 HW Class 6: Write a Function
 ================
-Jack Reddan
+Jack Reddan (PID: A59010543)
 10/17/2021
 
 # Section 1: Improving analysis code by writing functions
@@ -78,7 +78,7 @@ s1 <- read.pdb("4AKE")
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpIMI1Va/
     ## 4AKE.pdb exists. Skipping download
 
 ``` r
@@ -244,12 +244,12 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpIMI1Va/
     ## 4AKE.pdb exists. Skipping download
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpIMI1Va/
     ## 1AKE.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
@@ -258,7 +258,7 @@ structure_analysis(c("4AKE", "1AKE", "1E4Y"))
 
     ##   Note: Accessing on-line PDB file
 
-    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/Rtmpd7VUpO/
+    ## Warning in get.pdb(file, path = tempdir(), verbose = FALSE): /tmp/RtmpIMI1Va/
     ## 1E4Y.pdb exists. Skipping download
 
 ![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->![](class_06-HW-Reddan_files/figure-gfm/unnamed-chunk-10-3.png)<!-- -->
